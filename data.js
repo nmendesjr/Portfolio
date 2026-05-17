@@ -5,7 +5,7 @@ window.PORTFOLIO_DATA = {
   email: "naamamendesjr@gmail.com",
   phone: "(321) 276-8858",
   tagline: "Product leader building fintech and growth platforms used by millions.",
-  intro: "I'm a product leader with a decade of experience scaling B2B and B2C platforms — from a payroll fintech I co‑founded and sold, to leading product at YC‑backed startups, to building, shipping and distributing a new vertical from 0 to $2.2M ARR in 3 months at Tapcheck today. I work where data, design, and infrastructure meet — and I'm rebuilding how my team ships in the agent era.",
+  intro: "I'm a product leader with a decade of experience scaling B2B and B2C platforms — from a payroll fintech I co‑founded and sold, to leading product at YC‑backed startups, to building, shipping and distributing a new vertical from 0 to 15% of revenue in 3 months at Tapcheck today. I work where data, design, and infrastructure meet — and I'm rebuilding how my team ships in the agent era.",
 
   works: [
     {
@@ -14,16 +14,15 @@ window.PORTFOLIO_DATA = {
       company: "Tapcheck",
       role: "Director of Product — Growth",
       category: "Earned Wage Access · 0→1 Vertical",
-      headline: "Built, shipped, and distributed a new standalone vertical from 0 to $2.2M ARR in 3 months — and rewired the org around Claude Code.",
+      headline: "Built, shipped, and distributed a new standalone vertical from 0 to 15% of revenue in 3 months — and rewired the org around Claude Code.",
       metrics: [
-        { value: "$0 → $2.2M", label: "ARR in 3 months (new vertical)" },
-        { value: "−35%", label: "Loss rate, ML risk & recovery" },
+        { value: "0 → 15%", label: "of revenue in 3 months (new vertical)" },
+        { value: "−35%", label: "Reduced loss rate" },
         { value: "6mo → 45d", label: "App rebuild time with Claude Code" },
         { value: "40+", label: "Cross‑functional team led" },
       ],
       bullets: [
-        "Built, shipped, and distributed a new standalone vertical from 0 to $2.2M in ARR within 3 months.",
-        "Launched an ML‑based risk assessment and recovery mechanism that lowered loss rate by 35%.",
+        "Built, shipped, and distributed a new standalone vertical from 0 to 15% of revenue within 3 months.",
         "Redesigned product and engineering workflows around Claude Code — rebuilt a full app in 45 days versus the previous 6‑month baseline.",
         "Led and coached the product team on Claude Code adoption, enabling PMs to ship working prototypes directly to code without engineering intervention.",
         "Lead a 40+ person cross‑functional team (Sales, RevOps, Customer Success, three engineering pods) with clear OKRs and accountability frameworks.",
