@@ -35,10 +35,6 @@ function Hero({ data, theme }) {
       </div>
 
       <div className="hero-body">
-        <div className="hero-meta">
-          <span className="meta-dot" />
-          <span>Available for select roles · {year}</span>
-        </div>
         <h1 className="hero-title">
           <span className="hero-title-line">Product builder.</span>
           <span className="hero-title-line hero-title-line--italic">Focused on growth.</span>
