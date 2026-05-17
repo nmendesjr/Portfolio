@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tapcheck Express — Naama Mendes Jr.</title>
+<meta name="description" content="How I led Tapcheck Express — an embedded earned-wage-access platform that turned every payroll, HR, and time-and-attendance provider into a Tapcheck distribution channel." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="post.css" />
+<style>
+  /* ── Tapcheck Express hero panel ─────────────────────────────────────── */
+  .tx-hero {
+    margin: 56px calc(-1 * var(--pad-x)) 56px;
+    padding: 64px var(--pad-x) 80px;
+    background: #0e2a64;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .tx-hero .eyebrow {
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    opacity: 0.7; margin-bottom: 18px;
+    color: #ffd840;
+  }
+  .tx-hero h3 {
+    font-family: var(--sans); font-weight: 800;
+    font-size: clamp(32px, 5.4vw, 58px);
+    line-height: 1.04; letter-spacing: -0.025em;
+    margin: 0 0 24px; max-width: 16ch;
+  }
+  .tx-hero h3 em {
+    font-family: var(--serif); font-style: italic;
+    font-weight: 400; color: #5fc88a;
+  }
+  .tx-hero p {
+    font-family: var(--sans); font-size: 17px; line-height: 1.6;
+    color: rgba(255,255,255,0.82);
+    max-width: 52ch; margin: 0;
+  }
+  .tx-hero::after {
+    content: ""; position: absolute; right: -60px; top: -60px;
+    width: 280px; height: 280px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(95,200,138,0.15), transparent 70%);
+    pointer-events: none;
+  }
+
+  /* ── Distribution shift — before vs after, editorial layout ──────────── */
+  .tx-shift {
+    margin: 64px 0;
+    display: grid; grid-template-columns: 1fr;
+    gap: 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .tx-shift .row {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 40px;
+    padding: 40px 0;
+    align-items: start;
+  }
+  .tx-shift .row + .row { border-top: 1px solid var(--rule-soft); }
+  .tx-shift .key {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .tx-shift .key .badge {
+    align-self: flex-start;
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ink-3); padding: 4px 8px;
+    border: 1px solid var(--rule); border-radius: 4px;
+  }
+  .tx-shift .row.after .key .badge {
+    color: var(--accent); border-color: var(--accent);
+  }
+  .tx-shift .key h4 {
+    font-family: var(--serif); font-style: italic; font-weight: 400;
+    font-size: 28px; line-height: 1.1; letter-spacing: -0.01em;
+    margin: 0; color: var(--ink);
+  }
+  .tx-shift .row.after .key h4 em { color: var(--accent); }
+  .tx-shift .points {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px 32px;
+  }
+  .tx-shift .point {
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .tx-shift .point .lbl {
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .tx-shift .point p {
+    margin: 0;
+    font-family: var(--sans); font-size: 15px; line-height: 1.5;
+    color: var(--ink);
+  }
+  .tx-shift .row.after .point .lbl { color: var(--accent); }
+  @media (max-width: 720px) {
+    .tx-shift .row { grid-template-columns: 1fr; gap: 20px; padding: 32px 0; }
+    .tx-shift .points { grid-template-columns: 1fr; gap: 18px; }
+  }
+
+  /* ── Architecture diagram ────────────────────────────────────────────── */
+  .tx-arch {
+    margin: 64px 0;
+    border: 1px solid var(--rule);
+    background: #fff;
+    padding: 40px clamp(24px, 4vw, 56px) 48px;
+  }
+  html[data-theme="dark"] .tx-arch { background: #15261d; }
+  .tx-arch .arch-title {
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ink-3); margin-bottom: 6px;
+  }
+  .tx-arch h3 {
+    font-family: var(--sans); font-weight: 700;
+    font-size: clamp(22px, 2.8vw, 30px);
+    letter-spacing: -0.02em; line-height: 1.15;
+    margin: 0 0 40px; max-width: 28ch;
+  }
+  .arch-grid {
+    display: grid;
+    grid-template-columns: 1fr 52px 1.1fr 52px 1fr;
+    align-items: center;
+    gap: 0;
+  }
+  @media (max-width: 760px) {
+    .arch-grid { grid-template-columns: 1fr; gap: 12px; }
+    .arch-arrow { display: none; }
+  }
+  .arch-col {
+    display: flex; flex-direction: column; gap: 10px;
+    min-width: 0; align-self: stretch; justify-content: center;
+  }
+  .arch-col.center {
+    align-self: center; padding: 0 4px;
+  }
+  .arch-col .col-label {
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 4px;
+  }
+  .arch-col .col-cell {
+    border: 1px solid var(--rule); border-radius: 8px;
+    padding: 12px 14px;
+    font-family: var(--sans); font-size: 13.5px;
+    color: var(--ink); font-weight: 500;
+    background: var(--bg); line-height: 1.3;
+    transition: border-color 200ms;
+  }
+  .arch-col .col-cell:hover { border-color: var(--accent); }
+  .arch-col .col-cell .sub {
+    display: block;
+    font-family: var(--mono); font-size: 10px;
+    color: var(--ink-3); font-weight: 400;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    margin-top: 4px;
+  }
+  .arch-col.center .col-cell {
+    background: #0e2a64; color: #fff; border-color: #0e2a64;
+    text-align: center; font-weight: 700;
+    padding: 22px 14px; min-height: 116px;
+    display: flex; flex-direction: column;
+    justify-content: center; gap: 6px;
+  }
+  .arch-col.center .col-cell:hover { border-color: #0e2a64; }
+  .arch-col.center .col-cell .sub { color: #5fc88a; opacity: 0.9; }
+  .arch-arrow {
+    align-self: center; justify-self: stretch;
+    height: 1px; background: var(--rule);
+    position: relative; margin: 0 4px;
+  }
+  .arch-arrow::after {
+    content: ""; position: absolute;
+    right: -1px; top: 50%;
+    width: 7px; height: 7px;
+    border-top: 1px solid var(--ink-3);
+    border-right: 1px solid var(--ink-3);
+    transform: translate(0, -50%) rotate(45deg);
+  }
+
+  /* ── Six-pillar capabilities grid ────────────────────────────────────── */
+  .tx-pillars {
+    margin: 64px 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+  @media (max-width: 760px) { .tx-pillars { grid-template-columns: 1fr; } }
+  .tx-pillars .cap {
+    background: var(--bg);
+    padding: 28px 24px;
+    display: flex; flex-direction: column; gap: 10px;
+    min-height: 180px;
+  }
+  html[data-theme="dark"] .tx-pillars .cap { background: #15261d; }
+  .tx-pillars .cap .num {
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: 0.08em; color: var(--accent);
+  }
+  .tx-pillars .cap h4 {
+    font-family: var(--sans); font-weight: 600;
+    font-size: 17px; line-height: 1.25; letter-spacing: -0.01em;
+    margin: 0; color: var(--ink);
+  }
+  .tx-pillars .cap p {
+    font-family: var(--sans); font-size: 14px;
+    line-height: 1.55; color: var(--ink-2); margin: 0;
+  }
+
+  /* ── Platform work — editorial three-row layout ───────────────────────── */
+  .tx-platform {
+    margin: 40px 0 56px;
+    display: flex; flex-direction: column;
+  }
+  .tx-platform .pf {
+    display: grid;
+    grid-template-columns: 92px 1fr;
+    gap: 32px;
+    padding: 32px 0;
+    border-top: 1px solid var(--rule-soft);
+    align-items: start;
+  }
+  .tx-platform .pf:first-child { border-top: 1px solid var(--rule); }
+  .tx-platform .pf:last-child { border-bottom: 1px solid var(--rule); }
+  .tx-platform .pf .idx {
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .tx-platform .pf .idx .n {
+    font-family: var(--serif); font-style: italic;
+    font-size: 36px; line-height: 1; color: var(--accent);
+  }
+  .tx-platform .pf .idx .tag {
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .tx-platform .pf .body h4 {
+    font-family: var(--sans); font-weight: 600;
+    font-size: 19px; line-height: 1.25; letter-spacing: -0.01em;
+    margin: 0 0 8px; color: var(--ink);
+  }
+  .tx-platform .pf .body h4 em {
+    font-family: var(--serif); font-style: italic;
+    font-weight: 400; color: var(--accent);
+  }
+  .tx-platform .pf .body p {
+    font-family: var(--sans); font-size: 15px; line-height: 1.65;
+    color: var(--ink-2); margin: 0; max-width: 56ch;
+  }
+  @media (max-width: 720px) {
+    .tx-platform .pf { grid-template-columns: 1fr; gap: 12px; padding: 24px 0; }
+  }
+</style>
+</head>
+<body>
+  <article class="post-shell">
+    <div class="post-top">
+      <a class="post-back" href="../index.html">Back to portfolio</a>
+      <span class="post-mono">nm<span style="color:var(--accent);font-style:italic">.</span></span>
+    </div>
+
+    <div class="post-meta">
+      <span class="stripe" aria-hidden="true"></span>
+      <span class="tag">Embedded fintech</span>
+      <span>Case Study 01</span>
+      <span>· Tapcheck</span>
+    </div>
+
+    <h1 class="post-title">Distribution as <em>product.</em></h1>
+
+    <p class="post-deck">How I led Tapcheck Express — an embedded earned-wage-access platform that turned every payroll, HR, and time-and-attendance provider into a Tapcheck distribution channel.</p>
+
+    <div class="post-byline">
+      <div><strong>Naama Mendes Jr.</strong></div>
+      <div>Lead Product Manager · Tapcheck · 2023 – Current</div>
+      <div style="margin-left:auto">Issue 01</div>
+    </div>
+
+    <div class="post-body">
+      <p><span class="lead">Tapcheck is a leading earned-wage-access provider. We let employees of companies like Amazon, Home Instead, and Metro by T-Mobile take an advance on wages they've already earned, weeks before payday.</span> When I joined, the product was loved. The way it reached people wasn't.</p>
+
+      <p>The whole company was built around a direct-to-employer motion. Every new customer meant convincing an HR leader, integrating with their payroll system, and standing up the program one rooftop at a time. The product was instant. Distribution was anything but.</p>
+
+      <p>This is the story of <em>Tapcheck Express</em> — the embedded platform we shipped to fix that — and what I learned treating distribution as a product surface, not a sales motion.</p>
+
+      <section class="tx-hero" aria-label="Tapcheck Express cover">
+        <div class="eyebrow">Tapcheck Express</div>
+        <h3>Earned wage access — built for <em>workforce platforms.</em></h3>
+        <p>Designed for payroll, HR, and time-and-attendance providers, Tapcheck Express unlocks on-demand pay and financial wellness for their clients — instantly. Flip-the-switch simplicity. No engineering work on the partner's side. Just instant value to every business on the platform.</p>
+      </section>
+
+      <h2>The distribution problem</h2>
+
+      <p>Earned wage access isn't a product employees go and find. It arrives, or it doesn't, through the company they already work for. Which means EWA isn't really an employer-benefits product — it's a distribution problem dressed up as one.</p>
+
+      <p>Most of our growth was gated by a long, expensive direct-to-employer cycle: pitch HR, integrate the payroll system, train managers, launch. Meanwhile every payroll, HR, and time-and-attendance provider in the country already had thousands of employer relationships, and a product surface their clients used every week. They didn't have EWA. We didn't have their reach.</p>
+
+      <p>Tapcheck Express is the answer. We rebuilt our platform so any workforce-tech provider could embed Tapcheck inside their own product — under their brand or ours — with no engineering lift on their side. <strong>Their distribution. Our product. One integration.</strong></p>
+
+      <section class="tx-shift" aria-label="Distribution model — before vs after Express">
+        <div class="row before">
+          <div class="key">
+            <span class="badge">Before</span>
+            <h4>One employer at a time.</h4>
+          </div>
+          <div class="points">
+            <div class="point">
+              <span class="lbl">Motion</span>
+              <p>Sales-led acquisition, employer by employer.</p>
+            </div>
+            <div class="point">
+              <span class="lbl">Setup</span>
+              <p>Bespoke payroll and time-clock work for every customer.</p>
+            </div>
+            <div class="point">
+              <span class="lbl">Time to launch</span>
+              <p>Weeks. Sometimes a full quarter.</p>
+            </div>
+            <div class="point">
+              <span class="lbl">Ceiling</span>
+              <p>Reach capped by pipeline headcount, not product fit.</p>
+            </div>
+          </div>
+        </div>
+        <div class="row after">
+          <div class="key">
+            <span class="badge">After Express</span>
+            <h4>One partner, <em>every</em> employer.</h4>
+          </div>
+          <div class="points">
+            <div class="point">
+              <span class="lbl">Motion</span>
+              <p>Platform-led — every partner brings their full client base.</p>
+            </div>
+            <div class="point">
+              <span class="lbl">Setup</span>
+              <p>One multi-tenant integration replaces N bespoke ones.</p>
+            </div>
+            <div class="point">
+              <span class="lbl">Time to launch</span>
+              <p>Flip-the-switch — no IT work on the partner's side.</p>
+            </div>
+            <div class="point">
+              <span class="lbl">Ceiling</span>
+              <p>Reach capped by partner ecosystem, not headcount.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <h2>Impact as Lead PM</h2>
+
+      <p>The Express bet asked the platform to do things it had never done — serve multiple partners, run async of any one app, and stand up new integrations in a day instead of two weeks.</p>
+
+      <section class="story-pillars" aria-label="Three impact pillars">
+        <div class="pillar">
+          <div class="num">01 · Revenue</div>
+          <h4>$0 to $2.2M ARR in under a quarter.</h4>
+          <p>Express went from a slide deck to a live, revenue-generating platform faster than any product line in Tapcheck's history. The pipeline that had been sitting behind direct-to-employer sales unblocked the moment partners could enable us themselves.</p>
+        </div>
+        <div class="pillar">
+          <div class="num">02 · Activation</div>
+          <h4>+15% registration success via SSO.</h4>
+          <p>Embedding Tapcheck inside the partner's existing identity flow removed the friction layer that used to lose us employees at first contact. Users land already authenticated — fewer drop-offs, more eligible accounts.</p>
+        </div>
+        <div class="pillar">
+          <div class="num">03 · Throughput</div>
+          <h4>+7% transfers from the ML earnings model.</h4>
+          <p>The earnings prediction engine lifted transfers across the eligible base — and removed the time-clock dependency that used to gate every new partner integration.</p>
+        </div>
+      </section>
+
+      <h2>How Express works</h2>
+
+      <p>The product surface is small on purpose. A workforce-tech partner connects once. Every employer on their platform inherits Tapcheck. Every employee at those employers can transfer earned wages from inside the partner's app, the Tapcheck app, or a text message.</p>
+
+      <section class="tx-arch" aria-label="Tapcheck Express architecture">
+        <div class="arch-title">Architecture</div>
+        <h3>One contract on the partner side. Every distribution surface on ours.</h3>
+        <div class="arch-grid">
+          <div class="arch-col">
+            <div class="col-label">Partners</div>
+            <div class="col-cell">Payroll providers<span class="sub">Workday · ADP · Paylocity</span></div>
+            <div class="col-cell">Time &amp; attendance<span class="sub">Clock-in vendors</span></div>
+            <div class="col-cell">HRIS &amp; benefits<span class="sub">Embedded benefits suites</span></div>
+          </div>
+          <div class="arch-arrow" aria-hidden="true"></div>
+          <div class="arch-col center">
+            <div class="col-label" style="color:var(--accent-2);text-align:center">Platform</div>
+            <div class="col-cell">Tapcheck Express<span class="sub">Multi-tenant API · Earnings ML · Compliance</span></div>
+          </div>
+          <div class="arch-arrow" aria-hidden="true"></div>
+          <div class="arch-col">
+            <div class="col-label">Distribution surfaces</div>
+            <div class="col-cell">Embedded in partner app<span class="sub">Co-branded or white-label</span></div>
+            <div class="col-cell">Tapcheck mobile app<span class="sub">iOS &amp; Android</span></div>
+            <div class="col-cell">Text-to-transfer<span class="sub">SMS · WhatsApp</span></div>
+          </div>
+        </div>
+      </section>
+
+      <h2>What Express promises a partner</h2>
+
+      <p>Express is sold to platform partners on six commitments. Each one is a product decision — not a marketing line — and each one shaped a chunk of the platform we shipped.</p>
+
+      <section class="tx-pillars" aria-label="Tapcheck Express capabilities">
+        <div class="cap">
+          <div class="num">01</div>
+          <h4>Zero technical lift.</h4>
+          <p>Tapcheck handles setup, integration, and ongoing support. No engineering work on the partner side.</p>
+        </div>
+        <div class="cap">
+          <div class="num">02</div>
+          <h4>Flexible by design.</h4>
+          <p>Connect payroll, time-and-attendance, or both — pick the integration model that fits the partner's platform.</p>
+        </div>
+        <div class="cap">
+          <div class="num">03</div>
+          <h4>No change to payroll.</h4>
+          <p>Existing payroll cycles and processes stay untouched. Express runs alongside them, not through them.</p>
+        </div>
+        <div class="cap">
+          <div class="num">04</div>
+          <h4>Seamless for the employee.</h4>
+          <p>Wages, pay summaries, and financial education in one experience — embedded in the partner app or in Tapcheck's.</p>
+        </div>
+        <div class="cap">
+          <div class="num">05</div>
+          <h4>Free for the business.</h4>
+          <p>No cost to employers. Partners get a differentiator their competitors don't have, with no line on their clients' invoice.</p>
+        </div>
+        <div class="cap">
+          <div class="num">06</div>
+          <h4>Enterprise-grade by default.</h4>
+          <p>Built to the highest standards of data security and regulatory compliance — trusted by platforms that serve millions of businesses.</p>
+        </div>
+      </section>
+
+      <h2>The platform work behind it</h2>
+
+      <p>The promises above only work if the platform underneath earns them. Three pieces of platform work made Express ship.</p>
+
+      <section class="tx-platform" aria-label="Platform work">
+        <div class="pf">
+          <div class="idx">
+            <span class="n">01</span>
+            <span class="tag">Async services</span>
+          </div>
+          <div class="body">
+            <h4>Externalized balance generation and transfer calls.</h4>
+            <p>Moved off the critical path of the consumer app so any partner can call them <em>async</em> without bottlenecking each other. The same balance call now serves the Tapcheck app, an embedded experience inside Workday, and a text-to-transfer flow — without queuing.</p>
+          </div>
+        </div>
+        <div class="pf">
+          <div class="idx">
+            <span class="n">02</span>
+            <span class="tag">Earnings ML</span>
+          </div>
+          <div class="body">
+            <h4>An AI engine that predicts a minimal gross balance.</h4>
+            <p>Reduces the need for a time-clock integration — which used to gate every new partner. Most users now reach an eligible balance without one, which means a partner can ship Express with payroll alone, then add time-and-attendance later as an optimization.</p>
+          </div>
+        </div>
+        <div class="pf">
+          <div class="idx">
+            <span class="n">03</span>
+            <span class="tag">Real-time data</span>
+          </div>
+          <div class="body">
+            <h4>Individualized partner calls for the integrations that <em>do</em> need them.</h4>
+            <p>Speeds the delivery of new data to the front-end systems that show balances — so the user-visible numbers are right, inside whatever surface the partner exposes. The work that nobody outside the team saw, and the work that made every other claim above defensible.</p>
+          </div>
+        </div>
+      </section>
+
+      <h2>The numbers that mattered</h2>
+
+      <div class="post-numbers">
+        <div class="num-cell">
+          <div class="num-val">$0 → $2.2M</div>
+          <div class="num-lbl">ARR · in under a quarter</div>
+        </div>
+        <div class="num-cell">
+          <div class="num-val">+15%</div>
+          <div class="num-lbl">Registration success · SSO</div>
+        </div>
+        <div class="num-cell">
+          <div class="num-val">+7%</div>
+          <div class="num-lbl">Transfers · ML earnings model</div>
+        </div>
+      </div>
+
+      <h2>What I took from Express</h2>
+
+      <section class="reflect-pair" aria-label="Reflections">
+        <div class="col col-learned">
+          <div class="label">What I learned</div>
+          <h4>Distribution belongs in the product, not next to it.</h4>
+          <p>The biggest lever in EWA isn't the transfer experience — it's <strong>where the transfer is offered.</strong> Once we accepted that, "ship Express" stopped being a platform initiative and became the strategy.</p>
+          <p>I learned how to think through a problem holistically — distribution, platform, and pricing as one system rather than three roadmaps. Externalizing balance generation only mattered because it unlocked a partner integration; the partner integration only mattered because it bypassed the direct-to-employer cycle. Each piece earned its place by what it unlocked elsewhere.</p>
+          <p>I learned how to prepare a platform for scale before the scale arrives — not after. The integrations work that took us from 16 days to 1 was scoped a quarter before the partner pipeline that needed it.</p>
+        </div>
+        <div class="col col-different">
+          <div class="label">What I'd do differently</div>
+          <h4>Make the success metric visible to the team that ships it.</h4>
+          <p>I'd <strong>drive harder toward clear, easily accessible OKRs</strong> — visible to the non-technical folks who built around us. The teams that didn't see the active-user number on a dashboard were the teams whose work drifted off-strategy first.</p>
+          <p>I'd further differentiate communication across teams — find the buy-in story for sales, for engineering, for partner ops <em>separately</em>, with a focus on each team's specific job-to-be-done. One narrative is cheap to write and expensive to ship.</p>
+        </div>
+      </section>
+
+      <p>Express is the chapter I'm most proud of from Tapcheck. It taught me that the most strategic surface a fintech product owns isn't the screen the user taps — it's the ability to <em>be where the user already is.</em> Meet them inside the partner app, the payroll portal, the text thread they're already reading. Distribution stops being a sales motion and starts being a product question.</p>
+    </div>
+
+    <nav class="post-foot">
+      <a href="../index.html#writing">
+        <span>← All writing</span>
+        <strong>Field notes</strong>
+      </a>
+      <a class="next" href="cb-insights-growth.html">
+        <span>Next →</span>
+        <strong>Sustainable growth at CB Insights</strong>
+      </a>
+    </nav>
+  </article>
+
+</body>
+</html>
