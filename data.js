@@ -158,6 +158,14 @@ window.PORTFOLIO_DATA = {
   posts: [
     {
       year: "2026",
+      date: "May 17",
+      title: "A bicycle, an e-bike, or a rickshaw?",
+      excerpt: "Steve Jobs liked to say that the computer was a bicycle for the mind. The obvious question now is what AI is, in the same frame.",
+      tag: "AI",
+      href: "writing/bicycle-ebike-rickshaw.html",
+    },
+    {
+      year: "2026",
       date: "Mar 12",
       title: "Distribution as product — building Tapcheck Express",
       excerpt: "How I led Tapcheck Express — an embedded EWA platform that turned every payroll, HR, and time-and-attendance provider into a Tapcheck distribution channel.",
