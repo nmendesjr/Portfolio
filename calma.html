@@ -1,0 +1,2117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calma — read well</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,400&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; background: #0A0908; color: #E8E5DD; }
+    body { font-family: "Spectral", Georgia, serif; -webkit-font-smoothing: antialiased; }
+    #root { height: 100%; }
+
+    /* Selection color */
+    ::selection { background: rgba(201,168,118,0.28); }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(232,229,221,0.1); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(232,229,221,0.18); }
+
+    /* App shell */
+    .app { display: flex; height: 100vh; overflow: hidden; }
+
+    /* Sidebar */
+    .sidebar {
+      width: 220px; flex-shrink: 0; height: 100%;
+      background: #080706; border-right: 1px solid rgba(232,229,221,0.06);
+      display: flex; flex-direction: column; padding: 32px 0 24px;
+      overflow-y: auto;
+    }
+    .sidebar-logo {
+      padding: 0 24px 32px; font-size: 28px; line-height: 1;
+      font-weight: 600; letter-spacing: -0.5px; color: #E8E5DD;
+    }
+    .sidebar-logo span { color: #C9A876; }
+    .sidebar-section { padding: 0 12px; flex: 1; }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; border-radius: 6px; cursor: pointer;
+      font-size: 14.5px; color: #5E5B55; border: none; background: transparent;
+      width: 100%; text-align: left; transition: color 150ms, background 150ms;
+      font-family: "Spectral", Georgia, serif; letter-spacing: 0.1px;
+    }
+    .nav-item:hover { color: #9A958C; background: rgba(232,229,221,0.04); }
+    .nav-item.active { color: #E8E5DD; background: rgba(232,229,221,0.07); }
+    .nav-item svg { flex-shrink: 0; opacity: 0.7; }
+    .nav-item.active svg { opacity: 1; }
+    .sidebar-divider { height: 1px; background: rgba(232,229,221,0.06); margin: 16px 12px; }
+    .sidebar-bottom { padding: 0 12px; }
+    .add-btn {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; border-radius: 6px; cursor: pointer;
+      font-size: 14px; color: #C9A876; border: 1px solid rgba(201,168,118,0.2);
+      background: rgba(201,168,118,0.05); width: 100%; text-align: left;
+      font-family: "Spectral", Georgia, serif; transition: all 150ms;
+    }
+    .add-btn:hover { background: rgba(201,168,118,0.1); border-color: rgba(201,168,118,0.3); }
+
+    /* Main content area */
+    .main { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+    .scroll-area { flex: 1; overflow-y: auto; }
+
+    /* Library layout */
+    .library-inner { max-width: 720px; margin: 0 auto; padding: 48px 40px 80px; }
+    .view-label { font-size: 10px; letter-spacing: 2.8px; color: #5E5B55; text-transform: uppercase; margin-bottom: 8px; }
+    .view-title { font-size: 38px; font-weight: 600; letter-spacing: -0.6px; color: #E8E5DD; line-height: 1.05; }
+    .view-meta { font-size: 14px; color: #5E5B55; margin-top: 10px; font-style: italic; }
+
+    /* Continue reading card */
+    .continue-card {
+      margin: 32px 0; padding: 24px 28px;
+      background: #0F0E0D; border: 1px solid rgba(232,229,221,0.08);
+      border-radius: 4px; cursor: pointer; display: block; text-align: left;
+      width: 100%; color: inherit; font-family: inherit; transition: border-color 150ms;
+    }
+    .continue-card:hover { border-color: rgba(232,229,221,0.15); }
+    .continue-label { display: flex; align-items: center; gap: 8px; color: #C9A876; margin-bottom: 16px; }
+    .continue-label span { font-size: 10px; letter-spacing: 1.8px; text-transform: uppercase; }
+    .continue-title { font-size: 26px; font-weight: 600; letter-spacing: -0.3px; line-height: 1.15; margin-bottom: 8px; }
+    .continue-byline { font-size: 13px; color: #5E5B55; font-style: italic; margin-bottom: 20px; }
+    .progress-track { height: 1px; background: rgba(232,229,221,0.1); position: relative; }
+    .progress-fill { position: absolute; left: 0; top: 0; bottom: 0; background: #C9A876; transition: width 300ms; }
+    .progress-pct { font-size: 11px; color: #5E5B55; margin-top: 6px; letter-spacing: 0.3px; font-variant-numeric: tabular-nums; }
+
+    /* Section header */
+    .section-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 6px; }
+    .section-label { font-size: 10px; letter-spacing: 2px; color: #5E5B55; text-transform: uppercase; }
+    .section-count { font-size: 12px; color: #3D3A35; font-style: italic; }
+
+    /* Article rows */
+    .article-list { border-top: 1px solid rgba(232,229,221,0.06); }
+    .article-row {
+      display: block; width: 100%; text-align: left; background: transparent;
+      border: none; border-bottom: 1px solid rgba(232,229,221,0.06);
+      padding: 22px 0; cursor: pointer; color: inherit; font-family: inherit;
+      transition: background 120ms;
+    }
+    .article-row:hover { background: rgba(232,229,221,0.02); }
+    .article-row-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 7px; }
+    .article-pub { font-size: 10px; letter-spacing: 1.4px; color: #C9A876; text-transform: uppercase; }
+    .article-meta { font-size: 11px; color: #3D3A35; font-variant-numeric: tabular-nums; }
+    .article-title { font-size: 21px; font-weight: 600; letter-spacing: -0.2px; line-height: 1.2; margin-bottom: 8px; color: #E8E5DD; }
+    .article-excerpt { font-size: 14.5px; line-height: 1.5; color: #5E5B55; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .article-author { margin-top: 10px; font-size: 12px; color: #3D3A35; font-style: italic; }
+    .article-progress-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+    .article-progress-track { flex: 1; height: 1px; background: rgba(232,229,221,0.08); position: relative; }
+    .article-read-badge { font-size: 10px; color: #8FA382; letter-spacing: 0.5px; }
+
+    /* Reader */
+    .reader-wrap { position: relative; min-height: 100%; }
+    .reader-topbar {
+      position: sticky; top: 0; z-index: 50;
+      padding: 0 32px; height: 52px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(10,9,8,0.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(232,229,221,0.06);
+    }
+    .reader-topbar-back {
+      display: flex; align-items: center; gap: 6px;
+      background: transparent; border: none; color: #5E5B55; cursor: pointer;
+      font-family: "Spectral", Georgia, serif; font-size: 14px; font-style: italic;
+      padding: 4px 8px 4px 0; transition: color 150ms;
+    }
+    .reader-topbar-back:hover { color: #9A958C; }
+    .reader-pub { font-size: 10px; letter-spacing: 1.8px; color: #3D3A35; text-transform: uppercase; }
+    .reader-topbar-actions { display: flex; align-items: center; gap: 4px; }
+    .icon-btn {
+      width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
+      background: transparent; border: none; color: #5E5B55; cursor: pointer;
+      border-radius: 6px; transition: color 150ms, background 150ms;
+    }
+    .icon-btn:hover { color: #9A958C; background: rgba(232,229,221,0.06); }
+    .icon-btn.active { color: #E8E5DD; background: rgba(232,229,221,0.08); }
+    .reader-progress-bar { height: 1px; background: rgba(232,229,221,0.08); position: sticky; top: 52px; z-index: 49; }
+    .reader-progress-fill { height: 100%; background: #C9A876; transition: width 100ms; }
+    .reader-col { max-width: 660px; margin: 0 auto; padding: 56px 40px 120px; }
+    .article-h1 { font-size: 36px; font-weight: 600; letter-spacing: -0.5px; line-height: 1.12; color: #E8E5DD; margin-bottom: 16px; }
+    .article-byline { margin-bottom: 40px; }
+    .article-byline-name { font-size: 15px; font-style: italic; color: #9A958C; margin-bottom: 6px; }
+    .article-byline-meta { display: flex; align-items: center; gap: 8px; font-size: 10px; letter-spacing: 1.5px; color: #3D3A35; text-transform: uppercase; }
+    .article-byline-dot { width: 3px; height: 3px; border-radius: 50%; background: #3D3A35; }
+    .article-ornament { display: flex; align-items: center; gap: 12px; margin: 24px 0 0; color: #3D3A35; }
+    .article-ornament-line { flex: 1; height: 1px; background: rgba(232,229,221,0.06); }
+    .article-ornament-glyph { font-size: 16px; color: #3D3A35; }
+    .article-h2 { font-size: 19px; font-weight: 600; font-style: italic; letter-spacing: 0; line-height: 1.3; color: #E8E5DD; margin: 36px 0 16px; }
+    .article-p { font-size: 19px; line-height: 1.78; color: #E8E5DD; margin-bottom: 24px; letter-spacing: 0.08px; cursor: text; }
+    .article-end { text-align: center; color: #3D3A35; font-size: 18px; margin: 48px 0 24px; }
+    .article-source { text-align: center; font-size: 13px; color: #3D3A35; font-style: italic; }
+
+    /* Highlights */
+    mark { background: none; border-radius: 1px; }
+    mark.hl-ochre { background: rgba(201,168,118,0.18); box-shadow: inset 0 -1.5px 0 #C9A876; color: inherit; }
+    mark.hl-sage { background: rgba(143,163,130,0.18); box-shadow: inset 0 -1.5px 0 #8FA382; color: inherit; }
+    mark.hl-rose { background: rgba(194,138,138,0.18); box-shadow: inset 0 -1.5px 0 #C28A8A; color: inherit; }
+    mark.hl-blue { background: rgba(127,149,173,0.18); box-shadow: inset 0 -1.5px 0 #7F95AD; color: inherit; }
+    .hl-note-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-left: 3px; vertical-align: super; border: 1.5px solid #0A0908; }
+    .hl-ochre .hl-note-dot { background: #C9A876; }
+    .hl-sage .hl-note-dot { background: #8FA382; }
+    .hl-rose .hl-note-dot { background: #C28A8A; }
+    .hl-blue .hl-note-dot { background: #7F95AD; }
+
+    /* Inline note */
+    .inline-note { display: flex; align-items: flex-start; gap: 10px; margin: -12px 0 24px; padding-left: 14px; font-size: 14px; line-height: 1.55; color: #5E5B55; font-style: italic; }
+    .inline-note-label { font-size: 9px; letter-spacing: 1.4px; text-transform: uppercase; font-style: normal; padding-top: 3px; flex-shrink: 0; }
+
+    /* Selection toolbar */
+    .sel-toolbar {
+      position: fixed; z-index: 200;
+      background: #171614; border: 1px solid rgba(232,229,221,0.14);
+      border-radius: 100px; padding: 5px 6px;
+      display: flex; align-items: center; gap: 2px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4);
+      transform: translateX(-50%);
+      animation: toolbar-pop 140ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes toolbar-pop { from { opacity: 0; transform: translateX(-50%) scale(0.92); } to { opacity: 1; transform: translateX(-50%) scale(1); } }
+    .sel-btn {
+      display: flex; align-items: center; gap: 6px; padding: 7px 12px;
+      background: transparent; border: none; color: #E8E5DD; cursor: pointer;
+      font-family: "Spectral", Georgia, serif; font-size: 12.5px; letter-spacing: 0.3px;
+      border-radius: 100px; transition: background 120ms, color 120ms; white-space: nowrap;
+    }
+    .sel-btn:hover { background: rgba(232,229,221,0.08); }
+    .sel-btn.active { color: #C9A876; }
+    .sel-divider { width: 1px; height: 16px; background: rgba(232,229,221,0.1); flex-shrink: 0; }
+    .color-row { display: flex; align-items: center; gap: 10px; padding: 7px 12px; }
+    .color-swatch {
+      width: 22px; height: 22px; border-radius: 50%; border: none; cursor: pointer;
+      transition: transform 120ms, box-shadow 120ms; flex-shrink: 0;
+    }
+    .color-swatch:hover { transform: scale(1.15); }
+    .color-swatch.selected { box-shadow: 0 0 0 2px #0A0908, 0 0 0 3.5px var(--swatch-color); }
+
+    /* Note panel */
+    .note-panel {
+      position: fixed; right: 0; top: 0; bottom: 0; width: 340px;
+      background: #0F0E0D; border-left: 1px solid rgba(232,229,221,0.08);
+      display: flex; flex-direction: column; z-index: 100;
+      animation: slide-in-right 200ms ease-out;
+    }
+    @keyframes slide-in-right { from { transform: translateX(100%); } to { transform: translateX(0); } }
+    .note-panel-header { padding: 20px 22px 16px; border-bottom: 1px solid rgba(232,229,221,0.06); display: flex; justify-content: space-between; align-items: baseline; }
+    .note-panel-title { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #5E5B55; }
+    .note-panel-actions { display: flex; gap: 8px; align-items: center; }
+    .note-save-btn { background: transparent; border: none; color: #C9A876; cursor: pointer; font-family: "Spectral", Georgia, serif; font-size: 14px; font-weight: 500; padding: 0; }
+    .note-cancel-btn { background: transparent; border: none; color: #5E5B55; cursor: pointer; font-family: "Spectral", Georgia, serif; font-size: 14px; font-style: italic; padding: 0; }
+    .note-panel-quote { padding: 16px 22px; border-left: 2px solid; margin: 0 22px 0; border-radius: 0; }
+    .note-panel-quote-label { font-size: 9px; letter-spacing: 1.6px; text-transform: uppercase; margin-bottom: 6px; }
+    .note-panel-quote-text { font-size: 14px; line-height: 1.5; font-style: italic; color: #5E5B55; }
+    .note-textarea-wrap { flex: 1; padding: 0 22px; margin-top: 20px; }
+    .note-textarea { width: 100%; height: 100%; background: transparent; border: none; color: #E8E5DD; font-family: "Spectral", Georgia, serif; font-size: 16px; line-height: 1.6; resize: none; outline: none; }
+    .note-textarea::placeholder { color: #3D3A35; font-style: italic; }
+    .note-panel-footer { padding: 16px 22px; border-top: 1px solid rgba(232,229,221,0.06); }
+    .note-color-row { display: flex; align-items: center; gap: 10px; }
+    .note-color-label { font-size: 10px; letter-spacing: 1.6px; text-transform: uppercase; color: #3D3A35; }
+    .note-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
+    .note-tag { padding: 4px 10px; border-radius: 100px; border: 1px solid rgba(232,229,221,0.08); font-size: 11.5px; color: #5E5B55; font-style: italic; }
+
+    /* Reader settings */
+    .settings-panel {
+      position: fixed; right: 0; top: 52px; width: 260px;
+      background: #0F0E0D; border: 1px solid rgba(232,229,221,0.1);
+      border-radius: 8px; padding: 6px 0; z-index: 100;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+      animation: fade-down 140ms ease-out;
+    }
+    @keyframes fade-down { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+    .settings-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; border-bottom: 1px solid rgba(232,229,221,0.05); }
+    .settings-row:last-child { border-bottom: none; }
+    .settings-label { font-size: 14px; color: #9A958C; }
+    .settings-val { font-size: 14px; color: #5E5B55; font-style: italic; }
+    .settings-stepper { display: flex; gap: 4px; }
+    .stepper-btn { width: 28px; height: 26px; background: #0A0908; border: 1px solid rgba(232,229,221,0.1); border-radius: 4px; color: #9A958C; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; font-family: serif; }
+
+    /* Marginalia screen */
+    .marginalia-inner { max-width: 720px; margin: 0 auto; padding: 48px 40px 80px; }
+    .topic-filter { display: flex; gap: 20px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; margin: 24px 0 32px; }
+    .topic-filter::-webkit-scrollbar { display: none; }
+    .topic-chip { background: transparent; border: none; font-family: "Spectral", Georgia, serif; font-size: 13.5px; color: #3D3A35; cursor: pointer; padding: 4px 0; border-bottom: 1px solid transparent; white-space: nowrap; font-style: italic; transition: color 150ms; }
+    .topic-chip:hover { color: #5E5B55; }
+    .topic-chip.active { color: #E8E5DD; border-bottom-color: #C9A876; font-style: normal; }
+    .topic-group { margin-bottom: 32px; }
+    .topic-group-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; }
+    .topic-group-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #3D3A35; white-space: nowrap; }
+    .topic-group-line { flex: 1; height: 1px; background: rgba(232,229,221,0.06); }
+    .topic-group-count { font-size: 11px; color: #3D3A35; }
+    .hl-card {
+      background: #0F0E0D; border: 1px solid rgba(232,229,221,0.07);
+      border-radius: 3px; padding: 20px 22px; margin-bottom: 14px;
+      cursor: pointer; text-align: left; width: 100%; color: inherit;
+      font-family: inherit; transition: border-color 150ms;
+      border-left-width: 2px;
+    }
+    .hl-card:hover { border-color: rgba(232,229,221,0.14); }
+    .hl-card-quote { font-size: 17px; line-height: 1.48; font-style: italic; color: #E8E5DD; }
+    .hl-card-note { margin-top: 14px; padding-top: 12px; border-top: 1px dashed rgba(232,229,221,0.07); font-size: 14px; line-height: 1.5; color: #5E5B55; }
+    .hl-card-note-label { font-size: 10px; letter-spacing: 1.4px; text-transform: uppercase; margin-right: 8px; }
+    .hl-card-footer { margin-top: 14px; display: flex; align-items: center; gap: 8px; }
+    .hl-card-source { font-size: 12px; color: #5E5B55; font-style: italic; }
+    .hl-card-when { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: #3D3A35; }
+
+    /* Discover screen */
+    .discover-inner { max-width: 720px; margin: 0 auto; padding: 48px 40px 80px; }
+    .discover-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 32px; }
+    .discover-card {
+      background: #0F0E0D; border: 1px solid rgba(232,229,221,0.07);
+      border-radius: 3px; padding: 22px; cursor: pointer; text-align: left;
+      width: 100%; color: inherit; font-family: inherit; transition: border-color 150ms;
+      display: flex; flex-direction: column; min-height: 180px;
+    }
+    .discover-card:hover { border-color: rgba(232,229,221,0.14); }
+    .discover-card-tag { font-size: 9.5px; letter-spacing: 1.6px; color: #C9A876; text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+    .discover-card-tag::before { content: ''; display: block; width: 4px; height: 4px; border-radius: 50%; background: #C9A876; flex-shrink: 0; }
+    .discover-card-title { font-size: 18px; font-weight: 600; letter-spacing: -0.1px; line-height: 1.2; margin-bottom: 10px; color: #E8E5DD; }
+    .discover-card-excerpt { font-size: 13px; line-height: 1.5; color: #5E5B55; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; flex: 1; }
+    .discover-card-footer { margin-top: 16px; display: flex; justify-content: space-between; font-size: 11.5px; color: #3D3A35; font-style: italic; }
+
+    /* Search screen */
+    .search-inner { max-width: 720px; margin: 0 auto; padding: 48px 40px 80px; }
+    .search-input-wrap { position: relative; margin-top: 28px; }
+    .search-input {
+      width: 100%; background: #0F0E0D; border: 1px solid rgba(232,229,221,0.1);
+      border-radius: 4px; padding: 14px 18px 14px 44px;
+      color: #E8E5DD; font-family: "Spectral", Georgia, serif; font-size: 18px;
+      outline: none; transition: border-color 150ms;
+    }
+    .search-input:focus { border-color: rgba(201,168,118,0.3); }
+    .search-input::placeholder { color: #3D3A35; font-style: italic; }
+    .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #3D3A35; pointer-events: none; }
+    .search-results { margin-top: 36px; }
+    .search-section-title { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #3D3A35; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid rgba(232,229,221,0.06); }
+    .search-empty { text-align: center; padding: 60px 0; color: #3D3A35; font-size: 16px; font-style: italic; }
+
+    /* Add article modal */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+      animation: fade-in 150ms ease-out;
+    }
+    @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+    .modal {
+      background: #0F0E0D; border: 1px solid rgba(232,229,221,0.1);
+      border-radius: 8px; padding: 36px; width: 520px; max-width: calc(100vw - 40px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      animation: modal-in 200ms cubic-bezier(0.34, 1.2, 0.64, 1);
+    }
+    @keyframes modal-in { from { opacity: 0; transform: scale(0.96) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+    .modal-title { font-size: 22px; font-weight: 600; letter-spacing: -0.3px; margin-bottom: 6px; }
+    .modal-subtitle { font-size: 14px; color: #5E5B55; font-style: italic; margin-bottom: 28px; }
+    .modal-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #3D3A35; margin-bottom: 8px; }
+    .modal-input {
+      width: 100%; background: #0A0908; border: 1px solid rgba(232,229,221,0.1);
+      border-radius: 4px; padding: 12px 16px; color: #E8E5DD;
+      font-family: "Spectral", Georgia, serif; font-size: 15px; outline: none;
+      transition: border-color 150ms; margin-bottom: 24px;
+    }
+    .modal-input:focus { border-color: rgba(201,168,118,0.3); }
+    .modal-input::placeholder { color: #3D3A35; font-style: italic; }
+    .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+    .modal-btn-primary { background: #E8E5DD; color: #0A0908; border: none; border-radius: 3px; padding: 10px 20px; font-family: "Spectral", Georgia, serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 150ms; }
+    .modal-btn-primary:hover { background: #C9A876; }
+    .modal-btn-secondary { background: transparent; color: #5E5B55; border: 1px solid rgba(232,229,221,0.1); border-radius: 3px; padding: 10px 20px; font-family: "Spectral", Georgia, serif; font-size: 14px; cursor: pointer; transition: all 150ms; font-style: italic; }
+    .modal-btn-secondary:hover { color: #9A958C; border-color: rgba(232,229,221,0.2); }
+    .modal-success { text-align: center; padding: 16px 0; }
+    .modal-success-icon { font-size: 32px; margin-bottom: 14px; }
+    .modal-success-title { font-size: 20px; font-weight: 500; margin-bottom: 6px; }
+    .modal-success-sub { font-size: 14px; color: #5E5B55; font-style: italic; }
+
+    /* Mobile nav */
+    .mobile-nav {
+      display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
+      background: rgba(8,7,6,0.96); backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(232,229,221,0.06);
+      padding: 8px 0 20px;
+    }
+    .mobile-nav-inner { display: flex; justify-content: space-around; }
+    .mobile-nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 4px 16px; background: transparent; border: none; color: #3D3A35; cursor: pointer; font-family: "Spectral", Georgia, serif; font-size: 10px; letter-spacing: 0.3px; transition: color 150ms; }
+    .mobile-nav-item.active { color: #E8E5DD; }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .sidebar { width: 60px; }
+      .sidebar-logo { display: none; }
+      .nav-item span, .add-btn span { display: none; }
+      .nav-item { justify-content: center; }
+      .add-btn { justify-content: center; padding: 9px; }
+    }
+    @media (max-width: 640px) {
+      .sidebar { display: none; }
+      .mobile-nav { display: block; }
+      .main { padding-bottom: 72px; }
+      .library-inner, .marginalia-inner, .discover-inner, .search-inner { padding: 28px 20px 100px; }
+      .reader-col { padding: 40px 20px 100px; }
+      .reader-topbar { padding: 0 16px; }
+      .discover-grid { grid-template-columns: 1fr; }
+      .note-panel { width: 100%; }
+      .article-h1 { font-size: 28px; }
+      .article-p { font-size: 17px; }
+    }
+
+    /* Keyboard shortcut hint */
+    .shortcut-hint { font-size: 10px; letter-spacing: 0.5px; color: #3D3A35; background: rgba(232,229,221,0.05); border: 1px solid rgba(232,229,221,0.08); border-radius: 3px; padding: 2px 5px; font-family: ui-monospace, monospace; }
+
+    /* ── Onboarding ─────────────────────────────────────────────────────────── */
+    .onboarding { position: fixed; inset: 0; background: #0A0908; display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 24px; }
+    .onboarding-inner { width: 100%; max-width: 460px; display: flex; flex-direction: column; }
+    .onboarding-logo { font-size: 32px; font-weight: 600; letter-spacing: -0.5px; color: #E8E5DD; margin-bottom: 56px; }
+    .onboarding-logo span { color: #C9A876; }
+    .onboarding-eyebrow { font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: #5E5B55; margin-bottom: 14px; }
+    .onboarding-title { font-size: 38px; font-weight: 600; letter-spacing: -0.6px; line-height: 1.08; color: #E8E5DD; margin-bottom: 10px; }
+    .onboarding-sub { font-size: 16px; line-height: 1.5; color: #5E5B55; font-style: italic; margin-bottom: 40px; }
+    .onboarding-divider { height: 1px; background: rgba(232,229,221,0.06); margin: 28px 0; }
+    .ob-btn { display: flex; align-items: center; gap: 12px; width: 100%; padding: 14px 20px; border-radius: 4px; background: #0F0E0D; border: 1px solid rgba(232,229,221,0.1); color: #E8E5DD; font-family: "Spectral", Georgia, serif; font-size: 15px; cursor: pointer; text-align: left; transition: border-color 150ms, background 150ms; margin-bottom: 10px; }
+    .ob-btn:hover { border-color: rgba(232,229,221,0.2); background: rgba(232,229,221,0.04); }
+    .ob-btn-icon { width: 20px; height: 20px; flex-shrink: 0; opacity: 0.55; }
+    .ob-email-input { width: 100%; background: #0F0E0D; border: 1px solid rgba(232,229,221,0.1); border-radius: 4px; padding: 13px 16px; color: #E8E5DD; font-family: "Spectral", Georgia, serif; font-size: 15px; outline: none; transition: border-color 150ms; margin-bottom: 10px; }
+    .ob-email-input:focus { border-color: rgba(201,168,118,0.3); }
+    .ob-email-input::placeholder { color: #3D3A35; font-style: italic; }
+    .ob-primary-btn { width: 100%; padding: 14px; background: #E8E5DD; color: #0A0908; border: none; border-radius: 4px; font-family: "Spectral", Georgia, serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: background 150ms; }
+    .ob-primary-btn:hover:not(:disabled) { background: #C9A876; }
+    .ob-primary-btn:disabled { opacity: 0.35; cursor: default; }
+    .ob-link { background: transparent; border: none; color: #3D3A35; font-family: "Spectral", Georgia, serif; font-size: 13px; font-style: italic; cursor: pointer; margin-top: 14px; display: block; text-align: center; }
+    .ob-link:hover { color: #5E5B55; }
+
+    /* ── Interests ──────────────────────────────────────────────────────────── */
+    .interests-body { flex: 1; overflow-y: auto; margin: 0 -4px; padding: 0 4px; }
+    .interest-group { margin-bottom: 26px; }
+    .interest-group-label { font-size: 9px; letter-spacing: 2.2px; text-transform: uppercase; color: #3D3A35; margin-bottom: 10px; }
+    .interest-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .interest-chip { padding: 8px 16px; border-radius: 100px; border: 1px solid rgba(232,229,221,0.1); background: transparent; font-family: "Spectral", Georgia, serif; font-size: 14px; font-style: italic; color: #5E5B55; cursor: pointer; transition: all 150ms; }
+    .interest-chip:hover { border-color: rgba(232,229,221,0.2); color: #9A958C; }
+    .interest-chip.selected { background: rgba(201,168,118,0.1); border-color: rgba(201,168,118,0.3); color: #C9A876; font-style: normal; }
+    .ob-count { font-size: 13px; color: #5E5B55; font-style: italic; margin-bottom: 20px; min-height: 20px; }
+
+    /* ── Custom interest input ──────────────────────────────────────────────── */
+    .custom-interest-row { display: flex; align-items: center; gap: 8px; margin-top: 4px; padding-top: 20px; border-top: 1px solid rgba(232,229,221,0.06); }
+    .custom-interest-input { flex: 1; background: transparent; border: none; border-bottom: 1px solid rgba(232,229,221,0.12); color: #E8E5DD; font-family: "Spectral", Georgia, serif; font-size: 14px; font-style: italic; padding: 6px 0; outline: none; transition: border-color 150ms; }
+    .custom-interest-input:focus { border-bottom-color: rgba(201,168,118,0.4); font-style: normal; }
+    .custom-interest-input::placeholder { color: #3D3A35; }
+    .custom-interest-add { width: 28px; height: 28px; border-radius: 50%; border: 1px solid rgba(232,229,221,0.12); background: transparent; color: #5E5B55; font-size: 18px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 150ms; }
+    .custom-interest-add:hover:not(:disabled) { border-color: rgba(201,168,118,0.3); color: #C9A876; }
+    .custom-interest-add:disabled { opacity: 0.25; cursor: default; }
+
+    /* ── For You Rail ───────────────────────────────────────────────────────── */
+    .for-you-section { margin: 28px 0 8px; }
+    .for-you-label { font-size: 10px; letter-spacing: 2px; color: #5E5B55; text-transform: uppercase; margin-bottom: 14px; }
+    .for-you-rail { display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; margin: 0 -40px; padding: 0 40px 4px; }
+    .for-you-rail::-webkit-scrollbar { display: none; }
+    .for-you-card { flex-shrink: 0; width: 200px; padding: 16px; background: #0F0E0D; border: 1px solid rgba(232,229,221,0.07); border-radius: 3px; cursor: pointer; text-align: left; display: flex; flex-direction: column; transition: border-color 150ms; }
+    .for-you-card:hover { border-color: rgba(232,229,221,0.14); }
+    .for-you-card-tag { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #C9A876; margin-bottom: 8px; }
+    .for-you-card-title { font-size: 14.5px; font-weight: 600; letter-spacing: -0.1px; line-height: 1.22; color: #E8E5DD; margin-bottom: 6px; flex: 1; }
+    .for-you-card-source { font-size: 11px; color: #3D3A35; font-style: italic; margin-top: 10px; }
+    .for-you-card-save { margin-top: 8px; padding: 6px 10px; border-radius: 3px; background: transparent; border: 1px solid rgba(232,229,221,0.09); color: #5E5B55; font-family: "Spectral", Georgia, serif; font-size: 11.5px; cursor: pointer; transition: all 150ms; width: 100%; text-align: center; }
+    .for-you-card-save:hover { border-color: rgba(201,168,118,0.3); color: #C9A876; }
+    .for-you-card-save.saved { border-color: rgba(143,163,130,0.25); color: #8FA382; cursor: default; }
+
+    /* ── Feeds Screen ───────────────────────────────────────────────────────── */
+    .feeds-layout { display: flex; height: 100%; overflow: hidden; }
+    .feeds-sidebar { width: 240px; flex-shrink: 0; border-right: 1px solid rgba(232,229,221,0.06); overflow-y: auto; padding: 32px 0 40px; }
+    .feeds-sidebar-head { padding: 0 20px 24px; }
+    .feeds-sidebar-title { font-size: 20px; font-weight: 600; letter-spacing: -0.3px; color: #E8E5DD; }
+    .feeds-sidebar-sub { font-size: 12px; color: #5E5B55; font-style: italic; margin-top: 4px; }
+    .feed-group { margin-bottom: 4px; }
+    .feed-group-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #3D3A35; padding: 10px 20px 4px; }
+    .feed-item { display: flex; align-items: center; gap: 10px; padding: 8px 20px; cursor: pointer; border: none; background: transparent; color: #5E5B55; font-family: "Spectral", Georgia, serif; font-size: 14px; width: 100%; text-align: left; transition: background 120ms, color 120ms; }
+    .feed-item:hover { background: rgba(232,229,221,0.03); color: #9A958C; }
+    .feed-item.active { background: rgba(232,229,221,0.06); color: #E8E5DD; }
+    .feed-item-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex-shrink: 0; opacity: 0.4; }
+    .feed-item.active .feed-item-dot { opacity: 1; background: #C9A876; color: #C9A876; }
+    .feed-add-btn { display: block; margin: 16px 20px 0; padding: 10px 14px; border-radius: 4px; background: transparent; border: 1px dashed rgba(232,229,221,0.1); color: #3D3A35; font-family: "Spectral", Georgia, serif; font-size: 13px; cursor: pointer; font-style: italic; transition: all 150ms; width: calc(100% - 40px); text-align: left; }
+    .feed-add-btn:hover { border-color: rgba(232,229,221,0.2); color: #5E5B55; }
+    .feeds-main { flex: 1; overflow-y: auto; }
+    .feeds-main-inner { padding: 32px 40px 80px; max-width: 660px; }
+    .feed-article { display: flex; flex-direction: column; gap: 6px; padding: 22px 0; border-bottom: 1px solid rgba(232,229,221,0.06); }
+    .feed-article-title { font-size: 18px; font-weight: 600; letter-spacing: -0.1px; line-height: 1.22; color: #E8E5DD; }
+    .feed-article-excerpt { font-size: 14px; line-height: 1.52; color: #5E5B55; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .feed-article-meta { font-size: 11px; color: #3D3A35; font-style: italic; display: flex; gap: 6px; align-items: center; }
+    .feed-article-save { align-self: flex-start; margin-top: 4px; padding: 6px 12px; border-radius: 3px; background: transparent; border: 1px solid rgba(232,229,221,0.1); color: #9A958C; font-family: "Spectral", Georgia, serif; font-size: 12px; cursor: pointer; transition: all 150ms; }
+    .feed-article-save:hover:not(.saved) { border-color: rgba(201,168,118,0.3); color: #C9A876; }
+    .feed-article-save.saved { border-color: rgba(143,163,130,0.25); color: #8FA382; cursor: default; }
+    @media (max-width: 900px) { .feeds-sidebar { width: 180px; } }
+    @media (max-width: 640px) { .feeds-layout { flex-direction: column; } .feeds-sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid rgba(232,229,221,0.06); padding: 20px 0; } .feeds-main-inner { padding: 24px 20px 80px; } .for-you-rail { margin: 0 -20px; padding: 0 20px 4px; } }
+  </style>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+// ─── COLORS ──────────────────────────────────────────────────────────────────
+const HL_COLORS = {
+  ochre: { bg: 'rgba(201,168,118,0.18)', line: '#C9A876', label: 'Claim' },
+  sage:  { bg: 'rgba(143,163,130,0.18)', line: '#8FA382', label: 'Quote' },
+  rose:  { bg: 'rgba(194,138,138,0.18)', line: '#C28A8A', label: 'Question' },
+  blue:  { bg: 'rgba(127,149,173,0.18)', line: '#7F95AD', label: 'Other' },
+};
+
+// ─── ARTICLES ─────────────────────────────────────────────────────────────────
+const ARTICLES = [
+  {
+    id: 'quiet-practice',
+    title: 'On the Quiet Practice of Reading',
+    author: 'Margaret Pell',
+    publication: 'The Common Letter',
+    date: 'May 18, 2026',
+    minutes: 9,
+    saved: 'May 22, 2026',
+    domain: 'commonletter.co',
+    excerpt: 'Reading well is no longer a default behavior. It is, increasingly, a discipline — closer to gardening than to consumption.',
+    topics: ['Attention', 'Essays'],
+    body: [
+      { kind: 'p', text: 'There was a time, not so long ago, when reading was an unremarkable thing one did with an afternoon. A person sat down, opened a book or unfolded a paper, and that was the end of it. The rest of the world went on without them for an hour, and no one — including the reader — felt the absence as a wound.' },
+      { kind: 'p', text: 'What changed is not, I think, the books. The books are mostly fine. The essays are often very good. What changed is the gravity of the room around them. Reading now has to be insisted upon. It happens in spite of, not because of, the surfaces that hold the words.' },
+      { kind: 'p', text: 'I have come to think of reading less as a leisure activity and more as a kind of small, daily gardening — something one tends to for its own sake, with the understanding that nothing dramatic will happen on any single afternoon, and that the slow accumulation is the point.' },
+      { kind: 'p', text: 'A garden is patient. It is also, importantly, a little inconvenient. You have to go out to it. You have to bend down. The soil gets under your fingernails. None of this is incidental to the pleasure; the bending and the dirt are how the pleasure arrives.' },
+      { kind: 'h2', text: 'Friction as feature' },
+      { kind: 'p', text: 'For years our designers worked to remove every conceivable friction from the experience of reading on a screen. Tap, scroll, swipe; the words flowed past like water from a tap. The result, predictably, is that they registered like water too — useful, forgettable, gone.' },
+      { kind: 'p', text: 'Some friction is the texture by which we hold onto a thing. The dog-eared page; the underline; the margin note we will not understand a year from now but which marks, indelibly, that we were here.' },
+      { kind: 'p', text: 'It is not that reading must be hard. It is that reading must be felt. The two are easily confused, and the confusion has cost us a generation of attention.' },
+      { kind: 'h2', text: 'A small, daily room' },
+      { kind: 'p', text: 'The practice, then, is simple, and like all simple practices it is very hard. You make a small room in the day. You go into it. You stay longer than is comfortable. You come out with a sentence or two you would not have had otherwise.' },
+      { kind: 'p', text: 'On the days you do this, very little visibly changes. On the years you do this, almost everything does.' },
+    ],
+  },
+  {
+    id: 'what-we-owe',
+    title: 'What We Owe to Time',
+    author: 'Iris Kane',
+    publication: 'Cantilever',
+    date: 'May 14, 2026',
+    minutes: 14,
+    saved: 'May 18, 2026',
+    domain: 'cantilever.review',
+    excerpt: 'The hours we cannot account for are often the ones that did the most work. A defense of inefficiency.',
+    topics: ['Philosophy', 'Attention'],
+    body: [
+      { kind: 'p', text: 'On the question of how we use our time, most of us remain surprisingly incurious. We track our productive hours with apps, our sleep with rings, our steps with watches. But the hours that resist measurement — the walks that went nowhere, the long conversations that solved nothing practical, the afternoons surrendered to a novel — these we account for only in retrospect, usually with guilt.' },
+      { kind: 'p', text: 'The guilt is the wrong response. Those hours are not the ones wasted; they are, I would argue, the hours that do the heaviest lifting. The problem is that the work they perform is invisible to any instrument we currently have for measuring work.' },
+      { kind: 'h2', text: 'Unresolved time' },
+      { kind: 'p', text: 'I am thinking of a particular kind of time — what I will call unresolved time. Not leisure exactly, because leisure implies rest from effort, and unresolved time is not rest. It is something more like fermentation: slow, unglamorous, productive in ways that require patience to detect.' },
+      { kind: 'p', text: 'The scientist who takes a walk and returns to the problem differently. The writer who watches rain for twenty minutes and finds the sentence she had been looking for. The manager who steps away from the meeting and later, unprompted, has the insight that the meeting was circling. None of these things can be scheduled.' },
+      { kind: 'p', text: 'You cannot put "unresolved time" in a calendar and have it work. The moment you attach intention to it, it becomes something else: a deliberate creative exercise, a forced walk, an engineered silence. Useful, perhaps. But not the same thing.' },
+      { kind: 'h2', text: 'What we owe' },
+      { kind: 'p', text: 'The obligation I am proposing is not to be idle. It is to allow, occasionally, for time that does not know what it is for. To resist the reflex to fill. To notice when you are trying to convert every moment into a return, and to ask whether the returns you are getting are the ones that matter.' },
+      { kind: 'p', text: 'We owe ourselves this small freedom. It is perhaps the only thing that cannot be optimized away and remains, for that reason, genuinely valuable.' },
+    ],
+  },
+  {
+    id: 'patient-algorithm',
+    title: 'The Patient Algorithm',
+    author: 'Hugo Reeve',
+    publication: 'Folio Review',
+    date: 'May 9, 2026',
+    minutes: 22,
+    saved: 'May 10, 2026',
+    domain: 'folioreview.org',
+    excerpt: 'A recommendation system that respects the reader has to know when not to recommend anything at all.',
+    topics: ['Technology', 'Product'],
+    body: [
+      { kind: 'p', text: 'In 2019, I helped build the recommendation engine for a reading platform I will not name. We were proud of it. It optimized for a metric we called "saves" — the rate at which a user saved an article for later. The metric was clean, measurable, and, we told ourselves, a reasonable proxy for value.' },
+      { kind: 'p', text: 'The algorithm worked. It worked in the way that most recommendation systems work: it made you feel seen by showing you versions of yourself you already recognized. Your interests, amplified. Your habits, mirrored back. Your blind spots, faithfully preserved.' },
+      { kind: 'h2', text: 'The flattering machine' },
+      { kind: 'p', text: 'I have been thinking about this since leaving that company, and I have come to believe we built a flattering machine. We built something that told you, in article form, what you already knew you believed.' },
+      { kind: 'p', text: 'The failure mode of recommendation is mimicry. A system that learns your preferences and faithfully reproduces them will, over time, narrow the kind of mind you can have. Not catastrophically — you will still encounter new information within your established categories. But the categories themselves will harden. The frame will not change.' },
+      { kind: 'h2', text: 'Knowing when to be silent' },
+      { kind: 'p', text: 'A recommendation engine that genuinely served the reader would have to do something counterintuitive: it would have to occasionally recommend nothing. The reader who is between books is not necessarily underserved. The reader who finishes something difficult and does not know what to read next is in a productive state of suspension. Filling that silence too quickly is not helping; it is preventing something.' },
+      { kind: 'p', text: 'What would a patient algorithm look like? It would track not just what you read but how you read it. How long you stayed. Where you stopped. Whether you came back. It would learn the difference between the article you saved because it confirmed something and the article you saved because it troubled you. It would know that trouble is worth more.' },
+      { kind: 'p', text: 'This requires trust on both sides. The algorithm trusts that the reader wants to be enlarged, not just confirmed. The reader trusts that the system has her genuine interests at heart, not the interests of the platform. This trust is, in my experience, the rarest thing in software.' },
+    ],
+  },
+  {
+    id: 'light-slow',
+    title: 'Light, slow',
+    author: 'Anjali Rao',
+    publication: 'Distance Quarterly',
+    date: 'May 2, 2026',
+    minutes: 6,
+    saved: 'May 3, 2026',
+    domain: 'distance.qtly',
+    excerpt: 'A short essay on photographing rooms at the end of the afternoon, and what the light teaches you about waiting.',
+    topics: ['Photography', 'Writing'],
+    body: [
+      { kind: 'p', text: 'I began photographing empty rooms ten years ago because I could not afford furniture and was embarrassed about it. I photographed the rooms so they would seem intentional — a kind of editorial emptiness rather than practical poverty. Later, when I had furniture, I kept photographing them.' },
+      { kind: 'p', text: 'The thing about photographing an interior is that you must wait. Not for any particular thing to happen, but for the room to settle into what it actually is. In the morning, a room is performing itself. By mid-afternoon, if you have not bothered it with your intentions, it begins to relax. The light moves, and the room follows the light.' },
+      { kind: 'h2', text: 'The long hour' },
+      { kind: 'p', text: 'I take almost all my photographs in the hour before the light changes — the late afternoon, the long hour before dusk. The shadows grow specific. Every object acquires a second presence, a shadow-self that the morning would not permit. The room becomes twice as full as it was, and emptier than before.' },
+      { kind: 'p', text: 'You learn to wait for this. You cannot hurry it. You cannot will the light into being the light you want. You can only learn to be present when it arrives, which requires practice in a world that rewards restlessness.' },
+      { kind: 'p', text: 'Photography taught me that attention is not passive. It requires a kind of muscular stillness — a holding of yourself in a posture of readiness without collapsing into action. The room does not perform for you. You are the one who must learn to see.' },
+      { kind: 'h2', text: 'Practice' },
+      { kind: 'p', text: 'I do not know what the photographs are for. I have thousands of them now, rooms in seven countries, rooms I lived in and rooms I visited and rooms I was allowed into for a single afternoon. They are not art, exactly, and not documentation. They are, I think, practice: a daily exercise in waiting for a room to become itself.' },
+      { kind: 'p', text: 'It always does, in the end. You learn to wait for it.' },
+    ],
+  },
+  {
+    id: 'doing-nothing',
+    title: 'Notes on Doing Nothing',
+    author: 'Theo Lange',
+    publication: 'The Common Letter',
+    date: 'Apr 28, 2026',
+    minutes: 11,
+    saved: 'Apr 30, 2026',
+    domain: 'commonletter.co',
+    excerpt: 'Idleness is not the absence of work but a different kind of attention. We have stopped recognizing it.',
+    topics: ['Philosophy', 'Essays'],
+    body: [
+      { kind: 'p', text: 'The word idleness carries a charge in our culture that it perhaps does not deserve. To call someone idle is not neutral; it implies waste, abdication, a failure to convert one\'s hours into something countable. But idleness, properly understood, is not the absence of work. It is a different kind of attention — one we have largely forgotten how to maintain.' },
+      { kind: 'p', text: 'Consider what you are doing when you stare out of a window on a long train journey. You are not asleep. You are not thinking, exactly, in the deliberate sense — you are not solving a problem or constructing an argument. You are watching, loosely, without attachment to what you see. This is idleness. And it is also, I want to suggest, a form of perception that other modes of attention cannot access.' },
+      { kind: 'h2', text: 'The overlooked mode' },
+      { kind: 'p', text: 'We have built our entire economy around the eradication of this mode. The smartphone in your pocket exists, at some level, to ensure that you are never again allowed to stare out of that train window without something competing for your gaze. It is not malice; it is simply that idleness is invisible to metrics. It produces nothing that can be counted, and therefore, from the perspective of a system that counts, it does not exist.' },
+      { kind: 'p', text: 'But the person who returns from that train journey sometimes knows something they did not know before they got on. They cannot say what it is, or how it arrived. They are simply, quietly, a little changed.' },
+    ],
+  },
+  {
+    id: 'unsorted-mail',
+    title: 'The Unsorted Mail',
+    author: 'Beatrice Holm',
+    publication: 'Cantilever',
+    date: 'Apr 21, 2026',
+    minutes: 8,
+    saved: 'Apr 22, 2026',
+    domain: 'cantilever.review',
+    excerpt: 'On living with an inbox you do not pretend to control. A small ode to the pile.',
+    topics: ['Essays', 'Attention'],
+    body: [
+      { kind: 'p', text: 'I have a pile of mail on my kitchen table. It has been there for four months. It contains, I believe, a dental appointment reminder, a letter from someone whose handwriting I do not recognize, three issues of a magazine I meant to cancel, and something from the tax office that I suspect is important but have not been able to confirm because I have not opened it.' },
+      { kind: 'p', text: 'This pile is, by any reasonable measure, a failure of household management. And yet I have come to feel a kind of strange affection for it. It represents, among other things, the honest relationship I have with correspondence: I am behind, I am always behind, and the pile does not pretend otherwise.' },
+      { kind: 'h2', text: 'The pretense of inbox zero' },
+      { kind: 'p', text: 'The fantasy of the empty inbox — whether physical or digital — is a fantasy of control. But our relationship with information has never been one of control. It has always been a relationship with a pile. The pile grows. You take from it what you need when you need it. Occasionally you sort through it and discover something you should have dealt with months ago. This is not failure. This is how attention actually works.' },
+      { kind: 'p', text: 'The pile on my kitchen table is honest about what I can do in a day. The productivity system that promises to make it disappear is not. I know which one I trust.' },
+    ],
+  },
+];
+
+// Seed highlights for demo
+const SEED_HIGHLIGHTS = [
+  { id: 'sh1', articleId: 'quiet-practice', text: 'slow accumulation is the point', color: 'ochre', note: 'Reframing — reading as cultivation, not consumption. Use for the opening of the talk.', createdAt: Date.now() - 86400000, topic: 'Attention' },
+  { id: 'sh2', articleId: 'quiet-practice', text: 'words flowed past like water from a tap', color: 'sage', note: '', createdAt: Date.now() - 86000000, topic: 'Attention' },
+  { id: 'sh3', articleId: 'patient-algorithm', text: 'trouble is worth more', color: 'ochre', note: 'The most important constraint. Default to silence.', createdAt: Date.now() - 172800000, topic: 'Product' },
+  { id: 'sh4', articleId: 'light-slow', text: 'You learn to wait for it', color: 'rose', note: '', createdAt: Date.now() - 259200000, topic: 'Writing' },
+  { id: 'sh5', articleId: 'what-we-owe', text: 'hours we cannot account for are often the ones that did the most work', color: 'ochre', note: 'Quote for the essay on rest.', createdAt: Date.now() - 345600000, topic: 'Philosophy' },
+  { id: 'sh6', articleId: 'doing-nothing', text: 'Idleness is not the absence of work but a different kind of attention', color: 'sage', note: '', createdAt: Date.now() - 432000000, topic: 'Philosophy' },
+];
+
+const SEED_PROGRESS = { 'quiet-practice': 0.34, 'patient-algorithm': 0.72, 'light-slow': 1.0 };
+
+// ─── INTEREST DATA ────────────────────────────────────────────────────────────
+const INTEREST_GROUPS = {
+  Mind:    ['Attention', 'Philosophy', 'Psychology', 'Ethics', 'Linguistics'],
+  Craft:   ['Writing', 'Essays', 'Poetry', 'Photography', 'Memoir', 'Fiction', 'Design'],
+  World:   ['History', 'Technology', 'Science', 'Politics', 'Environment'],
+  Making:  ['Product', 'Architecture', 'Urbanism'],
+  Culture: ['Music', 'Film', 'Art'],
+  Body:    ['Food', 'Nature', 'Health'],
+};
+
+const INTEREST_FEEDS = {
+  Attention: [
+    { id: 'aeon', name: 'Aeon', domain: 'aeon.co', description: 'Essays on the human condition', articles: [
+      { id: 'aeon-1', title: 'The myth of multitasking', author: 'Celia Moore', excerpt: 'We do not switch between tasks, we abandon them. The attention never actually divides — it just frays.', minutes: 7 },
+      { id: 'aeon-2', title: 'How boredom became a virtue', author: 'James Shelby', excerpt: 'For most of human history, boredom was not a psychological complaint but a social condition. The difference matters.', minutes: 9 },
+      { id: 'aeon-3', title: 'A philosophy of distraction', author: 'Nadia Talal', excerpt: 'What if the constant pull away from our intentions is not a failure of will but a feature of consciousness?', minutes: 11 },
+    ]},
+    { id: 'hedgehog-review', name: 'The Hedgehog Review', domain: 'hedgehogrev.org', description: 'Critical reflections on contemporary culture', articles: [
+      { id: 'hhr-1', title: 'Contemplation in a distracted age', author: 'Mary Green', excerpt: 'The contemplative traditions offer not a retreat from the world but a different way of inhabiting it.', minutes: 14 },
+      { id: 'hhr-2', title: 'The economy of the glance', author: 'Paul Stein', excerpt: 'Our screens have reduced attention to its most minimal form: the glance. What we lose when we lose the sustained gaze.', minutes: 8 },
+    ]},
+  ],
+  Philosophy: [
+    { id: 'philosophy-now', name: 'Philosophy Now', domain: 'philosophynow.org', description: 'A magazine of ideas', articles: [
+      { id: 'pn-1', title: 'What do we owe each other?', author: 'Elena Carr', excerpt: "T.M. Scanlon's contractualism asks us to justify our actions to others. But who counts as an 'other'?", minutes: 10 },
+      { id: 'pn-2', title: 'The examined life, revisited', author: 'Thomas Reid', excerpt: 'Socrates said the unexamined life is not worth living. Modern philosophy has good reasons to push back.', minutes: 8 },
+    ]},
+    { id: 'the-point', name: 'The Point', domain: 'thepointmag.com', description: 'Intellectual essays on contemporary life', articles: [
+      { id: 'tp-1', title: 'Against self-help', author: 'Agnes Callard', excerpt: 'The genre promises transformation but delivers adjustment. What would genuine philosophical change require?', minutes: 15 },
+      { id: 'tp-2', title: 'On choosing not to know', author: 'David Webb', excerpt: 'There are things it is better not to know. A philosophical defense of productive ignorance.', minutes: 12 },
+    ]},
+  ],
+  Writing: [
+    { id: 'paris-review', name: 'The Paris Review', domain: 'theparisreview.org', description: 'Literature, culture, and the art of writing', articles: [
+      { id: 'pr-1', title: 'On the first sentence', author: 'Claire Messud', excerpt: 'The opening sentence of a novel is not a beginning but a promise. What happens when the novel cannot keep it?', minutes: 8 },
+      { id: 'pr-2', title: 'Writing in the second person', author: 'Ben Marcus', excerpt: '"You" is the most intimate and most alienating pronoun in English. A meditation on its strange power.', minutes: 11 },
+      { id: 'pr-3', title: 'The problem of the notebook', author: 'Joan Didion', excerpt: 'Why do we keep notebooks? Not to remember what happened, but to remember how it felt to have been that person.', minutes: 6 },
+    ]},
+    { id: 'lapham', name: "Lapham's Quarterly", domain: 'laphamsquarterly.org', description: 'History and ideas through primary sources', articles: [
+      { id: 'lq-1', title: 'The letter and the spirit', author: 'Various', excerpt: 'A collection of correspondence on the art and anxiety of writing, from Kafka to Baldwin.', minutes: 13 },
+    ]},
+  ],
+  Essays: [
+    { id: 'nplusoone', name: 'n+1', domain: 'nplusonemag.com', description: 'Politics, culture, ideas', articles: [
+      { id: 'n1-1', title: 'What is the essay for?', author: 'Marco Roth', excerpt: 'The essay form has survived every declaration of its death. Perhaps because it was never a form to begin with.', minutes: 12 },
+      { id: 'n1-2', title: 'On the personal essay', author: 'Dayna Tortorici', excerpt: 'The personal essay is not autobiography. It is a space for thinking, not for confession.', minutes: 9 },
+    ]},
+    { id: 'kenyon-review', name: 'Kenyon Review', domain: 'kenyonreview.org', description: 'Literature, culture, criticism', articles: [
+      { id: 'kr-1', title: 'Essay as argument', author: 'Philip Lopate', excerpt: 'The best personal essays are not about the self at all. They use the self as a lens to look outward.', minutes: 10 },
+      { id: 'kr-2', title: 'Against closure', author: 'Lia Purpura', excerpt: 'Some essays should not resolve. The unfinished sentence is not a failure of craft but an act of honesty.', minutes: 7 },
+    ]},
+  ],
+  Technology: [
+    { id: 'quanta', name: 'Quanta Magazine', domain: 'quantamagazine.org', description: 'Science and mathematics', articles: [
+      { id: 'qm-1', title: 'The shape of intelligence', author: 'Natalie Wolchover', excerpt: 'Researchers are mapping the conceptual landscape that neural networks inhabit. The terrain is strange.', minutes: 11 },
+      { id: 'qm-2', title: 'What complexity theory teaches us', author: 'Scott Aaronson', excerpt: 'Some problems are not just hard — they are provably hard. What does that tell us about the nature of thought?', minutes: 14 },
+    ]},
+    { id: 'increment', name: 'Increment', domain: 'increment.com', description: 'Software, systems, teams', articles: [
+      { id: 'inc-1', title: 'The hidden cost of good defaults', author: 'Tim Hwang', excerpt: 'When software makes decisions on our behalf, the consequences accumulate invisibly. A meditation on opt-out.', minutes: 8 },
+    ]},
+  ],
+  Photography: [
+    { id: 'lens-culture', name: 'LensCulture', domain: 'lensculture.com', description: 'Contemporary photography and culture', articles: [
+      { id: 'lc-1', title: 'The decisive non-moment', author: 'Alec Soth', excerpt: "Cartier-Bresson's decisive moment has shaped a century of photography. But what about the images that refuse to cohere?", minutes: 9 },
+      { id: 'lc-2', title: 'Color as argument', author: 'Paul Graham', excerpt: 'Black and white photography makes a claim about the world. So does color. We rarely notice either claim being made.', minutes: 7 },
+    ]},
+  ],
+  Product: [
+    { id: 'stratechery', name: 'Stratechery', domain: 'stratechery.com', description: 'Technology and business strategy', articles: [
+      { id: 'st-1', title: 'The product is the interface', author: 'Ben Thompson', excerpt: 'We talk about products as if they were separate from their interfaces. They are not. The interface is the product.', minutes: 10 },
+      { id: 'st-2', title: 'Defaults and power', author: 'Ben Thompson', excerpt: 'Whoever controls the default controls the market. A history of defaults as competitive moats.', minutes: 8 },
+    ]},
+  ],
+  Memoir: [
+    { id: 'longreads', name: 'Longreads', domain: 'longreads.com', description: 'Long-form personal journalism', articles: [
+      { id: 'lr-1', title: 'The year I stopped running', author: 'Roxane Gay', excerpt: 'A body that will not cooperate is not a body that has failed. A memoir of injury, recovery, and learning to stand still.', minutes: 18 },
+      { id: 'lr-2', title: 'What the kitchen remembers', author: 'Edwidge Danticat', excerpt: 'The recipes we inherit are not instructions. They are arguments about who we are and where we come from.', minutes: 12 },
+    ]},
+  ],
+  History: [
+    { id: 'jstor-daily', name: 'JSTOR Daily', domain: 'daily.jstor.org', description: 'Context for the news, from academic research', articles: [
+      { id: 'jd-1', title: 'The history of the afternoon', author: 'Rebecca Onion', excerpt: 'The afternoon was once its own country, with customs and rituals we have almost entirely abandoned.', minutes: 9 },
+      { id: 'jd-2', title: 'When letters were slow', author: 'Sarah Laskow', excerpt: 'Before email, people wrote letters knowing the reply would come weeks later. This changed what they said.', minutes: 7 },
+    ]},
+    { id: 'aeon-history', name: 'Aeon — History', domain: 'aeon.co', description: 'Historical essays from Aeon', articles: [
+      { id: 'ah-1', title: 'The invention of privacy', author: 'David Vincent', excerpt: 'Privacy is not an ancient right. It was invented, in a specific place and time, for specific reasons.', minutes: 13 },
+    ]},
+  ],
+  Psychology: [
+    { id: 'psyche', name: 'Psyche', domain: 'psyche.co', description: 'Essays on the mind, from Aeon', articles: [
+      { id: 'ps-1', title: 'Why we misremember our past selves', author: 'Kristina Olson', excerpt: 'Our memories of who we used to be are systematically distorted toward who we are now. The implications are unsettling.', minutes: 10 },
+      { id: 'ps-2', title: 'The self is not a fixed thing', author: 'Julian Baggini', excerpt: 'Psychological research keeps arriving at the same uncomfortable conclusion: there is no stable self, only a story we tell.', minutes: 8 },
+      { id: 'ps-3', title: 'Against positive thinking', author: 'Oliver Burkeman', excerpt: 'The effort to feel good can make you feel worse. A case for confronting your worst fears instead.', minutes: 11 },
+    ]},
+    { id: 'marginalia', name: 'The Marginalian', domain: 'themarginalian.org', description: 'Meaning, culture, and the examined life', articles: [
+      { id: 'mg-1', title: 'How we become who we are', author: 'Maria Popova', excerpt: 'On Erik Erikson, identity, and the life-long project of becoming a person.', minutes: 9 },
+      { id: 'mg-2', title: 'The courage to be yourself', author: 'Maria Popova', excerpt: 'What Rollo May and the existentialists understood about anxiety that the self-help industry does not.', minutes: 7 },
+    ]},
+  ],
+  Ethics: [
+    { id: 'practical-ethics', name: 'Practical Ethics', domain: 'blog.practicalethics.ox.ac.uk', description: 'Ethics in the news, from Oxford', articles: [
+      { id: 'pe-1', title: 'The ethics of doing nothing', author: 'Roger Crisp', excerpt: 'Omissions are morally complicated. Most ethical frameworks treat them very differently from acts — but should they?', minutes: 9 },
+      { id: 'pe-2', title: 'Who owns your attention?', author: 'Carissa Véliz', excerpt: 'The data economy has built a business model around harvesting focus. A philosopher asks what we are owed back.', minutes: 12 },
+    ]},
+    { id: 'the-stone', name: 'The Stone', domain: 'nytimes.com', description: 'NYT philosophy column', articles: [
+      { id: 'ts-1', title: 'Is it ever right to lie?', author: 'Simon Blackburn', excerpt: 'The question is older than philosophy itself. The answer depends on what you think truth is for.', minutes: 8 },
+      { id: 'ts-2', title: 'The moral case for privacy', author: 'Anita Allen', excerpt: 'Privacy is not about secrecy. It is about the conditions necessary for a self to exist at all.', minutes: 10 },
+    ]},
+  ],
+  Linguistics: [
+    { id: 'language-log', name: 'Language Log', domain: 'languagelog.ldc.upenn.edu', description: 'Linguistics in the wild', articles: [
+      { id: 'll-1', title: 'Why language changes faster than we think', author: 'Mark Liberman', excerpt: 'The pace of linguistic change has accelerated. What this means for how we understand each other.', minutes: 7 },
+      { id: 'll-2', title: 'The grammar of silence', author: 'Geoffrey Pullum', excerpt: 'Pauses, gaps, and hesitations are not failures of language. They are part of its structure.', minutes: 9 },
+    ]},
+    { id: 'aeon-language', name: 'Aeon — Language', domain: 'aeon.co', description: 'Language essays from Aeon', articles: [
+      { id: 'al-1', title: 'Does language shape thought?', author: 'Lera Boroditsky', excerpt: 'The Sapir-Whorf hypothesis has been mostly discredited and mostly vindicated. The real answer is more interesting.', minutes: 11 },
+      { id: 'al-2', title: 'In praise of translation', author: 'Tim Parks', excerpt: 'Every translation is a theory of meaning. What we lose — and find — when we move a text between languages.', minutes: 8 },
+    ]},
+  ],
+  Poetry: [
+    { id: 'poetry-foundation', name: 'Poetry Foundation', domain: 'poetryfoundation.org', description: 'Poems and essays on the art of poetry', articles: [
+      { id: 'pf-1', title: 'Why poetry still matters', author: 'Tracy K. Smith', excerpt: 'In an age of information overload, poetry does something no other form can: it makes you slow down inside a sentence.', minutes: 7 },
+      { id: 'pf-2', title: 'The prose poem and its discontents', author: 'D.A. Powell', excerpt: 'The prose poem refuses the line break and gains something in the exchange. What exactly is harder to say.', minutes: 9 },
+    ]},
+    { id: 'poetry-review', name: 'The Poetry Review', domain: 'poetrysociety.org.uk', description: 'The UK\'s leading poetry journal', articles: [
+      { id: 'poe-1', title: 'On difficulty in poetry', author: 'George Szirtes', excerpt: 'Some poems require effort. The question is whether that effort is rewarded — and what the reward actually is.', minutes: 11 },
+    ]},
+  ],
+  Fiction: [
+    { id: 'electric-lit', name: 'Electric Literature', domain: 'electricliterature.com', description: 'Literary fiction and criticism', articles: [
+      { id: 'el-1', title: 'The unreliable narrator, revisited', author: 'Roxane Gay', excerpt: 'We have come to love the narrator who lies to us. What does it mean to trust a voice that tells you not to?', minutes: 10 },
+      { id: 'el-2', title: 'The short story is not a failed novel', author: 'George Saunders', excerpt: 'The story has its own logic, its own necessities. Writers who treat it as a warm-up are missing the point.', minutes: 8 },
+    ]},
+    { id: 'the-millions', name: 'The Millions', domain: 'themillions.com', description: 'Books, arts, and culture', articles: [
+      { id: 'tm-1', title: 'Reading as resistance', author: 'Nick Moran', excerpt: 'In a world designed to capture attention, the sustained act of reading a novel is a small act of refusal.', minutes: 9 },
+      { id: 'tm-2', title: 'Why we need difficult fiction', author: 'Anne Enright', excerpt: 'Easy books confirm what we know. Hard books change what we are capable of knowing.', minutes: 12 },
+    ]},
+  ],
+  Design: [
+    { id: 'design-observer', name: 'Design Observer', domain: 'designobserver.com', description: 'Design, culture, and criticism', articles: [
+      { id: 'do-1', title: 'The invisible design', author: 'Michael Bierut', excerpt: 'The best design goes unnoticed. This is both its greatest achievement and its greatest limitation.', minutes: 8 },
+      { id: 'do-2', title: 'Type as argument', author: 'Ellen Lupton', excerpt: 'Every typeface makes a claim about the world it inhabits. We rarely read that claim consciously — but we respond to it.', minutes: 10 },
+    ]},
+    { id: 'eye-magazine', name: 'Eye Magazine', domain: 'eyemagazine.com', description: 'International review of graphic design', articles: [
+      { id: 'eye-1', title: 'Grid and its discontents', author: 'Rick Poynor', excerpt: 'The grid gave modernism its discipline. What it took away was more interesting than what it provided.', minutes: 11 },
+    ]},
+  ],
+  Science: [
+    { id: 'nautilus', name: 'Nautilus', domain: 'nautil.us', description: 'Science connected to culture', articles: [
+      { id: 'nau-1', title: 'The unreasonable effectiveness of mathematics', author: 'Jim Holt', excerpt: 'Physics keeps finding that the universe is exactly as strange as the mathematics predicted. We still don\'t know why.', minutes: 13 },
+      { id: 'nau-2', title: 'What evolution cannot explain', author: 'David Barash', excerpt: 'Natural selection is the most powerful explanation in biology. It is not, however, an explanation for everything.', minutes: 10 },
+      { id: 'nau-3', title: 'The science of the pause', author: 'Jennifer Ouellette', excerpt: 'Neuroscientists have been studying what the brain does when it is doing nothing. The results are strange.', minutes: 9 },
+    ]},
+    { id: 'knowable', name: 'Knowable Magazine', domain: 'knowablemagazine.org', description: 'Making sense of science', articles: [
+      { id: 'kn-1', title: 'The return of the naturalist', author: 'Emma Marris', excerpt: 'For a century, ecology moved indoors. Now scientists are going back outside — and finding something no model predicted.', minutes: 11 },
+    ]},
+  ],
+  Politics: [
+    { id: 'foreign-affairs', name: 'Foreign Affairs', domain: 'foreignaffairs.com', description: 'Global affairs and policy', articles: [
+      { id: 'fa-1', title: 'The long arc of democracy', author: 'Larry Diamond', excerpt: 'Democratic backsliding looks inevitable until it doesn\'t. History suggests the arc is longer than we think.', minutes: 14 },
+      { id: 'fa-2', title: 'What institutions actually do', author: 'Daron Acemoglu', excerpt: 'Institutions are not just rules. They are the crystallized expectations of a society — and they are very hard to change.', minutes: 12 },
+    ]},
+    { id: 'new-statesman', name: 'New Statesman', domain: 'newstatesman.com', description: 'British progressive politics and culture', articles: [
+      { id: 'ns-1', title: 'The politics of attention', author: 'Helen Lewis', excerpt: 'Political discourse has become an attention economy. The loudest voice is not always the most important one.', minutes: 9 },
+    ]},
+  ],
+  Environment: [
+    { id: 'emergence', name: 'Emergence Magazine', domain: 'emergencemagazine.org', description: 'Nature, culture, and place', articles: [
+      { id: 'em-1', title: 'Learning to be a forest', author: 'Robin Wall Kimmerer', excerpt: 'Indigenous ways of knowing have always understood the forest as a community. Science is only now catching up.', minutes: 16 },
+      { id: 'em-2', title: 'What the river remembers', author: 'Melissa Sevigny', excerpt: 'Rivers have longer memories than the people who live beside them. What happens when we start listening.', minutes: 12 },
+    ]},
+    { id: 'hakai', name: 'Hakai Magazine', domain: 'hakaimagazine.com', description: 'Science and society in coastal ecosystems', articles: [
+      { id: 'hk-1', title: 'The ocean\'s slow reckoning', author: 'Nicola Jones', excerpt: 'The ocean absorbs carbon faster than we can measure it. Scientists are only beginning to understand what this means.', minutes: 11 },
+      { id: 'hk-2', title: 'Fishing for memory', author: 'Alison Auld', excerpt: 'As fish populations change, so do the stories fishers tell about them. On shifting baselines and collective forgetting.', minutes: 8 },
+    ]},
+  ],
+  Architecture: [
+    { id: 'dezeen', name: 'Dezeen', domain: 'dezeen.com', description: 'Architecture and design', articles: [
+      { id: 'dz-1', title: 'The building that forgot its purpose', author: 'Amy Frearson', excerpt: 'A rash of civic buildings designed for spectacle has left behind a generation of structures no one knows how to use.', minutes: 8 },
+      { id: 'dz-2', title: 'What brutalism got right', author: 'Oliver Wainwright', excerpt: 'We have spent decades demolishing concrete towers. The reasons we built them are worth remembering.', minutes: 10 },
+    ]},
+    { id: 'places-journal', name: 'Places Journal', domain: 'placesjournal.org', description: 'Architecture, urbanism, landscape', articles: [
+      { id: 'pj-1', title: 'The room and the self', author: 'Witold Rybczynski', excerpt: 'We shape our buildings, and our buildings shape us. A study in how interior space changes how we think.', minutes: 12 },
+    ]},
+  ],
+  Urbanism: [
+    { id: 'bloomberg-citylab', name: 'Bloomberg CityLab', domain: 'bloomberg.com/citylab', description: 'Cities and urban life', articles: [
+      { id: 'cl-1', title: 'The fifteen-minute city', author: 'Linda Poon', excerpt: 'An urban planning idea that promises to change how cities work — if cities are willing to change.', minutes: 9 },
+      { id: 'cl-2', title: 'What streets are for', author: 'Kriston Capps', excerpt: 'The car made the street into a machine for moving vehicles. It was not always this way — and need not remain so.', minutes: 11 },
+    ]},
+    { id: 'strongtowns', name: 'Strong Towns', domain: 'strongtowns.org', description: 'A new vision for American cities', articles: [
+      { id: 'st2-1', title: 'The suburban promise', author: 'Chuck Marohn', excerpt: 'Suburbia was built on a financial model that does not work. The bill is coming due.', minutes: 10 },
+    ]},
+  ],
+  Music: [
+    { id: 'the-wire', name: 'The Wire', domain: 'thewire.co.uk', description: 'Adventures in modern music', articles: [
+      { id: 'tw-1', title: 'The silence between the notes', author: 'Mark Fisher', excerpt: 'Music criticism has always focused on what is played. The more interesting question is what is held back.', minutes: 10 },
+      { id: 'tw-2', title: 'Folk memory and the recorded voice', author: 'David Toop', excerpt: 'What happens to oral tradition when a tradition can be recorded? Not what you\'d expect.', minutes: 12 },
+    ]},
+    { id: 'pitchfork', name: 'Pitchfork Features', domain: 'pitchfork.com', description: 'Long-form music writing', articles: [
+      { id: 'pfk-1', title: 'The album is dying and that\'s fine', author: 'Jayson Greene', excerpt: 'The album format was always an accident of technology. What comes after may be more interesting.', minutes: 9 },
+      { id: 'pfk-2', title: 'On the persistence of the demo', author: 'Amanda Petrusich', excerpt: 'Fans now prefer the rough version. This says something surprising about what we want from music.', minutes: 8 },
+    ]},
+  ],
+  Film: [
+    { id: 'sight-and-sound', name: 'Sight & Sound', domain: 'bfi.org.uk', description: 'The world\'s leading film magazine', articles: [
+      { id: 'ss-1', title: 'Slow cinema and the ethics of looking', author: 'Girish Shambu', excerpt: 'Films that refuse to cut ask something of the viewer that most cinema no longer bothers to request.', minutes: 11 },
+      { id: 'ss-2', title: 'The documentary and its contract', author: 'Laura Poitras', excerpt: 'Documentary film has always involved a bargain with reality. Digital production is rewriting the terms.', minutes: 10 },
+    ]},
+    { id: 'rogerebert', name: 'RogerEbert.com', domain: 'rogerebert.com', description: 'Film reviews and criticism', articles: [
+      { id: 're-1', title: 'Why we go to the movies', author: 'Matt Zoller Seitz', excerpt: 'The sociological explanation for cinema has never been adequate. Something else is happening in the dark.', minutes: 8 },
+    ]},
+  ],
+  Art: [
+    { id: 'frieze', name: 'Frieze', domain: 'frieze.com', description: 'Contemporary art and culture', articles: [
+      { id: 'fr-1', title: 'What the white cube forgot', author: 'Tom Morton', excerpt: 'The neutral gallery space was never neutral. A history of the gallery as argument.', minutes: 9 },
+      { id: 'fr-2', title: 'Painting in the age of images', author: 'Katy Siegel', excerpt: 'Painting was supposed to be finished. Instead it keeps finding new things to be. A theory of its persistence.', minutes: 12 },
+    ]},
+    { id: 'art-in-america', name: 'Art in America', domain: 'artnews.com', description: 'American art and its contexts', articles: [
+      { id: 'aa-1', title: 'The museum and its discontents', author: 'Holland Cotter', excerpt: 'Museums say they are for everyone. The question is whether their collections agree.', minutes: 10 },
+    ]},
+  ],
+  Food: [
+    { id: 'vittles', name: 'Vittles', domain: 'vittles.co', description: 'Food writing from London and beyond', articles: [
+      { id: 'vi-1', title: 'On eating alone', author: 'Jonathan Nunn', excerpt: 'The solo diner has been a figure of pity and aspiration in equal measure. A reconsideration.', minutes: 8 },
+      { id: 'vi-2', title: 'The restaurant as theater', author: 'Sejal Sukhadwala', excerpt: 'We have always performed ourselves at the table. What has changed is who is watching.', minutes: 10 },
+    ]},
+    { id: 'roads-kingdoms', name: 'Roads & Kingdoms', domain: 'roadsandkingdoms.com', description: 'Food, travel, and politics', articles: [
+      { id: 'rk-1', title: 'The street food that survives', author: 'Matt Goulding', excerpt: 'Some dishes have lasted for centuries. The ones that do share something that is not about taste.', minutes: 11 },
+      { id: 'rk-2', title: 'What migration does to food', author: 'Tejal Rao', excerpt: 'Food moves when people move. What happens next is never quite what either the food or the people expected.', minutes: 9 },
+    ]},
+  ],
+  Nature: [
+    { id: 'orion', name: 'Orion Magazine', domain: 'orionmagazine.org', description: 'Nature, environment, and culture', articles: [
+      { id: 'or-1', title: 'A field guide to looking', author: 'Barry Lopez', excerpt: 'To look at the land carefully is to change your relationship to time. A practical and philosophical instruction.', minutes: 10 },
+      { id: 'or-2', title: 'What the animals know', author: 'Sy Montgomery', excerpt: 'Animal cognition research keeps finding that the gap between human and non-human minds is smaller than we assumed.', minutes: 12 },
+    ]},
+    { id: 'emergence-nature', name: 'Emergence Magazine', domain: 'emergencemagazine.org', description: 'Nature writing and ecology', articles: [
+      { id: 'en-1', title: 'The slow time of trees', author: 'Peter Wohlleben', excerpt: 'Trees operate on a temporal scale that makes human impatience look very small. What we can learn from waiting.', minutes: 9 },
+    ]},
+  ],
+  Health: [
+    { id: 'wellbeing-aeon', name: 'Aeon — Health', domain: 'aeon.co', description: 'Health and the examined life', articles: [
+      { id: 'ha-1', title: 'What medicine doesn\'t know', author: 'Eula Biss', excerpt: 'Medicine\'s confidence is partly rhetorical. The areas of genuine ignorance are larger than we are generally told.', minutes: 11 },
+      { id: 'ha-2', title: 'On chronic pain', author: 'Meghan O\'Rourke', excerpt: 'Chronic pain is invisible. So is the life reorganized around it. A firsthand account of medicine\'s limits.', minutes: 14 },
+    ]},
+    { id: 'stat-news', name: 'STAT News', domain: 'statnews.com', description: 'Health, medicine, and science', articles: [
+      { id: 'sn-1', title: 'The placebo is not nothing', author: 'Sharon Begley', excerpt: 'Placebo effects are real, measurable, and poorly understood. The word \'just\' does a lot of work here.', minutes: 8 },
+    ]},
+  ],
+};
+
+// ─── HOOKS ────────────────────────────────────────────────────────────────────
+function useLocalStorage(key, initial) {
+  const [val, setVal] = React.useState(() => {
+    try { const s = localStorage.getItem(key); return s ? JSON.parse(s) : initial; }
+    catch { return initial; }
+  });
+  const set = React.useCallback((v) => {
+    const next = typeof v === 'function' ? v(val) : v;
+    setVal(next);
+    try { localStorage.setItem(key, JSON.stringify(next)); } catch {}
+  }, [key, val]);
+  return [val, set];
+}
+
+function useTextSelection(containerRef, enabled = true) {
+  const [sel, setSel] = React.useState(null);
+  React.useEffect(() => {
+    if (!enabled) { setSel(null); return; }
+    const onUp = () => {
+      const s = window.getSelection();
+      if (!s || s.isCollapsed) return;
+      const txt = s.toString().trim();
+      if (txt.length < 3) return;
+      if (!containerRef.current?.contains(s.anchorNode)) return;
+      const r = s.getRangeAt(0);
+      const rect = r.getBoundingClientRect();
+      setSel({ text: txt, rect });
+    };
+    const onDown = (e) => {
+      if (e.target.closest('[data-toolbar]')) return;
+      setSel(null);
+    };
+    document.addEventListener('mouseup', onUp);
+    document.addEventListener('touchend', onUp);
+    document.addEventListener('mousedown', onDown);
+    return () => {
+      document.removeEventListener('mouseup', onUp);
+      document.removeEventListener('touchend', onUp);
+      document.removeEventListener('mousedown', onDown);
+    };
+  }, [containerRef, enabled]);
+  return [sel, setSel];
+}
+
+// ─── ICONS ────────────────────────────────────────────────────────────────────
+function Icon({ name, size = 18, color = 'currentColor', strokeWidth = 1.5 }) {
+  const s = { fill: 'none', stroke: color, strokeWidth, strokeLinecap: 'round', strokeLinejoin: 'round' };
+  const icons = {
+    library:    <g {...s}><path d="M4 5h16M4 12h16M4 19h10"/></g>,
+    quote:      <g {...s}><path d="M7 8c-2 1-3 3-3 5v4h4v-5H6c0-1.5.8-3 2-4zM17 8c-2 1-3 3-3 5v4h4v-5h-2c0-1.5.8-3 2-4z"/></g>,
+    sparkle:    <g {...s}><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></g>,
+    search:     <g {...s}><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></g>,
+    chevLeft:   <g {...s}><path d="M15 18l-6-6 6-6"/></g>,
+    plus:       <g {...s}><path d="M12 5v14M5 12h14"/></g>,
+    close:      <g {...s}><path d="M18 6L6 18M6 6l12 12"/></g>,
+    highlight:  <g {...s}><path d="M5 19l3-1 11-11-2-2L6 16l-1 3z"/><path d="M14 6l2 2"/></g>,
+    note:       <g {...s}><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></g>,
+    copy:       <g {...s}><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></g>,
+    settings:   <g {...s}><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></g>,
+    aA:         null,
+    check:      <g {...s}><path d="M20 6L9 17l-5-5"/></g>,
+    bookmark:   <g {...s}><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></g>,
+    feeds:      <g {...s}><circle cx="5" cy="19" r="1.5" fill="currentColor" stroke="none"/><path d="M4 11a9 9 0 019 9M4 4a16 16 0 0116 16"/></g>,
+  };
+  if (name === 'aA') return (
+    <svg width={size} height={size} viewBox="0 0 24 24" style={{ display: 'block', flexShrink: 0 }}>
+      <text x="2" y="18" fontSize="16" fill={color} stroke="none" fontFamily="Georgia, serif" fontWeight="600">A</text>
+      <text x="14" y="18" fontSize="11" fill={color} stroke="none" fontFamily="Georgia, serif">a</text>
+    </svg>
+  );
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" style={{ display: 'block', flexShrink: 0 }}>
+      {icons[name]}
+    </svg>
+  );
+}
+
+// ─── ONBOARDING SCREENS ──────────────────────────────────────────────────────
+function WelcomeScreen({ onNext }) {
+  const [mode, setMode] = React.useState('options');
+  const [email, setEmail] = React.useState('');
+
+  return (
+    <div className="onboarding">
+      <div className="onboarding-inner">
+        <div className="onboarding-logo">Calma<span>.</span></div>
+        <div className="onboarding-eyebrow">Read well</div>
+        <div className="onboarding-title">A quieter<br/>reading life.</div>
+        <div className="onboarding-sub">Save articles. Make notes in the margins. Read without the noise.</div>
+
+        {mode === 'options' ? (
+          <>
+            <button className="ob-btn" onClick={onNext}>
+              <svg className="ob-btn-icon" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+              </svg>
+              Continue with Apple
+            </button>
+            <button className="ob-btn" onClick={onNext}>
+              <svg className="ob-btn-icon" viewBox="0 0 24 24">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+              </svg>
+              Continue with Google
+            </button>
+            <button className="ob-btn" onClick={() => setMode('email')}>
+              <svg className="ob-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+              Continue with email
+            </button>
+            <div className="onboarding-divider" />
+            <p style={{ fontSize: 12, color: '#3D3A35', fontStyle: 'italic', lineHeight: 1.65 }}>
+              By continuing you agree to Calma's terms of service and privacy policy. No tracking. No ads. No noise.
+            </p>
+          </>
+        ) : (
+          <>
+            <input
+              className="ob-email-input"
+              type="email"
+              placeholder="your@email.com"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && email.includes('@') && onNext()}
+              autoFocus
+            />
+            <button className="ob-primary-btn" onClick={onNext} disabled={!email.includes('@')}>
+              Continue
+            </button>
+            <button className="ob-link" onClick={() => setMode('options')}>← Back to options</button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function InterestsScreen({ onComplete }) {
+  const [selected, setSelected] = React.useState([]);
+  const [customInterests, setCustomInterests] = React.useState([]);
+  const [inputVal, setInputVal] = React.useState('');
+  const inputRef = React.useRef(null);
+
+  const toggle = (interest) =>
+    setSelected(prev => prev.includes(interest) ? prev.filter(i => i !== interest) : [...prev, interest]);
+
+  const addCustom = () => {
+    const val = inputVal.trim();
+    if (!val) return;
+    const normalized = val.charAt(0).toUpperCase() + val.slice(1).toLowerCase();
+    setCustomInterests(prev => prev.includes(normalized) ? prev : [...prev, normalized]);
+    setSelected(prev => prev.includes(normalized) ? prev : [...prev, normalized]);
+    setInputVal('');
+    inputRef.current?.focus();
+  };
+
+  const remaining = Math.max(0, 3 - selected.length);
+
+  return (
+    <div className="onboarding" style={{ alignItems: 'flex-start', overflowY: 'auto' }}>
+      <div className="onboarding-inner" style={{ maxWidth: 520, paddingTop: 48, minHeight: '100%' }}>
+        <div className="onboarding-logo" style={{ marginBottom: 32 }}>Calma<span>.</span></div>
+        <div className="onboarding-eyebrow">Your reading life</div>
+        <div className="onboarding-title" style={{ fontSize: 30, marginBottom: 8 }}>What do you read?</div>
+        <div className="ob-count">
+          {selected.length === 0
+            ? 'Choose at least 3 to begin'
+            : remaining > 0
+            ? `${remaining} more to go`
+            : `${selected.length} selected — looks good`}
+        </div>
+
+        <div className="interests-body">
+          {Object.entries(INTEREST_GROUPS).map(([group, interests]) => (
+            <div key={group} className="interest-group">
+              <div className="interest-group-label">{group}</div>
+              <div className="interest-chips">
+                {interests.map(interest => (
+                  <button
+                    key={interest}
+                    className={`interest-chip ${selected.includes(interest) ? 'selected' : ''}`}
+                    onClick={() => toggle(interest)}
+                  >{interest}</button>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          {customInterests.length > 0 && (
+            <div className="interest-group">
+              <div className="interest-group-label">Yours</div>
+              <div className="interest-chips">
+                {customInterests.map(interest => (
+                  <button
+                    key={interest}
+                    className={`interest-chip ${selected.includes(interest) ? 'selected' : ''}`}
+                    onClick={() => toggle(interest)}
+                  >{interest}</button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="custom-interest-row">
+            <input
+              ref={inputRef}
+              className="custom-interest-input"
+              placeholder="Add your own interest…"
+              value={inputVal}
+              onChange={e => setInputVal(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && addCustom()}
+              maxLength={40}
+            />
+            <button
+              className="custom-interest-add"
+              onClick={addCustom}
+              disabled={!inputVal.trim()}
+              title="Add interest"
+            >+</button>
+          </div>
+        </div>
+
+        <div style={{ paddingTop: 28, paddingBottom: 48 }}>
+          <button className="ob-primary-btn" disabled={selected.length < 3} onClick={() => onComplete(selected)}>
+            Begin reading
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── FEEDS SCREEN ─────────────────────────────────────────────────────────────
+function FeedsScreen({ interests, savedRss, onSaveRss }) {
+  const allFeeds = (interests || []).flatMap(interest =>
+    (INTEREST_FEEDS[interest] || []).map(f => ({ ...f, interest }))
+  );
+  const feeds = allFeeds.filter((f, i) => allFeeds.findIndex(x => x.id === f.id) === i);
+
+  const [activeFeedId, setActiveFeedId] = React.useState(feeds[0]?.id || null);
+  const activeFeed = feeds.find(f => f.id === activeFeedId);
+
+  const grouped = {};
+  for (const f of feeds) {
+    (grouped[f.interest] = grouped[f.interest] || []).push(f);
+  }
+
+  if (feeds.length === 0) {
+    return (
+      <div className="scroll-area">
+        <div style={{ maxWidth: 720, margin: '0 auto', padding: '48px 40px 80px' }}>
+          <div className="view-label">Feeds</div>
+          <div className="view-title">RSS Feeds</div>
+          <div className="view-meta" style={{ marginTop: 32 }}>No feeds yet. Select interests to subscribe automatically.</div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="feeds-layout">
+      <aside className="feeds-sidebar">
+        <div className="feeds-sidebar-head">
+          <div className="feeds-sidebar-title">Feeds</div>
+          <div className="feeds-sidebar-sub">{feeds.length} subscribed</div>
+        </div>
+        {Object.entries(grouped).map(([interest, fds]) => (
+          <div key={interest} className="feed-group">
+            <div className="feed-group-label">{interest}</div>
+            {fds.map(f => (
+              <button
+                key={f.id}
+                className={`feed-item ${activeFeedId === f.id ? 'active' : ''}`}
+                onClick={() => setActiveFeedId(f.id)}
+              >
+                <span className="feed-item-dot" />
+                {f.name}
+              </button>
+            ))}
+          </div>
+        ))}
+        <button className="feed-add-btn">+ Add feed by URL</button>
+      </aside>
+
+      <div className="feeds-main">
+        {activeFeed && (
+          <div className="feeds-main-inner">
+            <div className="view-label">{activeFeed.interest}</div>
+            <div style={{ fontSize: 24, fontWeight: 600, letterSpacing: '-0.3px', color: '#E8E5DD', marginBottom: 4 }}>{activeFeed.name}</div>
+            <div style={{ fontSize: 13, color: '#5E5B55', fontStyle: 'italic', marginBottom: 0 }}>{activeFeed.description} · {activeFeed.domain}</div>
+            <div style={{ marginTop: 0 }}>
+              {activeFeed.articles.map(article => {
+                const isSaved = (savedRss || []).includes(article.id);
+                return (
+                  <div key={article.id} className="feed-article">
+                    <div className="feed-article-title">{article.title}</div>
+                    <div className="feed-article-excerpt">{article.excerpt}</div>
+                    <div className="feed-article-meta">
+                      <span>{article.author}</span>
+                      <span>·</span>
+                      <span>{article.minutes} min</span>
+                    </div>
+                    <button
+                      className={`feed-article-save ${isSaved ? 'saved' : ''}`}
+                      onClick={() => !isSaved && onSaveRss(article.id)}
+                    >
+                      {isSaved ? 'Saved to library' : 'Save to library'}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── SIDEBAR ──────────────────────────────────────────────────────────────────
+function Sidebar({ view, setView, onAdd }) {
+  const navItems = [
+    { id: 'library',    icon: 'library',  label: 'Library' },
+    { id: 'discover',   icon: 'sparkle',  label: 'Discover' },
+    { id: 'marginalia', icon: 'quote',    label: 'Marginalia' },
+    { id: 'search',     icon: 'search',   label: 'Search' },
+  ];
+  return (
+    <aside className="sidebar">
+      <div className="sidebar-logo">Calma<span>.</span></div>
+      <nav className="sidebar-section">
+        {navItems.map(item => (
+          <button
+            key={item.id}
+            className={`nav-item ${view === item.id ? 'active' : ''}`}
+            onClick={() => setView(item.id)}
+          >
+            <Icon name={item.icon} size={16} />
+            <span>{item.label}</span>
+          </button>
+        ))}
+      </nav>
+      <div className="sidebar-divider" />
+      <div className="sidebar-bottom">
+        <button className="add-btn" onClick={onAdd}>
+          <Icon name="plus" size={15} />
+          <span>Add article</span>
+        </button>
+      </div>
+    </aside>
+  );
+}
+
+// ─── MOBILE NAV ───────────────────────────────────────────────────────────────
+function MobileNav({ view, setView }) {
+  const items = [
+    { id: 'library',    icon: 'library',  label: 'Library' },
+    { id: 'discover',   icon: 'sparkle',  label: 'Discover' },
+    { id: 'marginalia', icon: 'quote',    label: 'Notes' },
+    { id: 'search',     icon: 'search',   label: 'Search' },
+  ];
+  return (
+    <nav className="mobile-nav">
+      <div className="mobile-nav-inner">
+        {items.map(item => (
+          <button
+            key={item.id}
+            className={`mobile-nav-item ${view === item.id ? 'active' : ''}`}
+            onClick={() => setView(item.id)}
+          >
+            <Icon name={item.icon} size={20} />
+            <span>{item.label}</span>
+          </button>
+        ))}
+      </div>
+    </nav>
+  );
+}
+
+// ─── LIBRARY SCREEN ──────────────────────────────────────────────────────────
+function LibraryScreen({ onOpen, highlights, progress, interests, savedRss, onSaveRss }) {
+  const inProgress = ARTICLES.find(a => progress[a.id] > 0 && progress[a.id] < 1);
+  const rest = ARTICLES.filter(a => a !== inProgress);
+
+  const forYouArticles = (interests && interests.length > 0)
+    ? interests.flatMap(interest =>
+        (INTEREST_FEEDS[interest] || []).flatMap(f =>
+          f.articles.map(a => ({ ...a, feedName: f.name, interest }))
+        )
+      ).filter((a, i, arr) => arr.findIndex(x => x.id === a.id) === i).slice(0, 10)
+    : [];
+
+  return (
+    <div className="scroll-area">
+      <div className="library-inner">
+        <div className="view-label">Library</div>
+        <div className="view-title">Calma.</div>
+        <div className="view-meta">{ARTICLES.length} saved · {Object.values(progress).filter(p => p > 0 && p < 1).length} in progress</div>
+
+        {forYouArticles.length > 0 && (
+          <div className="for-you-section">
+            <div className="for-you-label">From your feeds</div>
+            <div className="for-you-rail">
+              {forYouArticles.map(article => {
+                const isSaved = (savedRss || []).includes(article.id);
+                return (
+                  <div key={article.id} className="for-you-card">
+                    <div className="for-you-card-tag">{article.interest}</div>
+                    <div className="for-you-card-title">{article.title}</div>
+                    <div className="for-you-card-source">{article.feedName}</div>
+                    <button
+                      className={`for-you-card-save ${isSaved ? 'saved' : ''}`}
+                      onClick={() => !isSaved && onSaveRss(article.id)}
+                    >{isSaved ? 'Saved' : 'Save'}</button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {inProgress && (
+          <button className="continue-card" onClick={() => onOpen(inProgress.id)}>
+            <div className="continue-label">
+              <div style={{ width: 14, height: 1, background: '#C9A876' }} />
+              <span>Continue Reading</span>
+            </div>
+            <div className="continue-title">{inProgress.title}</div>
+            <div className="continue-byline">{inProgress.author} · {inProgress.publication}</div>
+            <div className="progress-track">
+              <div className="progress-fill" style={{ width: `${(progress[inProgress.id] || 0) * 100}%` }} />
+            </div>
+            <div className="progress-pct">{Math.round((progress[inProgress.id] || 0) * 100)}% read · {inProgress.minutes} min total</div>
+          </button>
+        )}
+
+        <div className="section-header" style={{ marginTop: inProgress ? 0 : 32 }}>
+          <span className="section-label">Recently Saved</span>
+          <span className="section-count">{rest.length} articles</span>
+        </div>
+        <div className="article-list">
+          {rest.map(article => {
+            const pct = progress[article.id] || 0;
+            const hlCount = highlights.filter(h => h.articleId === article.id).length;
+            return (
+              <button key={article.id} className="article-row" onClick={() => onOpen(article.id)}>
+                <div className="article-row-top">
+                  <span className="article-pub">{article.publication}</span>
+                  <span className="article-meta">{article.minutes} min · {article.saved}</span>
+                </div>
+                <div className="article-title">{article.title}</div>
+                <div className="article-excerpt">{article.excerpt}</div>
+                <div className="article-author">{article.author}</div>
+                {pct > 0 && (
+                  <div className="article-progress-row">
+                    <div className="article-progress-track">
+                      <div className="progress-fill" style={{ width: `${pct * 100}%` }} />
+                    </div>
+                    {pct >= 1
+                      ? <span className="article-read-badge">Read</span>
+                      : <span className="article-meta">{Math.round(pct * 100)}%</span>
+                    }
+                    {hlCount > 0 && <span className="article-meta">{hlCount} highlight{hlCount > 1 ? 's' : ''}</span>}
+                  </div>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── PARAGRAPH WITH HIGHLIGHTS ───────────────────────────────────────────────
+function HighlightedParagraph({ text, articleHighlights }) {
+  if (!articleHighlights || articleHighlights.length === 0) return <>{text}</>;
+
+  const relevant = articleHighlights
+    .filter(h => text.includes(h.text))
+    .sort((a, b) => text.indexOf(a.text) - text.indexOf(b.text));
+
+  if (relevant.length === 0) return <>{text}</>;
+
+  const segments = [];
+  let cursor = 0;
+  for (const h of relevant) {
+    const idx = text.indexOf(h.text, cursor);
+    if (idx < 0) continue;
+    if (idx > cursor) segments.push({ t: text.slice(cursor, idx), h: null });
+    segments.push({ t: h.text, h });
+    cursor = idx + h.text.length;
+  }
+  if (cursor < text.length) segments.push({ t: text.slice(cursor), h: null });
+
+  return (
+    <>
+      {segments.map((seg, i) =>
+        seg.h ? (
+          <mark key={i} className={`hl-${seg.h.color}`}>
+            {seg.t}
+            {seg.h.note && <span className="hl-note-dot" />}
+          </mark>
+        ) : (
+          <React.Fragment key={i}>{seg.t}</React.Fragment>
+        )
+      )}
+    </>
+  );
+}
+
+// ─── SELECTION TOOLBAR ───────────────────────────────────────────────────────
+function SelectionToolbar({ sel, onHighlight, onNote, onClose }) {
+  const [showColors, setShowColors] = React.useState(false);
+  const top = sel.rect.top - 52;
+  const left = sel.rect.left + sel.rect.width / 2;
+
+  return (
+    <div
+      className="sel-toolbar"
+      data-toolbar="1"
+      style={{ top: Math.max(64, top), left }}
+    >
+      {showColors ? (
+        <>
+          {Object.entries(HL_COLORS).map(([key, def]) => (
+            <button
+              key={key}
+              className="color-swatch"
+              style={{ background: def.line, '--swatch-color': def.line }}
+              title={def.label}
+              onClick={() => { onHighlight(key); onClose(); setShowColors(false); }}
+            />
+          ))}
+          <div className="sel-divider" />
+          <button className="sel-btn" style={{ padding: '7px 8px' }} onClick={() => setShowColors(false)}>
+            <Icon name="close" size={13} />
+          </button>
+        </>
+      ) : (
+        <>
+          <button className={`sel-btn ${showColors ? 'active' : ''}`} onClick={() => setShowColors(true)}>
+            <Icon name="highlight" size={14} />
+            Highlight
+          </button>
+          <div className="sel-divider" />
+          <button className="sel-btn" onClick={() => { onNote(); onClose(); }}>
+            <Icon name="note" size={14} />
+            Note
+          </button>
+          <div className="sel-divider" />
+          <button className="sel-btn" onClick={() => { navigator.clipboard?.writeText(sel.text).catch(() => {}); onClose(); }}>
+            <Icon name="copy" size={14} />
+            Copy
+          </button>
+          <div className="sel-divider" />
+          <button className="sel-btn" style={{ padding: '7px 8px' }} onClick={onClose}>
+            <Icon name="close" size={13} />
+          </button>
+        </>
+      )}
+    </div>
+  );
+}
+
+// ─── NOTE PANEL ──────────────────────────────────────────────────────────────
+function NotePanel({ pendingHighlight, articleTopics, onSave, onCancel }) {
+  const [noteText, setNoteText] = React.useState('');
+  const [color, setColor] = React.useState(pendingHighlight?.color || 'ochre');
+  const colorDef = HL_COLORS[color];
+
+  const handleSave = () => {
+    onSave({ ...pendingHighlight, color, note: noteText.trim() });
+  };
+
+  return (
+    <aside className="note-panel">
+      <div className="note-panel-header">
+        <span className="note-panel-title">New Note</span>
+        <div className="note-panel-actions">
+          <button className="note-cancel-btn" onClick={onCancel}>Cancel</button>
+          <button className="note-save-btn" onClick={handleSave}>Save</button>
+        </div>
+      </div>
+
+      <div style={{ padding: '18px 22px 0' }}>
+        <div
+          className="note-panel-quote"
+          style={{
+            borderLeftColor: colorDef.line,
+            background: colorDef.bg,
+            padding: '12px 14px',
+            borderLeft: `2px solid ${colorDef.line}`,
+          }}
+        >
+          <div className="note-panel-quote-label" style={{ color: colorDef.line }}>From the article</div>
+          <div className="note-panel-quote-text">"{pendingHighlight?.text}"</div>
+        </div>
+      </div>
+
+      <div className="note-textarea-wrap">
+        <textarea
+          className="note-textarea"
+          placeholder="Write a note…"
+          value={noteText}
+          onChange={e => setNoteText(e.target.value)}
+          autoFocus
+        />
+      </div>
+
+      <div className="note-panel-footer">
+        <div className="note-color-row">
+          <span className="note-color-label">Color</span>
+          {Object.entries(HL_COLORS).map(([key, def]) => (
+            <button
+              key={key}
+              className={`color-swatch ${key === color ? 'selected' : ''}`}
+              style={{ background: def.line, '--swatch-color': def.line, width: 20, height: 20 }}
+              onClick={() => setColor(key)}
+            />
+          ))}
+        </div>
+        <div className="note-tags" style={{ marginTop: 12 }}>
+          {(articleTopics || []).map(t => (
+            <span key={t} className="note-tag">{t}</span>
+          ))}
+        </div>
+      </div>
+    </aside>
+  );
+}
+
+// ─── READER SETTINGS ─────────────────────────────────────────────────────────
+function ReaderSettings({ fontSize, setFontSize, lineHeight, setLineHeight, onClose }) {
+  return (
+    <div className="settings-panel" data-toolbar="1">
+      <div className="settings-row">
+        <span className="settings-label">Font size</span>
+        <div className="settings-stepper">
+          <button className="stepper-btn" onClick={() => setFontSize(f => Math.max(15, f - 1))}>−</button>
+          <span className="settings-val" style={{ width: 32, textAlign: 'center', fontSize: 12 }}>{fontSize}px</span>
+          <button className="stepper-btn" onClick={() => setFontSize(f => Math.min(26, f + 1))}>+</button>
+        </div>
+      </div>
+      <div className="settings-row">
+        <span className="settings-label">Line spacing</span>
+        <div className="settings-stepper">
+          <button className="stepper-btn" onClick={() => setLineHeight(l => Math.max(1.4, parseFloat((l - 0.1).toFixed(1))))}>−</button>
+          <span className="settings-val" style={{ width: 32, textAlign: 'center', fontSize: 12 }}>{lineHeight}</span>
+          <button className="stepper-btn" onClick={() => setLineHeight(l => Math.min(2.2, parseFloat((l + 0.1).toFixed(1))))}>+</button>
+        </div>
+      </div>
+      <div className="settings-row">
+        <span className="settings-label">Typeface</span>
+        <span className="settings-val">Spectral</span>
+      </div>
+      <div className="settings-row">
+        <span className="settings-label">Theme</span>
+        <span className="settings-val">Dark ink</span>
+      </div>
+    </div>
+  );
+}
+
+// ─── READER SCREEN ───────────────────────────────────────────────────────────
+function ReaderScreen({ articleId, onBack, highlights, onAddHighlight, progress, setProgress }) {
+  const article = ARTICLES.find(a => a.id === articleId);
+  const articleHighlights = highlights.filter(h => h.articleId === articleId);
+  const contentRef = React.useRef(null);
+  const scrollRef = React.useRef(null);
+  const [scrollPct, setScrollPct] = React.useState(progress[articleId] || 0);
+  const [showSettings, setShowSettings] = React.useState(false);
+  const [fontSize, setFontSize] = React.useState(19);
+  const [lineHeight, setLineHeight] = React.useState(1.78);
+  const [pendingHighlight, setPendingHighlight] = React.useState(null);
+  const [showNotePanel, setShowNotePanel] = React.useState(false);
+  const [sel, setSel] = useTextSelection(contentRef, !showNotePanel);
+
+  // Track progress
+  React.useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      const max = el.scrollHeight - el.clientHeight;
+      const pct = max > 0 ? el.scrollTop / max : 0;
+      setScrollPct(pct);
+      setProgress(prev => ({ ...prev, [articleId]: Math.max(pct, prev[articleId] || 0) }));
+    };
+    el.addEventListener('scroll', onScroll, { passive: true });
+    return () => el.removeEventListener('scroll', onScroll);
+  }, [articleId, setProgress]);
+
+  // Close settings on outside click
+  React.useEffect(() => {
+    if (!showSettings) return;
+    const fn = (e) => { if (!e.target.closest('[data-toolbar]') && !e.target.closest('.icon-btn')) setShowSettings(false); };
+    document.addEventListener('mousedown', fn);
+    return () => document.removeEventListener('mousedown', fn);
+  }, [showSettings]);
+
+  const handleHighlight = (color) => {
+    if (!sel) return;
+    const article_obj = ARTICLES.find(a => a.id === articleId);
+    const newHl = {
+      id: Math.random().toString(36).slice(2, 10),
+      articleId,
+      text: sel.text,
+      color,
+      note: '',
+      createdAt: Date.now(),
+      topic: article_obj?.topics?.[0] || 'General',
+    };
+    onAddHighlight(newHl);
+    setSel(null);
+    window.getSelection()?.removeAllRanges();
+  };
+
+  const handleNoteOpen = () => {
+    if (!sel) return;
+    const article_obj = ARTICLES.find(a => a.id === articleId);
+    setPendingHighlight({
+      id: Math.random().toString(36).slice(2, 10),
+      articleId,
+      text: sel.text,
+      color: 'ochre',
+      note: '',
+      createdAt: Date.now(),
+      topic: article_obj?.topics?.[0] || 'General',
+    });
+    setSel(null);
+    window.getSelection()?.removeAllRanges();
+    setShowNotePanel(true);
+  };
+
+  const handleNoteSave = (hl) => {
+    onAddHighlight(hl);
+    setPendingHighlight(null);
+    setShowNotePanel(false);
+  };
+
+  if (!article) return null;
+
+  return (
+    <div style={{ display: 'flex', flex: 1, overflow: 'hidden', position: 'relative' }}>
+      <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+        {/* Top bar */}
+        <div className="reader-topbar">
+          <button className="reader-topbar-back" onClick={onBack}>
+            <Icon name="chevLeft" size={16} />
+            Library
+          </button>
+          <span className="reader-pub">{article.publication}</span>
+          <div className="reader-topbar-actions">
+            <button
+              className={`icon-btn ${showSettings ? 'active' : ''}`}
+              onClick={() => setShowSettings(s => !s)}
+              data-toolbar="1"
+              title="Reader settings"
+            >
+              <Icon name="aA" size={18} />
+            </button>
+            <button className="icon-btn" title="Bookmark">
+              <Icon name="bookmark" size={16} />
+            </button>
+          </div>
+        </div>
+
+        {/* Progress bar */}
+        <div className="reader-progress-bar">
+          <div className="reader-progress-fill" style={{ width: `${scrollPct * 100}%` }} />
+        </div>
+
+        {/* Article body */}
+        <div className="scroll-area" ref={scrollRef}>
+          <div className="reader-col" ref={contentRef}>
+            <h1 className="article-h1">{article.title}</h1>
+            <div className="article-byline">
+              <div className="article-byline-name">by {article.author}</div>
+              <div className="article-byline-meta">
+                <span>{article.publication}</span>
+                <span className="article-byline-dot" />
+                <span>{article.date}</span>
+                <span className="article-byline-dot" />
+                <span>{article.minutes} min read</span>
+              </div>
+              <div className="article-ornament">
+                <div className="article-ornament-line" />
+                <span className="article-ornament-glyph">§</span>
+                <div className="article-ornament-line" />
+              </div>
+            </div>
+
+            {article.body.map((block, i) => {
+              if (block.kind === 'h2') return <h2 key={i} className="article-h2">{block.text}</h2>;
+              if (block.kind === 'p') {
+                const paraHls = articleHighlights.filter(h => block.text.includes(h.text));
+                const noteHls = paraHls.filter(h => h.note);
+                return (
+                  <React.Fragment key={i}>
+                    <p
+                      className="article-p"
+                      style={{ fontSize, lineHeight }}
+                    >
+                      <HighlightedParagraph text={block.text} articleHighlights={articleHighlights} />
+                    </p>
+                    {noteHls.map(h => (
+                      <div key={h.id} className="inline-note" style={{ borderLeftColor: HL_COLORS[h.color]?.line }}>
+                        <span className="inline-note-label" style={{ color: HL_COLORS[h.color]?.line }}>Note</span>
+                        <span>{h.note}</span>
+                      </div>
+                    ))}
+                  </React.Fragment>
+                );
+              }
+              return null;
+            })}
+
+            <div className="article-end">* * *</div>
+            <div className="article-source">Saved from {article.domain} · {article.saved}</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Selection toolbar */}
+      {sel && !showNotePanel && (
+        <SelectionToolbar
+          sel={sel}
+          onHighlight={handleHighlight}
+          onNote={handleNoteOpen}
+          onClose={() => { setSel(null); window.getSelection()?.removeAllRanges(); }}
+        />
+      )}
+
+      {/* Settings panel */}
+      {showSettings && (
+        <ReaderSettings
+          fontSize={fontSize} setFontSize={setFontSize}
+          lineHeight={lineHeight} setLineHeight={setLineHeight}
+          onClose={() => setShowSettings(false)}
+        />
+      )}
+
+      {/* Note panel */}
+      {showNotePanel && pendingHighlight && (
+        <NotePanel
+          pendingHighlight={pendingHighlight}
+          articleTopics={article.topics}
+          onSave={handleNoteSave}
+          onCancel={() => { setPendingHighlight(null); setShowNotePanel(false); }}
+        />
+      )}
+    </div>
+  );
+}
+
+// ─── MARGINALIA SCREEN ───────────────────────────────────────────────────────
+function MarginaliScreen({ highlights, onOpen }) {
+  const [filter, setFilter] = React.useState('All');
+  const topics = ['All', ...Array.from(new Set(highlights.map(h => h.topic).filter(Boolean)))];
+
+  const grouped = {};
+  const visible = filter === 'All' ? highlights : highlights.filter(h => h.topic === filter);
+  for (const h of visible) {
+    (grouped[h.topic] = grouped[h.topic] || []).push(h);
+  }
+
+  const formatWhen = (ts) => {
+    const diff = Date.now() - ts;
+    if (diff < 86400000) return 'Today';
+    if (diff < 172800000) return 'Yesterday';
+    return new Date(ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  };
+
+  return (
+    <div className="scroll-area">
+      <div className="marginalia-inner">
+        <div className="view-label">Notes</div>
+        <div className="view-title">Marginalia</div>
+        <div className="view-meta">{highlights.length} highlights · {highlights.filter(h => h.note).length} with notes</div>
+
+        <div className="topic-filter">
+          {topics.map(t => (
+            <button
+              key={t}
+              className={`topic-chip ${filter === t ? 'active' : ''}`}
+              onClick={() => setFilter(t)}
+            >{t}</button>
+          ))}
+        </div>
+
+        {highlights.length === 0 && (
+          <div style={{ textAlign: 'center', padding: '60px 0', color: '#3D3A35', fontSize: 16, fontStyle: 'italic' }}>
+            Select text in the reader to create your first highlight.
+          </div>
+        )}
+
+        {Object.entries(grouped).map(([topic, hls]) => (
+          <div key={topic} className="topic-group">
+            <div className="topic-group-header">
+              <span className="topic-group-label">{topic}</span>
+              <span className="topic-group-line" />
+              <span className="topic-group-count">{hls.length}</span>
+            </div>
+            {hls.map(h => {
+              const article = ARTICLES.find(a => a.id === h.articleId);
+              const line = HL_COLORS[h.color]?.line || '#C9A876';
+              return (
+                <button
+                  key={h.id}
+                  className="hl-card"
+                  style={{ borderLeftColor: line }}
+                  onClick={() => onOpen(h.articleId)}
+                >
+                  <div className="hl-card-quote">
+                    <span style={{ color: line, marginRight: 3 }}>"</span>
+                    {h.text}
+                    <span style={{ color: line, marginLeft: 2 }}>"</span>
+                  </div>
+                  {h.note && (
+                    <div className="hl-card-note">
+                      <span className="hl-card-note-label" style={{ color: '#C9A876' }}>Note</span>
+                      {h.note}
+                    </div>
+                  )}
+                  <div className="hl-card-footer">
+                    <span className="hl-card-source">{article?.title}</span>
+                    <span style={{ width: 3, height: 3, borderRadius: '50%', background: '#3D3A35', alignSelf: 'center' }} />
+                    <span className="hl-card-when">{formatWhen(h.createdAt)}</span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── DISCOVER SCREEN ─────────────────────────────────────────────────────────
+function DiscoverScreen({ interests, savedRss, onSaveRss }) {
+  const [activeInterest, setActiveInterest] = React.useState('All');
+
+  const allArticles = (interests || []).flatMap(interest =>
+    (INTEREST_FEEDS[interest] || []).flatMap(feed =>
+      feed.articles.map(a => ({ ...a, interest, feedName: feed.name }))
+    )
+  ).filter((a, i, arr) => arr.findIndex(x => x.id === a.id) === i);
+
+  const filterOptions = ['All', ...(interests || [])];
+  const visible = activeInterest === 'All'
+    ? allArticles
+    : allArticles.filter(a => a.interest === activeInterest);
+
+  if (!interests || interests.length === 0) {
+    return (
+      <div className="scroll-area">
+        <div className="discover-inner">
+          <div className="view-label">Discover</div>
+          <div className="view-title">For You</div>
+          <div className="view-meta">Complete onboarding to discover articles from your interests.</div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="scroll-area">
+      <div className="discover-inner">
+        <div className="view-label">Discover</div>
+        <div className="view-title">For You</div>
+        <div className="view-meta">{allArticles.length} articles across {(interests || []).length} interests.</div>
+
+        <div className="topic-filter" style={{ marginTop: 24, marginBottom: 4 }}>
+          {filterOptions.map(opt => (
+            <button
+              key={opt}
+              className={`topic-chip ${activeInterest === opt ? 'active' : ''}`}
+              onClick={() => setActiveInterest(opt)}
+            >{opt}</button>
+          ))}
+        </div>
+
+        <div className="discover-grid">
+          {visible.map(article => {
+            const isSaved = (savedRss || []).includes(article.id);
+            return (
+              <div key={article.id} className="discover-card" style={{ cursor: 'default' }}>
+                <div className="discover-card-tag">{article.interest}</div>
+                <div className="discover-card-title">{article.title}</div>
+                <div className="discover-card-excerpt">{article.excerpt}</div>
+                <div className="discover-card-footer">
+                  <span style={{ fontStyle: 'italic' }}>{article.feedName}</span>
+                  <span>{article.minutes} min</span>
+                </div>
+                <button
+                  className={`feed-article-save ${isSaved ? 'saved' : ''}`}
+                  style={{ marginTop: 12, width: '100%', textAlign: 'center' }}
+                  onClick={() => !isSaved && onSaveRss(article.id)}
+                >{isSaved ? 'Saved to library' : 'Save to library'}</button>
+              </div>
+            );
+          })}
+        </div>
+
+        {visible.length === 0 && (
+          <div style={{ textAlign: 'center', padding: '60px 0', color: '#3D3A35', fontSize: 16, fontStyle: 'italic' }}>
+            No articles for this topic yet.
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── SEARCH SCREEN ───────────────────────────────────────────────────────────
+function SearchScreen({ highlights, onOpen }) {
+  const [query, setQuery] = React.useState('');
+  const q = query.toLowerCase().trim();
+
+  const matchedArticles = q
+    ? ARTICLES.filter(a =>
+        a.title.toLowerCase().includes(q) ||
+        a.author.toLowerCase().includes(q) ||
+        a.excerpt.toLowerCase().includes(q) ||
+        a.publication.toLowerCase().includes(q)
+      )
+    : [];
+
+  const matchedHighlights = q
+    ? highlights.filter(h =>
+        h.text.toLowerCase().includes(q) ||
+        (h.note && h.note.toLowerCase().includes(q))
+      )
+    : [];
+
+  const hasResults = matchedArticles.length > 0 || matchedHighlights.length > 0;
+
+  return (
+    <div className="scroll-area">
+      <div className="search-inner">
+        <div className="view-label">Search</div>
+        <div className="view-title">Find Anything</div>
+
+        <div className="search-input-wrap">
+          <span className="search-icon"><Icon name="search" size={18} /></span>
+          <input
+            className="search-input"
+            placeholder="Search articles, notes, highlights…"
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            autoFocus
+          />
+        </div>
+
+        <div className="search-results">
+          {q && !hasResults && (
+            <div className="search-empty">No results for "{query}"</div>
+          )}
+          {!q && (
+            <div className="search-empty">Start typing to search your library.</div>
+          )}
+
+          {matchedArticles.length > 0 && (
+            <div style={{ marginBottom: 36 }}>
+              <div className="search-section-title">Articles ({matchedArticles.length})</div>
+              {matchedArticles.map(a => (
+                <button key={a.id} className="article-row" onClick={() => onOpen(a.id)}>
+                  <div className="article-row-top">
+                    <span className="article-pub">{a.publication}</span>
+                    <span className="article-meta">{a.minutes} min</span>
+                  </div>
+                  <div className="article-title">{a.title}</div>
+                  <div className="article-author">{a.author}</div>
+                </button>
+              ))}
+            </div>
+          )}
+
+          {matchedHighlights.length > 0 && (
+            <div>
+              <div className="search-section-title">Highlights & Notes ({matchedHighlights.length})</div>
+              {matchedHighlights.map(h => {
+                const article = ARTICLES.find(a => a.id === h.articleId);
+                const line = HL_COLORS[h.color]?.line || '#C9A876';
+                return (
+                  <button key={h.id} className="hl-card" style={{ borderLeftColor: line, display: 'block', width: '100%' }} onClick={() => onOpen(h.articleId)}>
+                    <div className="hl-card-quote">
+                      <span style={{ color: line }}>"</span>{h.text}<span style={{ color: line }}>"</span>
+                    </div>
+                    {h.note && <div className="hl-card-note"><span className="hl-card-note-label" style={{ color: '#C9A876' }}>Note</span>{h.note}</div>}
+                    <div className="hl-card-footer">
+                      <span className="hl-card-source">{article?.title}</span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── ADD ARTICLE MODAL ───────────────────────────────────────────────────────
+function AddArticleModal({ onClose }) {
+  const [url, setUrl] = React.useState('');
+  const [state, setState] = React.useState('idle'); // idle | loading | success
+
+  const handleSave = () => {
+    if (!url.trim()) return;
+    setState('loading');
+    setTimeout(() => setState('success'), 1200);
+  };
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal" onClick={e => e.stopPropagation()}>
+        {state === 'success' ? (
+          <div className="modal-success">
+            <div className="modal-success-icon">§</div>
+            <div className="modal-success-title">Article saved</div>
+            <div className="modal-success-sub" style={{ marginBottom: 24 }}>It will appear in your library shortly.</div>
+            <button className="modal-btn-primary" onClick={onClose}>Back to Library</button>
+          </div>
+        ) : (
+          <>
+            <div className="modal-title">Save an article</div>
+            <div className="modal-subtitle">Paste a URL and Calma will fetch and clean the content for reading.</div>
+            <div className="modal-label">Article URL</div>
+            <input
+              className="modal-input"
+              placeholder="https://…"
+              value={url}
+              onChange={e => setUrl(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleSave()}
+              autoFocus
+            />
+            <div className="modal-actions">
+              <button className="modal-btn-secondary" onClick={onClose}>Cancel</button>
+              <button
+                className="modal-btn-primary"
+                onClick={handleSave}
+                disabled={!url.trim() || state === 'loading'}
+                style={{ opacity: !url.trim() || state === 'loading' ? 0.5 : 1 }}
+              >
+                {state === 'loading' ? 'Saving…' : 'Save article'}
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── ROOT APP ─────────────────────────────────────────────────────────────────
+function App() {
+  const [onboarded, setOnboarded] = useLocalStorage('calma_onboarded', false);
+  const [obStep, setObStep] = React.useState('welcome');
+  const [interests, setInterests] = useLocalStorage('calma_interests', []);
+  const [savedRss, setSavedRss] = useLocalStorage('calma_rss_saved', []);
+  const [view, setView] = React.useState('library');
+  const [openArticleId, setOpenArticleId] = React.useState(null);
+  const [highlights, setHighlights] = useLocalStorage('calma_highlights', SEED_HIGHLIGHTS);
+  const [progress, setProgress] = useLocalStorage('calma_progress', SEED_PROGRESS);
+  const [showAdd, setShowAdd] = React.useState(false);
+
+  // Onboarding gate
+  if (!onboarded) {
+    if (obStep === 'welcome') return <WelcomeScreen onNext={() => setObStep('interests')} />;
+    return (
+      <InterestsScreen
+        onComplete={(selected) => {
+          setInterests(selected);
+          setOnboarded(true);
+        }}
+      />
+    );
+  }
+
+  const openArticle = (id) => { setOpenArticleId(id); setView('library'); };
+  const closeArticle = () => setOpenArticleId(null);
+
+  const addHighlight = (hl) => setHighlights(prev => {
+    const filtered = prev.filter(h => !(h.articleId === hl.articleId && h.text === hl.text));
+    return [hl, ...filtered];
+  });
+
+  const saveRss = (articleId) => setSavedRss(prev => prev.includes(articleId) ? prev : [...prev, articleId]);
+
+  // Keyboard shortcuts
+  React.useEffect(() => {
+    const fn = (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'Escape' && openArticleId) closeArticle();
+      if (e.key === 'l' && !openArticleId) setView('library');
+      if (e.key === 'm' && !openArticleId) setView('marginalia');
+      if (e.key === 'd' && !openArticleId) setView('discover');
+      if (e.key === 's' && !openArticleId) setView('search');
+      if (e.key === 'n' && !openArticleId) setShowAdd(true);
+    };
+    document.addEventListener('keydown', fn);
+    return () => document.removeEventListener('keydown', fn);
+  }, [openArticleId]);
+
+  const renderMain = () => {
+    if (openArticleId) {
+      return (
+        <ReaderScreen
+          articleId={openArticleId}
+          onBack={closeArticle}
+          highlights={highlights}
+          onAddHighlight={addHighlight}
+          progress={progress}
+          setProgress={setProgress}
+        />
+      );
+    }
+    switch (view) {
+      case 'library':    return <LibraryScreen onOpen={openArticle} highlights={highlights} progress={progress} interests={interests} savedRss={savedRss} onSaveRss={saveRss} />;
+      case 'discover':   return <DiscoverScreen interests={interests} savedRss={savedRss} onSaveRss={saveRss} />;
+      case 'marginalia': return <MarginaliScreen highlights={highlights} onOpen={openArticle} />;
+      case 'search':     return <SearchScreen highlights={highlights} onOpen={openArticle} />;
+      default:           return null;
+    }
+  };
+
+  return (
+    <div className="app">
+      <Sidebar view={openArticleId ? '__reader__' : view} setView={(v) => { setOpenArticleId(null); setView(v); }} onAdd={() => setShowAdd(true)} />
+      <main className="main">
+        {renderMain()}
+      </main>
+      <MobileNav view={openArticleId ? '__reader__' : view} setView={(v) => { setOpenArticleId(null); setView(v); }} />
+      {showAdd && <AddArticleModal onClose={() => setShowAdd(false)} />}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
