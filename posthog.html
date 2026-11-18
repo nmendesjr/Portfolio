@@ -1,0 +1,1289 @@
+<title>Naama Mendes Jr.</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:ital,wght@0,400;0,500;1,400&display=swap">
+
+<style>
+:root {
+  --green:    #1A2B1E;
+  --green2:   #243A28;
+  --green3:   #2F4E34;
+  --bg:       #FEFCF4;
+  --surface:  #F5F0E2;
+  --yellow:   #F9C201;
+  --yellow-bg:#FFF8D0;
+  --orange:   #F54E00;
+  --fg:       #111111;
+  --fg-dark:  #EDEBD6;
+  --muted:    #666055;
+  --muted-dark:#8FA890;
+  --border:   #E2DBD0;
+  --radius:   10px;
+  --mono:     'Space Grotesk', system-ui, sans-serif;
+  --body:     'Inter', system-ui, sans-serif;
+  color-scheme: light;
+}
+/* single deliberate look — dark green + cream + yellow; no dark-mode flip */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--green);
+  color: var(--fg);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.65;
+  padding-left: max(0px, env(safe-area-inset-left, 0px));
+  padding-right: max(0px, env(safe-area-inset-right, 0px));
+  padding-block: 0;
+}
+
+/* ─── SHARED INNER ─── */
+.inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding-left: max(24px, env(safe-area-inset-left, 0px));
+  padding-right: max(24px, env(safe-area-inset-right, 0px));
+}
+
+/* ─── NAV ─── */
+.nav {
+  background: var(--green);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 100;
+}
+.nav .inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: 16px;
+}
+.nav-logo {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--fg-dark);
+  letter-spacing: -0.02em;
+}
+.nav-logo .dot { color: var(--yellow); }
+.nav-right { display: flex; align-items: center; gap: 24px; }
+.nav-link {
+  font-size: 14px;
+  color: var(--muted-dark);
+  text-decoration: none;
+  transition: color .15s;
+}
+.nav-link:hover { color: var(--fg-dark); }
+.btn-yellow {
+  background: var(--yellow);
+  color: #1A1200;
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 14px;
+  padding: 9px 20px;
+  border-radius: 7px;
+  text-decoration: none;
+  transition: opacity .15s;
+  white-space: nowrap;
+}
+.btn-yellow:hover { opacity: .88; }
+
+/* ─── PINEAPPLE COUNTER ─── */
+.pine-widget {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 999px;
+  overflow: hidden;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  user-select: none;
+  white-space: nowrap;
+}
+.pine-label {
+  padding: 6px 10px 6px 12px;
+  color: var(--muted-dark);
+  font-size: 12px;
+  font-family: var(--body);
+  letter-spacing: 0;
+}
+.pine-vote {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 11px;
+  cursor: pointer;
+  color: var(--fg-dark);
+  transition: background .15s, color .15s;
+  border: none;
+  background: transparent;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  border-left: 1px solid rgba(255,255,255,0.1);
+}
+.pine-vote:hover { background: rgba(255,255,255,0.1); }
+.pine-vote:active { transform: scale(.93); }
+.pine-vote.pine-yes.picked {
+  background: rgba(249,194,1,0.18);
+  color: var(--yellow);
+}
+.pine-vote.pine-no.picked {
+  background: rgba(245,78,0,0.18);
+  color: #F97B45;
+}
+.pine-vote .pine-emoji { font-size: 15px; }
+
+/* flying things */
+.pineapple-fly {
+  position: fixed;
+  font-size: 22px;
+  pointer-events: none;
+  z-index: 9999;
+  animation: pine-fly 1.1s cubic-bezier(.2,.8,.4,1) forwards;
+}
+@keyframes pine-fly {
+  0%   { opacity: 1; transform: translate(0, 0) scale(1) rotate(0deg); }
+  100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(1.6) rotate(var(--tr)); }
+}
+
+/* ─── HERO ─── */
+.hero {
+  background: var(--green);
+  padding-block: 72px 56px;
+  position: relative;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 60px;
+  background: var(--bg);
+  clip-path: ellipse(55% 100% at 50% 100%);
+}
+/* scattered decorative dots — the PostHog "world" feel */
+.hero-deco {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hero .inner { position: relative; z-index: 1; }
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--yellow);
+  margin-bottom: 24px;
+  background: rgba(249,194,1,0.12);
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(249,194,1,0.25);
+}
+.hero h1 {
+  font-family: var(--mono);
+  font-size: clamp(2.4rem, 5.5vw, 4rem);
+  font-weight: 800;
+  line-height: 1.07;
+  letter-spacing: -0.035em;
+  color: var(--fg-dark);
+  margin: 0 0 24px;
+  max-width: 16ch;
+  text-wrap: balance;
+}
+.hero h1 .hi { color: var(--yellow); }
+.hero-sub {
+  font-size: 18px;
+  color: var(--muted-dark);
+  line-height: 1.65;
+  max-width: 52ch;
+  margin: 0 0 16px;
+}
+.hero-sub strong { color: var(--fg-dark); }
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 36px;
+}
+.badge {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 1.5px solid rgba(255,255,255,0.15);
+  color: var(--fg-dark);
+  background: rgba(255,255,255,0.07);
+}
+.badge.yellow { background: rgba(249,194,1,0.15); border-color: rgba(249,194,1,0.4); color: var(--yellow); }
+.hero-cta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.btn-ghost {
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--muted-dark);
+  text-decoration: none;
+  padding: 10px 0;
+  transition: color .15s;
+}
+.btn-ghost:hover { color: var(--fg-dark); }
+
+/* ─── CONTENT BASE ─── */
+.section-white { background: var(--bg); }
+.section-cream { background: var(--surface); }
+.section-green { background: var(--green); }
+
+.section-pad { padding-block: 64px; }
+.section-pad-sm { padding-block: 48px; }
+
+.section-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 8px;
+}
+.section-label.on-dark { color: var(--yellow); }
+.section-h {
+  font-family: var(--mono);
+  font-size: clamp(1.6rem, 3vw, 2.3rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin: 0 0 12px;
+  text-wrap: balance;
+}
+.section-h.on-dark { color: var(--fg-dark); }
+.section-sub {
+  color: var(--muted);
+  font-size: 16px;
+  margin: 0 0 44px;
+  max-width: 56ch;
+}
+.section-sub.on-dark { color: var(--muted-dark); }
+
+/* ─── STAT STRIP ─── */
+.stat-strip {
+  background: var(--green2);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.stat-strip .inner {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+.stat-cell {
+  padding: 28px 20px;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.stat-cell:last-child { border-right: none; }
+.stat-n {
+  font-family: var(--mono);
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--fg-dark);
+  font-variant-numeric: tabular-nums;
+}
+.stat-n .y { color: var(--yellow); }
+.stat-l {
+  font-size: 12px;
+  color: var(--muted-dark);
+  line-height: 1.45;
+}
+
+/* ─── THREE CARDS ─── */
+.three-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.card {
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 28px;
+  transition: border-color .2s;
+}
+.card:hover { border-color: var(--fg); }
+.card-icon { font-size: 32px; margin-bottom: 16px; }
+.card-title {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: -0.015em;
+  margin: 0 0 10px;
+}
+.card-text {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.65;
+  margin: 0;
+}
+.card-text strong { color: var(--fg); }
+.card-tag {
+  display: inline-block;
+  margin-top: 16px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--orange);
+  background: #FDE8DF;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+/* ─── WARNING BOX ─── */
+.warning-box {
+  background: var(--yellow-bg);
+  border: 1.5px solid var(--yellow);
+  border-radius: 10px;
+  padding: 20px 24px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+.warning-box .wb-label {
+  font-family: var(--mono);
+  font-weight: 800;
+  font-size: 13px;
+  color: #7A5A00;
+  white-space: nowrap;
+  padding-top: 2px;
+}
+.warning-box .wb-text {
+  font-size: 15px;
+  color: #5A4200;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ─── EXPERIENCE ─── */
+.exp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.exp-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 20px;
+  align-items: start;
+  padding: 22px 24px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  cursor: pointer;
+  position: relative;
+  transition: border-color .2s;
+}
+.exp-row:hover { border-color: var(--fg); }
+.exp-row.active { border-color: var(--orange); }
+.exp-role {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: -0.015em;
+  margin: 0 0 2px;
+}
+.exp-co {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 0 0 0;
+}
+.exp-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+.exp-yr {
+  font-size: 13px;
+  color: var(--muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.exp-pill {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 4px;
+}
+.exp-pill.yc { background: var(--yellow); color: #2A1800; }
+.exp-pill.acq { background: #DCF4E6; color: #0D6032; }
+.exp-pill.now { background: var(--orange); color: #fff; }
+.exp-details {
+  display: none;
+  grid-column: 1 / -1;
+  margin-top: 4px;
+}
+.exp-row.active .exp-details { display: block; }
+.exp-details-inner {
+  border-top: 1px solid var(--border);
+  padding-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.exp-desc-italic {
+  font-style: italic;
+  color: var(--muted);
+  font-size: 14px;
+  margin: 0;
+}
+.exp-bullets {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.exp-bullets li {
+  font-size: 14px;
+  display: flex;
+  gap: 10px;
+  line-height: 1.55;
+}
+.exp-bullets li::before {
+  content: '→';
+  color: var(--orange);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.exp-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.hl {
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--mono);
+  padding: 4px 11px;
+  border-radius: 20px;
+  background: #FDE8DF;
+  color: var(--orange);
+  border: 1px solid #FBBDA6;
+}
+
+/* ─── WHY POSTHOG SECTION ─── */
+.why-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.why-item {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 18px;
+  align-items: start;
+}
+.why-num {
+  font-family: var(--mono);
+  font-size: 2rem;
+  font-weight: 800;
+  color: rgba(249,194,1,0.35);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  padding-top: 4px;
+  font-variant-numeric: tabular-nums;
+}
+.why-title {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--fg-dark);
+  margin: 0 0 6px;
+  letter-spacing: -0.015em;
+}
+.why-text {
+  font-size: 14px;
+  color: var(--muted-dark);
+  line-height: 1.65;
+  margin: 0;
+}
+.why-text strong { color: var(--fg-dark); }
+
+/* ─── SKILLS ─── */
+.skill-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+}
+.skill-row {
+  padding: 16px 20px;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.skill-title {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 14px;
+  min-width: 150px;
+  flex-shrink: 0;
+}
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.stag {
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 5px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--fg);
+}
+
+/* ─── EDUCATION ─── */
+.edu-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  gap: 20px;
+}
+.edu-row:last-child { border-bottom: none; }
+.edu-deg {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  margin: 0 0 2px;
+}
+.edu-info { font-size: 13px; color: var(--muted); margin: 0; }
+.edu-note {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--orange);
+  white-space: nowrap;
+  padding-top: 3px;
+}
+
+/* ─── FOOTER ─── */
+.footer {
+  background: var(--green);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-block: 40px;
+}
+.footer .inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.footer-name {
+  font-family: var(--mono);
+  font-weight: 700;
+  color: var(--fg-dark);
+  font-size: 15px;
+  letter-spacing: -0.01em;
+}
+.footer-name .dot { color: var(--yellow); }
+.footer-links {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.footer-links a {
+  font-size: 14px;
+  color: var(--muted-dark);
+  text-decoration: none;
+  transition: color .15s;
+}
+.footer-links a:hover { color: var(--fg-dark); }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 700px) {
+  .three-cards { grid-template-columns: 1fr; }
+  .stat-strip .inner { grid-template-columns: 1fr 1fr; }
+  .stat-cell:nth-child(even) { border-right: none; }
+  .stat-cell { border-bottom: 1px solid rgba(255,255,255,.08); }
+  .stat-cell:nth-child(3), .stat-cell:nth-child(4) { border-bottom: none; }
+  .skill-cols { grid-template-columns: 1fr; }
+  .skill-row { flex-direction: column; gap: 8px; }
+  .skill-title { min-width: auto; }
+  .nav-link { display: none; }
+  .hero h1 { font-size: 2.4rem; }
+}
+
+/* dividers */
+.divider-down {
+  display: block;
+  height: 48px;
+  background: var(--bg);
+  clip-path: ellipse(55% 100% at 50% 100%);
+  margin-top: -1px;
+}
+.divider-up {
+  display: block;
+  height: 48px;
+  background: var(--green);
+  clip-path: ellipse(55% 100% at 50% 0%);
+  margin-bottom: -1px;
+}
+.divider-up-cream {
+  display: block;
+  height: 48px;
+  background: var(--surface);
+  clip-path: ellipse(55% 100% at 50% 0%);
+  margin-bottom: -1px;
+}
+
+/* ─── CAPYBARA MASCOT ─── */
+.capy-wrap {
+  position: absolute;
+  bottom: 50px;
+  right: max(60px, 8vw);
+  z-index: 3;
+  width: 180px;
+  cursor: default;
+}
+.capy-svg {
+  width: 100%;
+  display: block;
+  overflow: visible;
+  transition: transform .4s cubic-bezier(.34,1.56,.64,1);
+  filter: drop-shadow(0 6px 24px rgba(0,0,0,.55));
+}
+.capy-wrap:hover .capy-svg { transform: translateY(-10px) rotate(-1deg); }
+.capy-bubble {
+  position: absolute;
+  bottom: calc(100% + 14px);
+  right: 0;
+  width: 262px;
+  background: #FEFCF4;
+  border: 1.5px solid #E2DBD0;
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-family: var(--body);
+  font-size: 13px;
+  line-height: 1.6;
+  color: #111111;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px) scale(.96);
+  transform-origin: bottom right;
+  transition: opacity .25s, transform .3s cubic-bezier(.34,1.56,.64,1);
+  box-shadow: 0 6px 28px rgba(0,0,0,.2);
+  z-index: 10;
+}
+.capy-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -8px; right: 36px;
+  width: 14px; height: 14px;
+  background: #FEFCF4;
+  border-right: 1.5px solid #E2DBD0;
+  border-bottom: 1.5px solid #E2DBD0;
+  transform: rotate(45deg);
+}
+.capy-wrap:hover .capy-bubble {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+.capy-fact {
+  color: #F54E00;
+  font-weight: 600;
+  margin-top: 8px;
+  font-size: 12px;
+}
+@media (max-width: 700px) {
+  .capy-wrap { width: 120px; right: 12px; bottom: 46px; }
+  .capy-bubble { width: 220px; right: -8px; }
+}
+
+</style>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="inner">
+    <div class="nav-logo">naama<span class="dot">.</span></div>
+    <div class="nav-right">
+      <div class="pine-widget" id="pineWidget">
+        <span class="pine-label">🍍 on pizza?</span>
+        <button class="pine-vote pine-yes" id="pineYes" onclick="pineappleVote('yes',event)">
+          <span class="pine-emoji">✅</span> yes <span id="pineYesCt">0</span>
+        </button>
+        <button class="pine-vote pine-no" id="pineNo" onclick="pineappleVote('no',event)">
+          <span class="pine-emoji">🚫</span> no <span id="pineNoCt">0</span>
+        </button>
+      </div>
+      <a href="#experience" class="nav-link">Experience</a>
+      <a href="#why" class="nav-link">Why PostHog</a>
+      <a href="mailto:naamamendesjr@gmail.com" class="btn-yellow">Get in touch →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-deco"></div>
+  <div class="capy-wrap">
+    <svg class="capy-svg" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg" aria-label="Capybara mascot with snorkel and diving goggles">
+      <!-- body -->
+      <path d="M28 185 Q18 185 18 205 L18 240 L182 240 L182 205 Q182 185 172 185 Z" fill="#6B401A"/>
+      <rect x="34" y="190" width="132" height="50" fill="#8A5425" rx="6"/>
+      <rect x="60" y="198" width="80" height="28" fill="#A0642E" rx="4"/>
+      <!-- neck -->
+      <rect x="74" y="162" width="52" height="26" fill="#7A4820" rx="8"/>
+      <!-- head shadow -->
+      <rect x="20" y="66" width="160" height="100" fill="#62380E" rx="22"/>
+      <!-- head main -->
+      <rect x="26" y="60" width="148" height="94" fill="#9A6030" rx="20"/>
+      <!-- face highlight -->
+      <rect x="50" y="70" width="100" height="66" fill="#B07640" rx="14"/>
+      <!-- ears -->
+      <ellipse cx="32" cy="70" rx="22" ry="15" fill="#7A4820" transform="rotate(-18 32 70)"/>
+      <ellipse cx="32" cy="70" rx="13" ry="9" fill="#CE8E6A" transform="rotate(-18 32 70)"/>
+      <ellipse cx="168" cy="70" rx="22" ry="15" fill="#7A4820" transform="rotate(18 168 70)"/>
+      <ellipse cx="168" cy="70" rx="13" ry="9" fill="#CE8E6A" transform="rotate(18 168 70)"/>
+      <!-- snout -->
+      <rect x="62" y="118" width="76" height="36" fill="#6E3C18" rx="14"/>
+      <rect x="68" y="122" width="64" height="28" fill="#925228" rx="10"/>
+      <ellipse cx="84" cy="136" rx="8" ry="5" fill="#3A1A08"/>
+      <ellipse cx="116" cy="136" rx="8" ry="5" fill="#3A1A08"/>
+      <path d="M82 145 Q100 154 118 145" stroke="#542810" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <rect x="90" y="143" width="8" height="7" fill="#EDE8D5" rx="1.5"/>
+      <rect x="102" y="143" width="8" height="7" fill="#EDE8D5" rx="1.5"/>
+      <!-- goggle straps -->
+      <rect x="12" y="94" width="22" height="10" fill="#126A80" rx="4"/>
+      <rect x="166" y="94" width="22" height="10" fill="#126A80" rx="4"/>
+      <!-- left goggle -->
+      <circle cx="75" cy="99" r="27" fill="#126A80"/>
+      <circle cx="75" cy="99" r="22" fill="#3AAEBE"/>
+      <circle cx="75" cy="99" r="17" fill="#62CED8" opacity=".9"/>
+      <ellipse cx="68" cy="91" rx="7" ry="4" fill="white" opacity=".38"/>
+      <circle cx="75" cy="99" r="10" fill="#101E28"/>
+      <circle cx="71" cy="95" r="3.5" fill="white"/>
+      <!-- right goggle -->
+      <circle cx="125" cy="99" r="27" fill="#126A80"/>
+      <circle cx="125" cy="99" r="22" fill="#3AAEBE"/>
+      <circle cx="125" cy="99" r="17" fill="#62CED8" opacity=".9"/>
+      <ellipse cx="118" cy="91" rx="7" ry="4" fill="white" opacity=".38"/>
+      <circle cx="125" cy="99" r="10" fill="#101E28"/>
+      <circle cx="121" cy="95" r="3.5" fill="white"/>
+      <!-- bridge -->
+      <rect x="96" y="93" width="8" height="12" fill="#126A80" rx="3"/>
+      <!-- snorkel tube — orange matches site accent -->
+      <rect x="150" y="22" width="14" height="84" fill="#F54E00" rx="6"/>
+      <rect x="142" y="14" width="22" height="14" fill="#F54E00" rx="6"/>
+      <rect x="142" y="14" width="22" height="7" fill="#D84000" rx="4"/>
+      <ellipse cx="153" cy="14" rx="8" ry="4" fill="#180A00"/>
+      <!-- mouthpiece -->
+      <path d="M150 104 Q146 112 148 122 L160 122 Q160 112 157 104 Z" fill="#F54E00"/>
+      <rect x="157" y="100" width="14" height="8" fill="#F54E00" rx="4"/>
+      <rect x="157" y="100" width="14" height="5" fill="#D84000" rx="3"/>
+    </svg>
+    <div class="capy-bubble">
+      Like a capybara, I'm comfortable diving deep into data, work well across groups, and I move fast.
+      <div class="capy-fact">Yes, capybaras can actually hit 20 mph. 🐾</div>
+    </div>
+  </div>
+  <div class="inner">
+    <div class="hero-eyebrow">📍 Applying for PM at PostHog</div>
+    <h1>Built two companies.<br><span class="hi">Sold one.</span><br>Took one to YC.</h1>
+    <p class="hero-sub">
+      PostHog values being weird. I've been weird since I got my name.
+    </p>
+    <p class="hero-sub">
+      I'm <strong>Naama Mendes Jr.</strong> — a decade of growth-focused product work: data deep dives, ML models, and partner ecosystems at scale. Looking to bring that to a company that publishes its own strategy in a handbook.
+    </p>
+    <div class="hero-badges">
+      <span class="badge yellow">YC W21 · Datlo</span>
+      <span class="badge">Exited · Valuu → SWAP</span>
+      <span class="badge">10 years B2B growth</span>
+      <span class="badge">Orlando, FL · remote-ready</span>
+    </div>
+    <div class="hero-cta">
+      <a href="mailto:naamamendesjr@gmail.com" class="btn-yellow" style="font-size:15px; padding:12px 24px;">naamamendesjr@gmail.com</a>
+      <a href="#why" class="btn-ghost">Why PostHog specifically →</a>
+    </div>
+  </div>
+</section>
+
+<!-- STAT STRIP -->
+<div class="stat-strip">
+  <div class="inner">
+    <div class="stat-cell">
+      <span class="stat-n">20<span class="y">%</span></span>
+      <span class="stat-l">New vertical → company revenue in one quarter</span>
+    </div>
+    <div class="stat-cell">
+      <span class="stat-n">16d<span class="y">→1</span></span>
+      <span class="stat-l">Partner onboarding time after API platform rebuild</span>
+    </div>
+    <div class="stat-cell">
+      <span class="stat-n">↓35<span class="y">%</span></span>
+      <span class="stat-l">Loss rate after ML risk model I designed</span>
+    </div>
+    <div class="stat-cell">
+      <span class="stat-n">250<span class="y">+</span></span>
+      <span class="stat-l">Payroll provider partnerships closed</span>
+    </div>
+  </div>
+</div>
+
+<!-- WHY I'M DIFFERENT -->
+<div class="divider-down"></div>
+<section class="section-white section-pad" id="about">
+  <div class="inner">
+    <div class="section-label">The background</div>
+    <h2 class="section-h">You said it mattered.<br>I have done it.</h2>
+    <p class="section-sub">Three things that shaped how I work.</p>
+
+    <div class="three-cards">
+      <div class="card">
+        <div class="card-icon">🏗️</div>
+        <div class="card-title">Two companies, one exit</div>
+        <p class="card-text">
+          Built Valuu (payroll fintech) from scratch and exited via acquisition to <strong>SWAP</strong>.
+          Then co-founded Datlo, went through <strong>Y Combinator W21</strong>, and hit 25% month-over-month growth.
+          Founding experience tends to change how you think about every product decision after.
+        </p>
+        <span class="card-tag">2× Founder</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔬</div>
+        <div class="card-title">Comfortable in the data layer</div>
+        <p class="card-text">
+          At Tapcheck I built the ML model that predicts employee earnings per pay cycle.
+          At CB Insights I designed the WAU and funnel analytics stack.
+          SQL, cohort pulls, BigQuery — I work directly with data rather than waiting on summaries.
+        </p>
+        <span class="card-tag">SQL · BigQuery · ML</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">📡</div>
+        <div class="card-title">Revenue missions</div>
+        <p class="card-text">
+          At Tapcheck I ran weekly metrics reviews with everyone in the room — engineering, sales, marketing.
+          From those sessions we'd spin up discovery calls, pull in real user snippets, and get the whole company
+          looking at the same data. Owning that loop — from insight to action to alignment — is where I do my best work.
+        </p>
+        <span class="card-tag">Metrics & users</span>
+      </div>
+    </div>
+  </div>
+</section>
+<span class="divider-up"></span>
+
+<!-- WHY POSTHOG -->
+<section class="section-green section-pad" id="why">
+  <div class="inner">
+    <div class="section-label on-dark">Why PostHog</div>
+    <p style="font-size:13px; color:var(--muted-dark); font-style:italic; margin:4px 0 16px;">get ready for the shameless sell.</p>
+    <h2 class="section-h on-dark">What I found when I<br>read the handbook.</h2>
+    <p class="section-sub on-dark" style="margin-bottom: 44px;">You guys get what product SHOULD do.</p>
+
+    <div class="why-list">
+      <div class="why-item">
+        <span class="why-num">01</span>
+        <div>
+          <div class="why-title">Discovery-focused.</div>
+          <p class="why-text">PostHog PMs are described as owning research, data, and context — not sprint tickets. At Tapcheck, that's been my setup: growth review frameworks, cohort analysis, churn modeling, competitive research. The engineers own delivery. I surface what's worth building next and why.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <span class="why-num">02</span>
+        <div>
+          <div class="why-title">PostHog is YC W20. I went through YC W21.</div>
+          <p class="why-text">I understand what you mean by building things people want. I see the world in the same way.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <span class="why-num">03</span>
+        <div>
+          <div class="why-title">The growth review format matches what I've been doing.</div>
+          <p class="why-text">Monthly reviews, per product: metrics, churn, user interviews, competitive intel. At Tapcheck I ran these for a platform with 250+ integrations. I worked directly in BigQuery and walked through cohorts live rather than presenting static decks. The format PostHog describes is close to how I already operate.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <span class="why-num">04</span>
+        <div>
+          <div class="why-title">Platform markets and competitive pricing are familiar territory.</div>
+          <p class="why-text">The role includes leading competitive landscape research and pricing work. Engineers are super smart. They need to hear it from customers, what they think, and I serve as a thought partner.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<div class="divider-down"></div>
+<section class="section-white section-pad" id="experience">
+  <div class="inner">
+    <div class="section-label">Experience</div>
+    <h2 class="section-h">The work, in order.</h2>
+    <p class="section-sub">Click any role to expand.</p>
+
+    <div class="exp-list">
+
+      <div class="exp-row active" onclick="this.classList.toggle('active')">
+        <div>
+          <div class="exp-role">Director of Product (Growth)</div>
+          <div class="exp-co">Tapcheck · Earned-wage-access platform</div>
+          <div class="exp-details">
+            <div class="exp-details-inner">
+              <ul class="exp-bullets">
+                <li>Built a new standalone vertical from 0 to 1 — in one quarter it represented 20% of company revenue.</li>
+                <li>Launched an ML-based risk assessment and recovery mechanism that lowered the loss rate by 35%.</li>
+                <li>Restructured product and engineering around Claude Code — rebuilt a full app in 45 days vs. the prior 6-month cycle.</li>
+                <li>Coached PMs to build working prototypes and ship directly to code without engineering intervention.</li>
+                <li>Leading a 40+ person cross-functional org (Sales, RevOps, CS, 3 dev teams) with OKRs and accountability frameworks.</li>
+              </ul>
+              <div class="exp-highlights">
+                <span class="hl">0→1 vertical = 20% revenue</span>
+                <span class="hl">ML risk model −35% loss</span>
+                <span class="hl">45-day app rebuild</span>
+                <span class="hl">40+ person org</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="exp-right">
+          <span class="exp-pill now">Current</span>
+          <span class="exp-yr">2025 – Present</span>
+        </div>
+      </div>
+
+      <div class="exp-row" onclick="this.classList.toggle('active')">
+        <div>
+          <div class="exp-role">Lead Product Manager (B2B Growth)</div>
+          <div class="exp-co">Tapcheck</div>
+          <div class="exp-details">
+            <div class="exp-details-inner">
+              <ul class="exp-bullets">
+                <li>Redesigned distribution strategy — moved from direct employer permissioning to embedded payroll integration, driving 30% user growth in two quarters.</li>
+                <li>Launched a user-centric disbursement service informed by behavioral data; improved adoption from 5% to 21% per payroll cycle.</li>
+                <li>Defined and tracked activation, transfer frequency, and employer-satisfaction metrics using cohort analysis.</li>
+                <li>Implemented a measurement and alerting framework that reduced customer incidents by 80% through proactive monitoring.</li>
+                <li>Drove strategic partnerships with 250+ payroll providers through stakeholder alignment and negotiation.</li>
+              </ul>
+              <div class="exp-highlights">
+                <span class="hl">+30% user growth</span>
+                <span class="hl">5%→21% adoption</span>
+                <span class="hl">−80% incidents</span>
+                <span class="hl">250+ integrations</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="exp-right">
+          <span class="exp-yr">2024 – 2025</span>
+        </div>
+      </div>
+
+      <div class="exp-row" onclick="this.classList.toggle('active')">
+        <div>
+          <div class="exp-role">Senior PM — Platform & Integrations</div>
+          <div class="exp-co">Tapcheck</div>
+          <div class="exp-details">
+            <div class="exp-details-inner">
+              <ul class="exp-bullets">
+                <li>Led discovery and delivery of an ML model that predicts employee earnings per pay cycle, lifting transfers by 7%.</li>
+                <li>Built an API-first integration platform that cut partner onboarding from 16 days to 1.</li>
+                <li>Led an infrastructure transformation while maintaining 99.9% uptime, coordinating across engineering, DevOps, and business teams.</li>
+              </ul>
+              <div class="exp-highlights">
+                <span class="hl">16 days → 1 day</span>
+                <span class="hl">ML earnings model</span>
+                <span class="hl">99.9% uptime</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="exp-right">
+          <span class="exp-yr">2023 – 2024</span>
+        </div>
+      </div>
+
+      <div class="exp-row" onclick="this.classList.toggle('active')">
+        <div>
+          <div class="exp-role">Senior Product Manager</div>
+          <div class="exp-co">CB Insights · Market intelligence for VCs and enterprise</div>
+          <div class="exp-details">
+            <div class="exp-details-inner">
+              <ul class="exp-bullets">
+                <li>Built personalized onboarding driven by company data and user roles — improved conversion by 27%.</li>
+                <li>Designed a behavioral alert and email engagement system that raised weekly active users from 59% to 75%.</li>
+                <li>Built an analytics framework tracking WAU, feature adoption, and conversion funnels.</li>
+                <li>Coordinated cross-functional growth team across Sales, Marketing, and RevOps to optimize the acquisition funnel.</li>
+              </ul>
+              <div class="exp-highlights">
+                <span class="hl">+27% conversion</span>
+                <span class="hl">WAU 59%→75%</span>
+                <span class="hl">Funnel analytics stack</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="exp-right">
+          <span class="exp-yr">2022 – 2023</span>
+        </div>
+      </div>
+
+      <div class="exp-row" onclick="this.classList.toggle('active')">
+        <div>
+          <div class="exp-role">Chief Product Officer</div>
+          <div class="exp-co">Datlo · Y Combinator W21 · Geomarketing for Fortune 500</div>
+          <div class="exp-details">
+            <div class="exp-details-inner">
+              <p class="exp-desc-italic">Went through YC W21. Built ML/AI platform serving Cargill, Bunge, AB InBev. Consistent 25% month-over-month growth.</p>
+              <ul class="exp-bullets">
+                <li>Led transformation from consulting service to scalable B2B SaaS platform.</li>
+                <li>Built an ML/AI platform optimizing point-of-sale throughput for major enterprise clients.</li>
+                <li>Created the API strategy and security framework for clients with sensitive sales and logistics data.</li>
+                <li>Recruited and led a 20-person team through hypergrowth — designers, engineers, data scientists.</li>
+                <li>Secured YC investment; delivered 25% month-over-month growth through customer feedback loops.</li>
+              </ul>
+              <div class="exp-highlights">
+                <span class="hl">YC W21</span>
+                <span class="hl">25% MoM growth</span>
+                <span class="hl">20-person team</span>
+                <span class="hl">ML/AI platform</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="exp-right">
+          <span class="exp-pill yc">YC W21</span>
+          <span class="exp-yr">2019 – 2022</span>
+        </div>
+      </div>
+
+      <div class="exp-row" onclick="this.classList.toggle('active')">
+        <div>
+          <div class="exp-role">CEO & Co-Founder</div>
+          <div class="exp-co">Valuu · Acquired by SWAP</div>
+          <div class="exp-details">
+            <div class="exp-details-inner">
+              <p class="exp-desc-italic">Payroll-integrated financial platform in Brazil. Built from zero, sold in a successful acquisition.</p>
+              <ul class="exp-bullets">
+                <li>Identified an underserved market and built a platform helping Brazilian companies disburse government-mandated food stipends via debit cards.</li>
+                <li>Designed an end-to-end fintech platform spanning verification, treasury, payment processing, and distribution.</li>
+                <li>Built referral and engagement systems that drove consistent user adoption and growth.</li>
+                <li>Led the company from ideation to a successful acquisition through strategic vision, team building, and execution.</li>
+              </ul>
+              <div class="exp-highlights">
+                <span class="hl">Acquired · Exited</span>
+                <span class="hl">0→1 fintech</span>
+                <span class="hl">CEO & founder</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="exp-right">
+          <span class="exp-pill acq">Acquired</span>
+          <span class="exp-yr">2016 – 2019</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+<span class="divider-up-cream"></span>
+
+<!-- SKILLS -->
+<section class="section-cream section-pad-sm" id="skills">
+  <div class="inner">
+    <div class="section-label">Skills</div>
+    <h2 class="section-h" style="margin-bottom: 32px;">Core competencies.</h2>
+    <div class="skill-cols">
+      <div class="skill-row">
+        <span class="skill-title">📊 Data & Analytics</span>
+        <div class="skill-tags">
+          <span class="stag">SQL</span><span class="stag">BigQuery</span><span class="stag">Looker</span>
+          <span class="stag">Tableau</span><span class="stag">Cohort analysis</span><span class="stag">A/B testing</span>
+          <span class="stag">Funnel optimization</span><span class="stag">Predictive modeling</span>
+        </div>
+      </div>
+      <div class="skill-row">
+        <span class="skill-title">⚙️ Technical</span>
+        <div class="skill-tags">
+          <span class="stag">API design</span><span class="stag">Integration architecture</span>
+          <span class="stag">ML/AI implementation</span><span class="stag">Platform infra</span>
+          <span class="stag">Claude Code</span><span class="stag">Cybersecurity</span>
+        </div>
+      </div>
+      <div class="skill-row">
+        <span class="skill-title">🎯 Strategy</span>
+        <div class="skill-tags">
+          <span class="stag">User research</span><span class="stag">Market analysis</span>
+          <span class="stag">Roadmapping</span><span class="stag">Prioritization</span>
+          <span class="stag">Go-to-market</span><span class="stag">Pricing</span>
+        </div>
+      </div>
+      <div class="skill-row">
+        <span class="skill-title">🤝 Leadership</span>
+        <div class="skill-tags">
+          <span class="stag">40+ org</span><span class="stag">OKR frameworks</span>
+          <span class="stag">Cross-functional</span><span class="stag">PM coaching</span>
+          <span class="stag">Stakeholder mgmt</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<span class="divider-up"></span>
+
+<!-- EDUCATION -->
+<section class="section-green section-pad-sm">
+  <div class="inner">
+    <div class="section-label on-dark">Education</div>
+    <h2 class="section-h on-dark" style="margin-bottom: 32px;">The foundation.</h2>
+    <div class="edu-row">
+      <div>
+        <div class="edu-deg" style="color: var(--fg-dark);">Master's in Product Management</div>
+        <p class="edu-info" style="color: var(--muted-dark);">Tera, Brazil · 2019 · Faculty from Netflix, Wildlife Studios, and Nubank</p>
+      </div>
+    </div>
+    <div class="edu-row" style="border-color: rgba(255,255,255,.1)">
+      <div>
+        <div class="edu-deg" style="color: var(--fg-dark);">Master's in Economics</div>
+        <p class="edu-info" style="color: var(--muted-dark);">UEM, Brazil · 2016</p>
+      </div>
+    </div>
+    <div class="edu-row" style="border-color: rgba(255,255,255,.1)">
+      <div>
+        <div class="edu-deg" style="color: var(--fg-dark);">Bachelor's in Economics</div>
+        <p class="edu-info" style="color: var(--muted-dark);">Gordon College, USA · 2013</p>
+      </div>
+      <div class="edu-note">Clarendon Scholar — full scholarship</div>
+    </div>
+
+    <div style="margin-top: 48px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,.1);">
+      <h3 style="font-family: var(--mono); font-size: 1.6rem; font-weight: 800; color: var(--fg-dark); letter-spacing: -0.025em; margin: 0 0 12px; text-wrap: balance;">
+        Happy to talk through<br>any of this in more depth.
+      </h3>
+      <p style="color: var(--muted-dark); font-size: 16px; max-width: 48ch; margin: 0 0 28px;">
+        I've read the handbook and have a good sense of what the role involves. Looking forward to the conversation.
+      </p>
+      <a href="mailto:naamamendesjr@gmail.com" class="btn-yellow" style="font-size: 16px; padding: 13px 28px; display: inline-block;">
+        naamamendesjr@gmail.com →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="inner">
+    <div class="footer-name">Naama Mendes Jr<span class="dot">.</span></div>
+    <div class="footer-links">
+      <a href="https://naamamendes.com" target="_blank" rel="noopener">naamamendes.com</a>
+      <a href="tel:+13212768858">(321) 276-8858</a>
+      <span style="color: var(--muted-dark); font-size: 14px;">Orlando, FL</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ─── PINEAPPLE COUNTER ───
+  (function() {
+    var YES_KEY = 'pine_yes', NO_KEY = 'pine_no', VOTED_KEY = 'pine_voted';
+    var yes = 0, no = 0, voted = null;
+    try { yes = parseInt(localStorage.getItem(YES_KEY) || '0', 10) || 0; } catch(e){}
+    try { no  = parseInt(localStorage.getItem(NO_KEY)  || '0', 10) || 0; } catch(e){}
+    try { voted = localStorage.getItem(VOTED_KEY) || null; } catch(e){}
+    function render() {
+      var yEl = document.getElementById('pineYesCt');
+      var nEl = document.getElementById('pineNoCt');
+      var yBtn = document.getElementById('pineYes');
+      var nBtn = document.getElementById('pineNo');
+      if (yEl) yEl.textContent = yes;
+      if (nEl) nEl.textContent = no;
+      if (yBtn) { yBtn.classList.toggle('picked', voted === 'yes'); yBtn.disabled = !!voted; }
+      if (nBtn) { nBtn.classList.toggle('picked', voted === 'no');  nBtn.disabled = !!voted; }
+    }
+    render();
+    function spawnParticles(emoji, btn) {
+      var rect = btn.getBoundingClientRect();
+      var cx = rect.left + rect.width / 2;
+      var cy = rect.top + rect.height / 2;
+      for (var i = 0; i < 8; i++) {
+        (function(i) {
+          setTimeout(function() {
+            var el = document.createElement('span');
+            el.className = 'pineapple-fly';
+            el.textContent = emoji;
+            var angle = (i / 8) * Math.PI * 2 + (Math.random() - .5) * .6;
+            var dist = 80 + Math.random() * 90;
+            el.style.left = (cx - 11) + 'px';
+            el.style.top  = (cy - 11) + 'px';
+            el.style.setProperty('--tx', (Math.cos(angle) * dist) + 'px');
+            el.style.setProperty('--ty', (Math.sin(angle) * dist - 30) + 'px');
+            el.style.setProperty('--tr', ((Math.random() - .5) * 200) + 'deg');
+            el.style.animationDelay = (Math.random() * .1) + 's';
+            document.body.appendChild(el);
+            setTimeout(function() { el.remove(); }, 1400);
+          }, i * 30);
+        })(i);
+      }
+    }
+    window.pineappleVote = function(choice, e) {
+      if (voted) return;
+      voted = choice;
+      if (choice === 'yes') yes++; else no++;
+      try {
+        localStorage.setItem(YES_KEY, yes);
+        localStorage.setItem(NO_KEY, no);
+        localStorage.setItem(VOTED_KEY, choice);
+      } catch(ex){}
+      render();
+      var btn = document.getElementById(choice === 'yes' ? 'pineYes' : 'pineNo');
+      spawnParticles(choice === 'yes' ? '🍍' : '🚫', btn);
+    };
+  })();
+
+  // keyboard accessibility for exp rows
+  document.querySelectorAll('.exp-row').forEach(row => {
+    row.setAttribute('role', 'button');
+    row.setAttribute('tabindex', '0');
+    row.setAttribute('aria-expanded', row.classList.contains('active') ? 'true' : 'false');
+    row.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        row.classList.toggle('active');
+        row.setAttribute('aria-expanded', row.classList.contains('active') ? 'true' : 'false');
+      }
+    });
+    row.addEventListener('click', () => {
+      row.setAttribute('aria-expanded', row.classList.contains('active') ? 'true' : 'false');
+    });
+  });
+</script>
