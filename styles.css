@@ -1199,61 +1199,272 @@ html[data-accent="rosa"][data-theme="dark"] { --accent: #ff85a8; --hilite: rgba(
 .foot-resume:hover { opacity: 0.7; }
 
 /* ============================================================
-   Vibe: clear — Swiss-minimal, no decoration, all-sans
+   Vibe: clear — editorial, easy-to-read, Essential Design-inspired
+   Pure white · large headings · generous spacing · no decoration
    ============================================================ */
+
+/* Tokens */
 html[data-vibe="clear"] {
-  --bg: #fafafa;
-  --bg-2: #f0f0f0;
+  --bg: #ffffff;
+  --bg-2: #f5f5f5;
   --ink: #111111;
-  --ink-2: #333333;
-  --ink-3: #666666;
-  --rule: rgba(17, 17, 17, 0.20);
-  --rule-soft: rgba(17, 17, 17, 0.09);
-  --accent: var(--ink);
-  --hilite: rgba(17, 17, 17, 0.06);
+  --ink-2: #444444;
+  --ink-3: #888888;
+  --rule: #e0e0e0;
+  --rule-soft: #eeeeee;
+  --accent: #111111;
+  --hilite: rgba(0,0,0,0.04);
+  --max: 900px;
 }
 html[data-vibe="clear"][data-theme="dark"] {
   --bg: #111111;
-  --bg-2: #1a1a1a;
-  --ink: #f0f0f0;
-  --ink-2: #cccccc;
-  --ink-3: #888888;
-  --accent: var(--ink);
+  --bg-2: #1c1c1c;
+  --ink: #eeeeee;
+  --ink-2: #bbbbbb;
+  --ink-3: #777777;
+  --rule: #2e2e2e;
+  --rule-soft: #222222;
+  --accent: #eeeeee;
 }
 
+/* Kill all animation and transitions */
 html[data-vibe="clear"] * {
   animation: none !important;
-  transition-duration: 0ms !important;
+  transition: none !important;
 }
+
+/* Kill all decoration */
 html[data-vibe="clear"] .hero::before,
 html[data-vibe="clear"] .hero-strip,
 html[data-vibe="clear"] .section-head::before,
+html[data-vibe="clear"] .hero-meta,
 html[data-vibe="clear"] .drop,
 html[data-vibe="clear"] .meta-dot,
-html[data-vibe="clear"] .marquee-bullet { display: none !important; }
+html[data-vibe="clear"] .marquee-bullet,
+html[data-vibe="clear"] .float-stack { display: none !important; }
 
+/* All-sans typography */
 html[data-vibe="clear"] body,
-html[data-vibe="clear"] h1,
-html[data-vibe="clear"] h2,
-html[data-vibe="clear"] h3,
-html[data-vibe="clear"] .hero-title,
-html[data-vibe="clear"] .hero-title-line,
-html[data-vibe="clear"] .section-title,
-html[data-vibe="clear"] .foot-headline {
+html[data-vibe="clear"] h1, html[data-vibe="clear"] h2, html[data-vibe="clear"] h3,
+html[data-vibe="clear"] .hero-title, html[data-vibe="clear"] .hero-title-line,
+html[data-vibe="clear"] .section-title, html[data-vibe="clear"] .foot-headline,
+html[data-vibe="clear"] .wrb-headline-text, html[data-vibe="clear"] .hero-strip-item {
   font-family: var(--sans) !important;
   font-style: normal !important;
 }
 html[data-vibe="clear"] .hero-title-line--italic { font-style: normal !important; }
+html[data-vibe="clear"] .section-title-em { font-style: normal !important; color: var(--ink-3) !important; }
 
+/* Body */
+html[data-vibe="clear"] body {
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+/* ── Hero ── */
 html[data-vibe="clear"] .hero {
-  border-bottom: 2px solid var(--ink);
+  min-height: auto;
+  padding-top: 36px;
+  padding-bottom: 72px;
+  border-bottom: 1px solid var(--rule);
 }
-html[data-vibe="clear"] .section-head {
-  border-bottom: 2px solid var(--ink);
+html[data-vibe="clear"] .hero-top {
+  padding-bottom: 72px;
 }
+html[data-vibe="clear"] .hero-mono {
+  pointer-events: none;
+}
+html[data-vibe="clear"] .mono-svg {
+  display: none;
+}
+html[data-vibe="clear"] .hero-mono::before {
+  content: "NM";
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+html[data-vibe="clear"] .hero-nav {
+  gap: 32px;
+}
+html[data-vibe="clear"] .hero-nav a {
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  opacity: 0.6;
+}
+html[data-vibe="clear"] .hero-nav a:hover { opacity: 1; }
+html[data-vibe="clear"] .hero-nav a::after { display: none; }
+html[data-vibe="clear"] .hero-title {
+  font-size: clamp(48px, 7vw, 88px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.0;
+  margin-bottom: 0;
+}
+html[data-vibe="clear"] .hero-title-line {
+  display: block;
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+html[data-vibe="clear"] .hero-foot {
+  margin-top: 56px;
+  padding-top: 28px;
+  border-top: 1px solid var(--rule);
+  gap: 40px;
+}
+html[data-vibe="clear"] .hero-foot-col .lbl {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-family: var(--sans);
+}
+html[data-vibe="clear"] .hero-foot-col .val {
+  font-size: 15px;
+  color: var(--ink-2);
+}
+
+/* ── Nav resume button ── */
 html[data-vibe="clear"] .nav-resume {
   background: transparent;
   color: var(--ink);
-  border: 1.5px solid var(--ink);
-  border-radius: 3px;
+  border: 1px solid var(--rule);
+  border-radius: 100px;
+  font-weight: 400;
+}
+html[data-vibe="clear"] .nav-resume:hover { background: var(--bg-2); }
+
+/* ── Section heads ── */
+html[data-vibe="clear"] .section-head {
+  padding: 72px 0 24px;
+  border-bottom: 1px solid var(--rule);
+  gap: 16px;
+}
+html[data-vibe="clear"] .section-num { display: none; }
+html[data-vibe="clear"] .section-title {
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+html[data-vibe="clear"] .section-count {
+  font-size: 12px;
+  font-family: var(--sans);
+  color: var(--ink-3);
+}
+
+/* ── Work list ── */
+html[data-vibe="clear"] .work-row-btn {
+  padding: 24px 0;
+}
+html[data-vibe="clear"] .work-row-btn::before,
+html[data-vibe="clear"] .work-row-btn::after { display: none !important; }
+html[data-vibe="clear"] .work-row-btn:hover { padding-left: 0 !important; background: none !important; }
+html[data-vibe="clear"] .wr-company {
+  font-size: 20px;
+  font-weight: 600;
+  background: none !important;
+  -webkit-text-fill-color: var(--ink) !important;
+  background-clip: unset !important;
+}
+html[data-vibe="clear"] .wr-role {
+  font-size: 14px;
+  color: var(--ink-3);
+}
+html[data-vibe="clear"] .wr-year { color: var(--ink-3); font-size: 13px; }
+html[data-vibe="clear"] .wr-cat { font-size: 12px; color: var(--ink-3); }
+html[data-vibe="clear"] .metric {
+  border: 1px solid var(--rule) !important;
+  background: none !important;
+}
+html[data-vibe="clear"] .metric::before,
+html[data-vibe="clear"] .metric::after { display: none !important; }
+html[data-vibe="clear"] .metric-value {
+  font-family: var(--sans);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ink);
+}
+html[data-vibe="clear"] .wrb-headline-text {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--ink);
+}
+html[data-vibe="clear"] .wrb-bullets li { gap: 12px; }
+html[data-vibe="clear"] .bullet-mark { color: var(--ink-3); }
+
+/* ── About ── */
+html[data-vibe="clear"] .about-lead p {
+  font-size: 18px;
+  line-height: 1.65;
+  max-width: 60ch;
+  color: var(--ink);
+}
+html[data-vibe="clear"] .about-second { color: var(--ink-2); }
+
+/* ── Clients marquee → plain list ── */
+html[data-vibe="clear"] .marquee { overflow: visible; }
+html[data-vibe="clear"] .marquee-track {
+  animation: none !important;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 0;
+  width: auto;
+}
+html[data-vibe="clear"] .marquee-item {
+  font-size: 14px;
+  color: var(--ink-2);
+  padding-right: 24px;
+}
+
+/* ── Caps ── */
+html[data-vibe="clear"] .caps-num { display: none; }
+html[data-vibe="clear"] .caps-item {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--rule-soft);
+  gap: 0;
+}
+html[data-vibe="clear"] .caps-text {
+  font-size: 16px;
+  color: var(--ink-2);
+}
+
+/* ── Footer ── */
+html[data-vibe="clear"] .foot {
+  border-top: 1px solid var(--rule);
+  padding-top: 56px;
+  padding-bottom: 56px;
+}
+html[data-vibe="clear"] .foot-mono {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 24px;
+  letter-spacing: -0.02em;
+}
+html[data-vibe="clear"] .foot-headline {
+  font-size: clamp(24px, 3vw, 36px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+html[data-vibe="clear"] .foot-mail,
+html[data-vibe="clear"] .foot-phone {
+  font-size: 15px;
+  color: var(--ink-2);
+}
+html[data-vibe="clear"] .foot-resume {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+  font-size: 13px;
+}
+html[data-vibe="clear"] .foot-meta {
+  font-size: 13px;
+  color: var(--ink-3);
+  border-top: 1px solid var(--rule);
+  padding-top: 20px;
+  margin-top: 40px;
 }
