@@ -139,7 +139,8 @@ window.PORTFOLIO_DATA = {
 
   capabilities: [
     "0→1 Product & Vertical Launches",
-    "Embedded Fintech & EWA Platforms",
+    "Embedded Fintech",
+    "Cards & Payment Processing",
     "Distribution Strategy & Partner Ecosystems",
     "Growth — Activation, Retention, Conversion",
     "API-First Platform Architecture",
