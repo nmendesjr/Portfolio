@@ -159,6 +159,7 @@ function useTweaks(defaults) {
 // is what actually hides the panel.
 function TweaksPanel({ title = 'Tweaks', children }) {
   const [open, setOpen] = React.useState(false);
+  const [everOpened, setEverOpened] = React.useState(false);
   const dragRef = React.useRef(null);
   const offsetRef = React.useRef({ x: 16, y: 16 });
   const PAD = 16;
@@ -192,7 +193,7 @@ function TweaksPanel({ title = 'Tweaks', children }) {
   React.useEffect(() => {
     const onMsg = (e) => {
       const t = e?.data?.type;
-      if (t === '__activate_edit_mode') setOpen(true);
+      if (t === '__activate_edit_mode') { setOpen(true); setEverOpened(true); }
       else if (t === '__deactivate_edit_mode') setOpen(false);
     };
     window.addEventListener('message', onMsg);
@@ -204,6 +205,8 @@ function TweaksPanel({ title = 'Tweaks', children }) {
     setOpen(false);
     window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
   };
+
+  const openPanel = () => { setOpen(true); setEverOpened(true); };
 
   const onDragStart = (e) => {
     const panel = dragRef.current;
@@ -227,7 +230,32 @@ function TweaksPanel({ title = 'Tweaks', children }) {
     window.addEventListener('mouseup', up);
   };
 
-  if (!open) return null;
+  const triggerStyle = `
+    .twk-trigger{position:fixed;right:16px;bottom:16px;z-index:2147483645;
+      appearance:none;border:0;border-radius:10px;padding:7px 13px;cursor:default;
+      font:12px/1 ui-sans-serif,system-ui,-apple-system,sans-serif;font-weight:600;
+      letter-spacing:.02em;
+      background:rgba(250,249,247,.88);color:#29261b;
+      -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
+      border:.5px solid rgba(255,255,255,.6);
+      box-shadow:0 2px 12px rgba(0,0,0,.18);
+      display:flex;align-items:center;gap:6px}
+    .twk-trigger:hover{background:rgba(250,249,247,.98)}
+  `;
+
+  if (!open) return (
+    <>
+      <style>{triggerStyle}</style>
+      <button className="twk-trigger" onClick={openPanel} aria-label="Open tweaks">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="8" cy="8" r="2.5" stroke="currentColor" strokeWidth="1.5"/>
+          <path d="M8 1v2M8 13v2M1 8h2M13 8h2M2.93 2.93l1.41 1.41M11.66 11.66l1.41 1.41M2.93 13.07l1.41-1.41M11.66 4.34l1.41-1.41" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+        </svg>
+        Tweaks
+      </button>
+    </>
+  );
+
   return (
     <>
       <style>{__TWEAKS_STYLE}</style>
