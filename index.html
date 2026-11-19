@@ -18,46 +18,48 @@
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 
 <script src="data.js"></script>
-<script type="text/babel" src="tweaks-panel.jsx"></script>
 <script type="text/babel" src="components.jsx"></script>
 
 <script type="text/babel">
 const { useState, useEffect } = React;
 
-const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "theme": "dark",
-  "accent": "verde",
-  "display": "serif",
-  "density": "regular",
-  "layout": "default",
-  "vibe": "fun"
-}/*EDITMODE-END*/;
+function VibeToggle({ vibe, onChange }) {
+  return (
+    <div className="vibe-bar">
+      <button
+        className={"vibe-opt" + (vibe === "fun" ? " vibe-opt--on" : "")}
+        onClick={() => onChange("fun")}
+      >fun</button>
+      <button
+        className={"vibe-opt" + (vibe === "clear" ? " vibe-opt--on" : "")}
+        onClick={() => onChange("clear")}
+      >clear</button>
+    </div>
+  );
+}
 
 function App() {
-  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [vibe, setVibe] = useState("fun");
   const [openId, setOpenId] = useState("tapcheck-director");
   const data = window.PORTFOLIO_DATA;
 
-  // Apply tweaks as data-* on <html>
   useEffect(() => {
     const html = document.documentElement;
-    html.setAttribute("data-theme", t.theme);
-    html.setAttribute("data-accent", t.accent);
-    html.setAttribute("data-display", t.display);
-    html.setAttribute("data-density", t.density);
-    html.setAttribute("data-layout", t.layout);
-    html.setAttribute("data-vibe", t.vibe);
-  }, [t.theme, t.accent, t.display, t.density, t.layout, t.vibe]);
+    if (vibe === "clear") {
+      html.setAttribute("data-theme", "light");
+    } else {
+      html.setAttribute("data-theme", "dark");
+    }
+    html.setAttribute("data-vibe", vibe);
+  }, [vibe]);
 
-  // Scroll reveal
   useScrollReveal();
-
-  const onToggleTheme = () =>
-    setTweak("theme", t.theme === "dark" ? "light" : "dark");
 
   return (
     <div className="app">
-      <Hero data={data} theme={t.theme} />
+      <VibeToggle vibe={vibe} onChange={setVibe} />
+
+      <Hero data={data} theme={vibe === "clear" ? "light" : "dark"} />
 
       <div data-reveal>
         <WorkList data={data} openId={openId} setOpenId={setOpenId} />
@@ -81,53 +83,7 @@ function App() {
 
       <Footer data={data} />
 
-      <FloatingContact data={data} theme={t.theme} onToggleTheme={onToggleTheme} />
-
-      <TweaksPanel>
-        <TweakSection label="Theme" />
-        <TweakRadio
-          label="Mode"
-          value={t.theme}
-          options={["light", "dark"]}
-          onChange={(v) => setTweak("theme", v)}
-        />
-        <TweakSelect
-          label="Accent"
-          value={t.accent}
-          options={["verde", "cobalt", "amarelo", "terracota", "rosa"]}
-          onChange={(v) => setTweak("accent", v)}
-        />
-
-        <TweakSection label="Typography" />
-        <TweakRadio
-          label="Display"
-          value={t.display}
-          options={["serif", "grotesk"]}
-          onChange={(v) => setTweak("display", v)}
-        />
-
-        <TweakSection label="Style" />
-        <TweakRadio
-          label="Vibe"
-          value={t.vibe}
-          options={["fun", "clear"]}
-          onChange={(v) => setTweak("vibe", v)}
-        />
-
-        <TweakSection label="Layout" />
-        <TweakRadio
-          label="Density"
-          value={t.density}
-          options={["compact", "regular", "comfy"]}
-          onChange={(v) => setTweak("density", v)}
-        />
-        <TweakSelect
-          label="Width"
-          value={t.layout}
-          options={["default", "centered", "wide"]}
-          onChange={(v) => setTweak("layout", v)}
-        />
-      </TweaksPanel>
+      <FloatingContact data={data} theme={vibe === "clear" ? "light" : "dark"} onToggleTheme={() => {}} />
     </div>
   );
 }

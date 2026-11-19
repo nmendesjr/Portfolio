@@ -1468,3 +1468,42 @@ html[data-vibe="clear"] .foot-meta {
   padding-top: 20px;
   margin-top: 40px;
 }
+
+/* ============================================================
+   Vibe toggle bar — centered top of page
+   ============================================================ */
+.vibe-bar {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 100px;
+  background: rgba(128,128,128,0.15);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+  border: 0.5px solid rgba(128,128,128,0.2);
+}
+.vibe-opt {
+  padding: 6px 22px;
+  border-radius: 100px;
+  border: none;
+  background: transparent;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  color: var(--ink);
+  opacity: 0.45;
+  transition: opacity 150ms ease;
+}
+.vibe-opt--on {
+  background: var(--bg);
+  opacity: 1;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+}
+.vibe-opt:not(.vibe-opt--on):hover { opacity: 0.75; }
