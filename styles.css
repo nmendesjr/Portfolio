@@ -1461,14 +1461,30 @@ html[data-vibe="clear"] .marquee-bullet {
 
 /* ── Caps ── */
 html[data-vibe="clear"] .caps-num { display: none; }
-html[data-vibe="clear"] .caps-item {
-  padding: 16px 0;
-  border-bottom: 1px solid var(--rule-soft);
+html[data-vibe="clear"] .caps-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 0;
 }
+html[data-vibe="clear"] .caps-item {
+  padding: 14px 16px 14px 0;
+  border-bottom: 1px solid var(--rule-soft);
+  border-right: none;
+  gap: 0;
+  align-items: flex-start;
+}
+html[data-vibe="clear"] .caps-item:nth-child(odd) {
+  padding-right: 24px;
+  border-right: 1px solid var(--rule-soft);
+}
+html[data-vibe="clear"] .caps-item:nth-child(even) {
+  padding-left: 24px;
+}
 html[data-vibe="clear"] .caps-text {
-  font-size: 16px;
+  font-size: 15px;
+  line-height: 1.35;
   color: var(--ink-2);
+  font-weight: 400;
 }
 
 /* ── Footer ── */

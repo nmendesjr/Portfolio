@@ -138,15 +138,18 @@ window.PORTFOLIO_DATA = {
   ],
 
   capabilities: [
-    "Product Strategy & Marketplace Growth",
-    "User Research & Experimentation (A/B, Cohort)",
-    "Cross‑Functional Team Leadership & Agile",
-    "Product Roadmap & Documentation",
-    "Data Analytics & SQL (BigQuery, Looker, Tableau)",
-    "UI/UX Optimization (Figma, Heatmaps, User Testing)",
-    "Fintech & Payment Infrastructure",
-    "Geographic Information Systems",
-    "ML Predictive Algorithms",
+    "0→1 Product & Vertical Launches",
+    "Embedded Fintech & EWA Platforms",
+    "Distribution Strategy & Partner Ecosystems",
+    "Growth — Activation, Retention, Conversion",
+    "API-First Platform Architecture",
+    "ML & Predictive Product Systems",
+    "Behavioral Research & A/B Experimentation",
+    "AI-Assisted Development & Claude Code",
+    "Cross-Functional Leadership (40+ teams)",
+    "B2B SaaS & Enterprise Go-To-Market",
+    "Data Analytics — BigQuery, Looker, Tableau",
+    "Payroll & Payment Infrastructure",
   ],
 
   education: [
