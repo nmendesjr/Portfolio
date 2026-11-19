@@ -1394,7 +1394,15 @@ html[data-vibe="clear"] .wrb-headline-text {
   line-height: 1.4;
   color: var(--ink);
 }
+html[data-vibe="clear"] .wrb-metrics { display: none; }
+html[data-vibe="clear"] .wrb-grid { grid-template-columns: 1fr; }
 html[data-vibe="clear"] .wrb-bullets li { gap: 12px; }
+html[data-vibe="clear"] .wrb-bullets li span:first-child { color: var(--ink-3); }
+html[data-vibe="clear"] .wrb-bullets {
+  font-size: 16px;
+  line-height: 1.6;
+}
+html[data-vibe="clear"] .wrb-bullets li + li { margin-top: 12px; }
 html[data-vibe="clear"] .bullet-mark { color: var(--ink-3); }
 
 /* ── About ── */
