@@ -1238,10 +1238,21 @@ html[data-vibe="clear"] .hero::before,
 html[data-vibe="clear"] .hero-strip,
 html[data-vibe="clear"] .section-head::before,
 html[data-vibe="clear"] .hero-meta,
-html[data-vibe="clear"] .drop,
 html[data-vibe="clear"] .meta-dot,
 html[data-vibe="clear"] .marquee-bullet,
 html[data-vibe="clear"] .float-stack { display: none !important; }
+
+/* drop cap: show as plain inline text, no decoration */
+html[data-vibe="clear"] .drop {
+  float: none;
+  font-size: inherit;
+  font-family: inherit;
+  font-style: normal;
+  line-height: inherit;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+}
 
 /* All-sans typography */
 html[data-vibe="clear"] body,
@@ -1499,6 +1510,8 @@ html[data-vibe="clear"] .foot-meta {
 /* ============================================================
    Vibe toggle bar — centered top of page
    ============================================================ */
+html { scroll-padding-top: 56px; }
+
 .vibe-bar {
   position: fixed;
   top: 16px;
@@ -1534,3 +1547,6 @@ html[data-vibe="clear"] .foot-meta {
   box-shadow: 0 1px 4px rgba(0,0,0,0.12);
 }
 .vibe-opt:not(.vibe-opt--on):hover { opacity: 0.75; }
+
+/* prevent pill from overlapping fixed section heads on scroll */
+.section-head { scroll-margin-top: 56px; }
