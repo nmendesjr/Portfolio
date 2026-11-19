@@ -47,63 +47,73 @@
     pointer-events: none;
   }
 
-  /* ── Distribution shift — before vs after, editorial layout ──────────── */
+  /* ── Distribution shift — clean comparison table ──────────────────────── */
   .tx-shift {
     margin: 64px 0;
-    display: grid; grid-template-columns: 1fr;
-    gap: 0;
-    border-top: 1px solid var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .tx-shift-head {
+    display: grid;
+    grid-template-columns: 100px 1fr 1fr;
     border-bottom: 1px solid var(--rule);
+    background: var(--bg-2);
   }
-  .tx-shift .row {
-    display: grid;
-    grid-template-columns: 200px 1fr;
-    gap: 40px;
-    padding: 40px 0;
-    align-items: start;
-  }
-  .tx-shift .row + .row { border-top: 1px solid var(--rule-soft); }
-  .tx-shift .key {
-    display: flex; flex-direction: column; gap: 8px;
-  }
-  .tx-shift .key .badge {
-    align-self: flex-start;
-    font-family: var(--mono); font-size: 10px;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--ink-3); padding: 4px 8px;
-    border: 1px solid var(--rule); border-radius: 4px;
-  }
-  .tx-shift .row.after .key .badge {
-    color: var(--accent); border-color: var(--accent);
-  }
-  .tx-shift .key h4 {
-    font-family: var(--serif); font-style: italic; font-weight: 400;
-    font-size: 28px; line-height: 1.1; letter-spacing: -0.01em;
-    margin: 0; color: var(--ink);
-  }
-  .tx-shift .row.after .key h4 em { color: var(--accent); }
-  .tx-shift .points {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px 32px;
-  }
-  .tx-shift .point {
+  .tx-shift-head .sh-empty { border-right: 1px solid var(--rule); }
+  .tx-shift-head .sh-col {
+    padding: 20px 24px;
     display: flex; flex-direction: column; gap: 6px;
   }
-  .tx-shift .point .lbl {
+  .tx-shift-head .sh-col.before { border-right: 1px solid var(--rule); }
+  .tx-shift-head .sh-col .badge {
+    display: inline-block;
     font-family: var(--mono); font-size: 10px;
     letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--ink-3);
+    color: var(--ink-3); padding: 3px 7px;
+    border: 1px solid var(--rule); border-radius: 3px;
+    align-self: flex-start;
   }
-  .tx-shift .point p {
+  .tx-shift-head .sh-col.after .badge {
+    color: var(--accent); border-color: var(--accent);
+  }
+  .tx-shift-head h4 {
     margin: 0;
-    font-family: var(--sans); font-size: 15px; line-height: 1.5;
-    color: var(--ink);
+    font-family: var(--sans); font-weight: 600;
+    font-size: 15px; line-height: 1.3; color: var(--ink);
   }
-  .tx-shift .row.after .point .lbl { color: var(--accent); }
-  @media (max-width: 720px) {
-    .tx-shift .row { grid-template-columns: 1fr; gap: 20px; padding: 32px 0; }
-    .tx-shift .points { grid-template-columns: 1fr; gap: 18px; }
+  .tx-shift-head .sh-col.after h4 em { color: var(--accent); font-style: normal; }
+  .tx-shift-row {
+    display: grid;
+    grid-template-columns: 100px 1fr 1fr;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .tx-shift-row:last-child { border-bottom: none; }
+  .tx-shift-row .lbl {
+    padding: 18px 20px;
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--ink-3);
+    border-right: 1px solid var(--rule);
+    display: flex; align-items: center;
+  }
+  .tx-shift-row .val {
+    padding: 18px 24px;
+    font-family: var(--sans); font-size: 14px; line-height: 1.55;
+    color: var(--ink-2);
+    border-right: 1px solid var(--rule);
+  }
+  .tx-shift-row .val.after {
+    color: var(--ink);
+    border-right: none;
+    background: color-mix(in oklab, var(--accent) 5%, transparent);
+  }
+  @media (max-width: 600px) {
+    .tx-shift-head,
+    .tx-shift-row { grid-template-columns: 80px 1fr; }
+    .tx-shift-head .sh-col.before,
+    .tx-shift-row .val:not(.after) { display: none; }
+    .tx-shift-head .sh-col.after { border-right: none; }
   }
 
   /* ── Architecture diagram ────────────────────────────────────────────── */
@@ -308,53 +318,36 @@
       <p>Tapcheck Express is the answer. We rebuilt our platform so any workforce-tech provider could embed Tapcheck inside their own product — under their brand or ours — with no engineering lift on their side. <strong>Their distribution. Our product. One integration.</strong></p>
 
       <section class="tx-shift" aria-label="Distribution model — before vs after Express">
-        <div class="row before">
-          <div class="key">
+        <div class="tx-shift-head">
+          <div class="sh-empty"></div>
+          <div class="sh-col before">
             <span class="badge">Before</span>
             <h4>One employer at a time.</h4>
           </div>
-          <div class="points">
-            <div class="point">
-              <span class="lbl">Motion</span>
-              <p>Sales-led acquisition, employer by employer.</p>
-            </div>
-            <div class="point">
-              <span class="lbl">Setup</span>
-              <p>Bespoke payroll and time-clock work for every customer.</p>
-            </div>
-            <div class="point">
-              <span class="lbl">Time to launch</span>
-              <p>Weeks. Sometimes a full quarter.</p>
-            </div>
-            <div class="point">
-              <span class="lbl">Ceiling</span>
-              <p>Reach capped by pipeline headcount, not product fit.</p>
-            </div>
-          </div>
-        </div>
-        <div class="row after">
-          <div class="key">
+          <div class="sh-col after">
             <span class="badge">After Express</span>
             <h4>One partner, <em>every</em> employer.</h4>
           </div>
-          <div class="points">
-            <div class="point">
-              <span class="lbl">Motion</span>
-              <p>Platform-led — every partner brings their full client base.</p>
-            </div>
-            <div class="point">
-              <span class="lbl">Setup</span>
-              <p>One multi-tenant integration replaces N bespoke ones.</p>
-            </div>
-            <div class="point">
-              <span class="lbl">Time to launch</span>
-              <p>Flip-the-switch — no IT work on the partner's side.</p>
-            </div>
-            <div class="point">
-              <span class="lbl">Ceiling</span>
-              <p>Reach capped by partner ecosystem, not headcount.</p>
-            </div>
-          </div>
+        </div>
+        <div class="tx-shift-row">
+          <span class="lbl">Motion</span>
+          <span class="val">Sales-led acquisition, employer by employer.</span>
+          <span class="val after">Platform-led — every partner brings their full client base.</span>
+        </div>
+        <div class="tx-shift-row">
+          <span class="lbl">Setup</span>
+          <span class="val">Bespoke payroll and time-clock work for every customer.</span>
+          <span class="val after">One multi-tenant integration replaces N bespoke ones.</span>
+        </div>
+        <div class="tx-shift-row">
+          <span class="lbl">Launch</span>
+          <span class="val">Weeks. Sometimes a full quarter.</span>
+          <span class="val after">Flip-the-switch — no IT work on the partner's side.</span>
+        </div>
+        <div class="tx-shift-row">
+          <span class="lbl">Ceiling</span>
+          <span class="val">Reach capped by pipeline headcount, not product fit.</span>
+          <span class="val after">Reach capped by partner ecosystem, not headcount.</span>
         </div>
       </section>
 

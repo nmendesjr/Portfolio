@@ -227,7 +227,8 @@ section, footer {
   font-style: normal;
   font-size: 9px;
   letter-spacing: 0.08em;
-  fill: var(--accent-2);
+  fill: currentColor;
+  opacity: 0.75;
   text-transform: lowercase;
 }
 .mono-rule {
@@ -1163,3 +1164,96 @@ html[data-accent="terracota"] { --accent: #d94a2b; --hilite: rgba(217, 74, 43, 0
 html[data-accent="terracota"][data-theme="dark"] { --accent: #ff7a52; --hilite: rgba(255, 122, 82, 0.16); }
 html[data-accent="rosa"] { --accent: #c83e6a; --hilite: rgba(200, 62, 106, 0.14); }
 html[data-accent="rosa"][data-theme="dark"] { --accent: #ff85a8; --hilite: rgba(255, 133, 168, 0.16); }
+
+/* ============================================================
+   Resume download buttons
+   ============================================================ */
+.nav-resume {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 14px;
+  background: var(--accent);
+  color: var(--bg);
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition: opacity 150ms ease;
+}
+.nav-resume:hover { opacity: 0.85; }
+.resume-arrow { font-size: 11px; }
+
+.foot-resume {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border-bottom: 1px solid var(--accent);
+  padding-bottom: 2px;
+  transition: opacity 150ms ease;
+}
+.foot-resume:hover { opacity: 0.7; }
+
+/* ============================================================
+   Vibe: clear — Swiss-minimal, no decoration, all-sans
+   ============================================================ */
+html[data-vibe="clear"] {
+  --bg: #fafafa;
+  --bg-2: #f0f0f0;
+  --ink: #111111;
+  --ink-2: #333333;
+  --ink-3: #666666;
+  --rule: rgba(17, 17, 17, 0.20);
+  --rule-soft: rgba(17, 17, 17, 0.09);
+  --accent: var(--ink);
+  --hilite: rgba(17, 17, 17, 0.06);
+}
+html[data-vibe="clear"][data-theme="dark"] {
+  --bg: #111111;
+  --bg-2: #1a1a1a;
+  --ink: #f0f0f0;
+  --ink-2: #cccccc;
+  --ink-3: #888888;
+  --accent: var(--ink);
+}
+
+html[data-vibe="clear"] * {
+  animation: none !important;
+  transition-duration: 0ms !important;
+}
+html[data-vibe="clear"] .hero::before,
+html[data-vibe="clear"] .hero-strip,
+html[data-vibe="clear"] .section-head::before,
+html[data-vibe="clear"] .drop,
+html[data-vibe="clear"] .meta-dot,
+html[data-vibe="clear"] .marquee-bullet { display: none !important; }
+
+html[data-vibe="clear"] body,
+html[data-vibe="clear"] h1,
+html[data-vibe="clear"] h2,
+html[data-vibe="clear"] h3,
+html[data-vibe="clear"] .hero-title,
+html[data-vibe="clear"] .hero-title-line,
+html[data-vibe="clear"] .section-title,
+html[data-vibe="clear"] .foot-headline {
+  font-family: var(--sans) !important;
+  font-style: normal !important;
+}
+html[data-vibe="clear"] .hero-title-line--italic { font-style: normal !important; }
+
+html[data-vibe="clear"] .hero {
+  border-bottom: 2px solid var(--ink);
+}
+html[data-vibe="clear"] .section-head {
+  border-bottom: 2px solid var(--ink);
+}
+html[data-vibe="clear"] .nav-resume {
+  background: transparent;
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
+  border-radius: 3px;
+}
