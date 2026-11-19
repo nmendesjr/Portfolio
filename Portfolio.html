@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark" data-accent="verde" data-display="serif" data-density="regular" data-layout="default">
+<html lang="en" data-theme="dark" data-accent="verde" data-display="serif" data-density="regular" data-layout="default" data-vibe="fun">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -29,7 +29,8 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "accent": "verde",
   "display": "serif",
   "density": "regular",
-  "layout": "default"
+  "layout": "default",
+  "vibe": "fun"
 }/*EDITMODE-END*/;
 
 function App() {
@@ -45,7 +46,8 @@ function App() {
     html.setAttribute("data-display", t.display);
     html.setAttribute("data-density", t.density);
     html.setAttribute("data-layout", t.layout);
-  }, [t.theme, t.accent, t.display, t.density, t.layout]);
+    html.setAttribute("data-vibe", t.vibe);
+  }, [t.theme, t.accent, t.display, t.density, t.layout, t.vibe]);
 
   // Scroll reveal
   useScrollReveal();
@@ -102,6 +104,14 @@ function App() {
           value={t.display}
           options={["serif", "grotesk"]}
           onChange={(v) => setTweak("display", v)}
+        />
+
+        <TweakSection label="Style" />
+        <TweakRadio
+          label="Vibe"
+          value={t.vibe}
+          options={["fun", "clear"]}
+          onChange={(v) => setTweak("vibe", v)}
         />
 
         <TweakSection label="Layout" />

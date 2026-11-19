@@ -31,6 +31,9 @@ function Hero({ data, theme }) {
           <a href="#about">About</a>
           <a href="#writing">Writing</a>
           <a href="#contact">Contact</a>
+          <a href="uploads/N%20Mendes%20Product%20Resume.pdf" download className="nav-resume">
+            <span className="resume-arrow">↓</span> Resume
+          </a>
         </nav>
       </div>
 
@@ -284,6 +287,7 @@ function Footer({ data }) {
           </h3>
           <a href={`mailto:${data.email}`} className="foot-mail">{data.email}</a>
           <a href={`tel:${data.phone.replace(/[^0-9+]/g, "")}`} className="foot-phone">{data.phone}</a>
+          <a href="uploads/N%20Mendes%20Product%20Resume.pdf" download className="foot-resume">↓ Download resume</a>
         </div>
       </div>
       <div className="foot-meta">
