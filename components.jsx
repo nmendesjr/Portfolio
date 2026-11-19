@@ -161,7 +161,10 @@ function About({ data }) {
             {data.intro.slice(1)}
           </p>
           <p className="about-second">
-            I lead through experimentation, behavioral data, and tight loops with engineering and design. I'm at home where the work is messy — payroll plumbing, infrastructure rewrites, marketplaces with cold‑start problems, models that need to be wrong less often.
+            I operate at the intersection of data, design, and technology, combining experimentation, behavioral insights, and close collaboration with engineering to turn complex problems into products that drive measurable growth. I'm particularly drawn to challenges where the path forward isn't obvious, whether that's navigating payroll infrastructure, rebuilding core systems, or improving decision-making models.
+          </p>
+          <p className="about-second">
+            Today, I'm also focused on rethinking how product teams build and ship in the age of AI agents, moving faster, learning continuously, and creating more leverage with smaller teams.
           </p>
         </div>
 
