@@ -147,7 +147,6 @@ window.PORTFOLIO_DATA = {
     "ML & Predictive Product Systems",
     "Behavioral Research & A/B Experimentation",
     "AI-Assisted Development & Claude Code",
-    "Cross-Functional Leadership (40+ teams)",
     "B2B SaaS & Enterprise Go-To-Market",
     "Data Analytics — BigQuery, Looker, Tableau",
     "Payroll & Payment Infrastructure",
