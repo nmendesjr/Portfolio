@@ -168,7 +168,7 @@ window.PORTFOLIO_DATA = {
       description: "Ask a natural-language question about where you are and where you're going, and Hereabouts resolves the intent, filters candidates by on-route proximity, and animates a street-snapped driving route — all without a backend. The EV demo shows the full loop: find a charger within 20 minutes that's on the way to JFK, pick one, and watch the two-leg route draw itself while the panel surfaces walkable stops nearby.",
       insight: "Maps have always answered \"where.\" Adding an LLM layer lets them answer \"given my context, what should I do next\" — which is a fundamentally different and more useful product surface.",
       stack: ["MapKit JS", "React", "TypeScript", "Vite", "On-route corridor algorithm"],
-      href: "http://localhost:5174",
+      href: "https://www.naamamendes.com/hereabouts",
       image: "uploads/hereabouts-demo.jpg",
     },
   ],

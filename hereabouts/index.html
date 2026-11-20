@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hereabouts</title>
+    <!--
+      Content-Security-Policy:
+      - No inline scripts (nonce-based would be needed in prod; Vite injects scripts as modules)
+      - No external fonts or CDNs at runtime
+      - connect-src restricted to self + the local proxy (port 3001)
+      - No map tile CDN: tiles come from the bundled PMTiles file
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+        default-src 'self';
+        script-src 'self' https://cdn.apple-mapkit.com;
+        style-src 'self' 'unsafe-inline';
+        img-src 'self' blob: data: https://*.apple.com https://cdn.apple-mapkit.com;
+        font-src 'self';
+        connect-src 'self' http://localhost:3001 https://*.apple.com https://*.apple-mapkit.com https://cdn.apple-mapkit.com;
+        worker-src 'self' blob:;
+        child-src blob:;
+        object-src 'none';
+        base-uri 'self';
+      "
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script type="module" crossorigin src="/hereabouts/assets/index-DkI21TfC.js"></script>
+    <link rel="stylesheet" crossorigin href="/hereabouts/assets/index-DM3-ayQO.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
