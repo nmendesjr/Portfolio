@@ -1405,7 +1405,18 @@ html[data-vibe="clear"] .wrb-headline-text {
   line-height: 1.4;
   color: var(--ink);
 }
-html[data-vibe="clear"] .wrb-metrics { display: none; }
+/* Always expand work rows in clear mode — metrics always visible */
+html[data-vibe="clear"] .work-row-body,
+html[data-vibe="clear"] .work-row-body[hidden] {
+  display: block !important;
+}
+html[data-vibe="clear"] .wr-toggle { display: none !important; }
+html[data-vibe="clear"] .work-row-btn { cursor: default; }
+
+/* Restore metrics grid */
+html[data-vibe="clear"] .wrb-metrics {
+  display: grid;
+}
 html[data-vibe="clear"] .wrb-grid { grid-template-columns: 1fr; }
 html[data-vibe="clear"] .wrb-bullets li { gap: 12px; }
 html[data-vibe="clear"] .wrb-bullets li span:first-child { color: var(--ink-3); }

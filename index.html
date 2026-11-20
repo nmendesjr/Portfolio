@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark" data-accent="verde" data-display="serif" data-density="regular" data-layout="default" data-vibe="fun">
+<html lang="en" data-theme="light" data-accent="verde" data-display="serif" data-density="regular" data-layout="default" data-vibe="clear">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -39,7 +39,7 @@ function VibeToggle({ vibe, onChange }) {
 }
 
 function App() {
-  const [vibe, setVibe] = useState("fun");
+  const [vibe, setVibe] = useState("clear");
   const [openId, setOpenId] = useState("tapcheck-director");
   const data = window.PORTFOLIO_DATA;
 
