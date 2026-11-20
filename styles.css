@@ -1595,3 +1595,32 @@ html { scroll-padding-top: 56px; }
 
 /* prevent pill from overlapping fixed section heads on scroll */
 .section-head { scroll-margin-top: 56px; }
+
+/* ============ Mobile ============ */
+@media (max-width: 900px) {
+  /* hide key metric in work row — no space in the 3-col mobile grid */
+  html[data-vibe="clear"] .wr-key-metric { display: none; }
+}
+
+@media (max-width: 600px) {
+  /* hero nav — hide text links, keep only Resume button */
+  .hero-nav a:not(.nav-resume) { display: none; }
+
+  /* hero footer stats — stack to single column */
+  .hero-foot {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  /* caps 2-col clear mode → 1 col */
+  html[data-vibe="clear"] .caps-list {
+    grid-template-columns: 1fr;
+  }
+  html[data-vibe="clear"] .caps-item:nth-child(odd) {
+    border-right: none;
+    padding-right: 0;
+  }
+  html[data-vibe="clear"] .caps-item:nth-child(even) {
+    padding-left: 0;
+  }
+}
