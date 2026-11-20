@@ -1432,6 +1432,8 @@ html[data-vibe="clear"] .wr-km-label {
   max-width: 160px;
 }
 html[data-vibe="clear"] .wr-cat { display: none; }
+html[data-vibe="clear"] .vibe-bar { display: none; }
+html[data-vibe="clear"] .hero-title-line--italic::after { display: none; }
 html[data-vibe="clear"] .wrb-metrics { display: none; }
 html[data-vibe="clear"] .wrb-grid { grid-template-columns: 1fr; }
 html[data-vibe="clear"] .wrb-bullets li { gap: 12px; }
