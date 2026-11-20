@@ -1447,12 +1447,18 @@ html[data-vibe="clear"] .bullet-mark { color: var(--ink-3); }
 
 /* ── About ── */
 html[data-vibe="clear"] .about-lead p {
-  font-size: 18px;
-  line-height: 1.65;
-  max-width: 60ch;
+  font-family: var(--sans);
+  font-size: 17px;
+  font-style: normal;
+  line-height: 1.7;
+  max-width: 64ch;
   color: var(--ink);
+  letter-spacing: -0.01em;
 }
-html[data-vibe="clear"] .about-second { color: var(--ink-2); }
+html[data-vibe="clear"] .about-second {
+  color: var(--ink-2);
+  font-style: normal !important;
+}
 
 /* ── Clients marquee — clear mode ── */
 html[data-vibe="clear"] .marquee {
@@ -1510,9 +1516,9 @@ html[data-vibe="clear"] .caps-item:nth-child(even) {
   padding-left: 24px;
 }
 html[data-vibe="clear"] .caps-text {
-  font-size: 15px;
+  font-size: 17px;
   line-height: 1.35;
-  color: var(--ink-2);
+  color: var(--ink);
   font-weight: 400;
 }
 
