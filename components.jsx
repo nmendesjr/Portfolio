@@ -29,6 +29,7 @@ function Hero({ data, theme }) {
         <nav className="hero-nav">
           <a href="#work">Work</a>
           <a href="#about">About</a>
+          <a href="#ai-projects">Projects</a>
           <a href="#writing">Writing</a>
           <a href="#contact">Contact</a>
           <a href="uploads/N%20Mendes%20Product%20Resume.pdf" download className="nav-resume">
@@ -240,12 +241,69 @@ function Clients({ data }) {
   );
 }
 
+// ========== AI Projects ==========
+function AIProjects({ data }) {
+  if (!data.aiProjects || !data.aiProjects.length) return null;
+  return (
+    <section className="ai-projects" id="ai-projects">
+      <header className="section-head">
+        <span className="section-num">05</span>
+        <h2 className="section-title">AI Projects <span className="section-title-em">— built with Claude Code</span></h2>
+        <span className="section-count">{data.aiProjects.length} project{data.aiProjects.length !== 1 ? "s" : ""}</span>
+      </header>
+
+      <div className="aip-grid">
+        {data.aiProjects.map((p) => (
+          <article key={p.id} className="aip-card">
+            {p.image && (
+              <div className="aip-img-wrap">
+                <img src={p.image} alt={p.name + " demo screenshot"} className="aip-img" loading="lazy" />
+              </div>
+            )}
+
+            <div className="aip-body">
+              <div className="aip-meta">
+                <span className="aip-name">{p.name}</span>
+                <span className="aip-year">{p.year}</span>
+                <span className="aip-status">{p.status}</span>
+              </div>
+
+              <p className="aip-tagline">{p.tagline}</p>
+              <p className="aip-desc">{p.description}</p>
+
+              {p.insight && (
+                <blockquote className="aip-insight">
+                  <span className="aip-insight-mark">→</span>
+                  <span>{p.insight}</span>
+                </blockquote>
+              )}
+
+              <div className="aip-foot">
+                <div className="aip-stack">
+                  {p.stack.map((s, i) => (
+                    <span className="aip-tag" key={i}>{s}</span>
+                  ))}
+                </div>
+                {p.href && (
+                  <a href={p.href} className="aip-link" target="_blank" rel="noopener noreferrer">
+                    View demo →
+                  </a>
+                )}
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 // ========== Writing ==========
 function Writing({ data }) {
   return (
     <section className="writing" id="writing">
       <header className="section-head">
-        <span className="section-num">05</span>
+        <span className="section-num">06</span>
         <h2 className="section-title">Writing <span className="section-title-em">— field notes</span></h2>
         <span className="section-count">{data.posts.length} posts</span>
       </header>
@@ -359,5 +417,5 @@ function useScrollReveal() {
 }
 
 Object.assign(window, {
-  Hero, WorkList, WorkRow, About, Capabilities, Clients, Writing, Footer, FloatingContact, useScrollReveal,
+  Hero, WorkList, WorkRow, About, Capabilities, Clients, AIProjects, Writing, Footer, FloatingContact, useScrollReveal,
 });

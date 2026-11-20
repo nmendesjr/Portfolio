@@ -158,6 +158,21 @@ window.PORTFOLIO_DATA = {
     { school: "Gordon College, USA", degree: "Bachelor's in Economics", year: "2013", note: "Econometrics and data analysis. Clarendon Scholar (full scholarship for inner‑city students)." },
   ],
 
+  aiProjects: [
+    {
+      id: "hereabouts",
+      name: "Hereabouts",
+      status: "Live prototype",
+      year: "2026",
+      tagline: "LLMs as a spatial reasoning layer — contextual decisions directly in maps.",
+      description: "Ask a natural-language question about where you are and where you're going, and Hereabouts resolves the intent, filters candidates by on-route proximity, and animates a street-snapped driving route — all without a backend. The EV demo shows the full loop: find a charger within 20 minutes that's on the way to JFK, pick one, and watch the two-leg route draw itself while the panel surfaces walkable stops nearby.",
+      insight: "Maps have always answered \"where.\" Adding an LLM layer lets them answer \"given my context, what should I do next\" — which is a fundamentally different and more useful product surface.",
+      stack: ["MapKit JS", "React", "TypeScript", "Vite", "On-route corridor algorithm"],
+      href: "http://localhost:5174",
+      image: "uploads/hereabouts-demo.jpg",
+    },
+  ],
+
   posts: [
     {
       year: "2026",
