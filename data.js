@@ -5,7 +5,7 @@ window.PORTFOLIO_DATA = {
   email: "naamamendesjr@gmail.com",
   phone: "(321) 276-8858",
   tagline: "Product leader building fintech and growth platforms used by millions.",
-  intro: "I'm a product leader with 10 years of experience building and scaling B2B and B2C platforms. I've co-founded and sold a payroll fintech, led product at YC-backed startups, and most recently built and launched a new vertical at Tapcheck that grew to represent 15% of company revenue in just three months.",
+  intro: "I'm a product leader with 10 years of experience building and scaling B2B and B2C platforms. I've co-founded and sold a payroll fintech, led product at Y Combinator-invested startups, and most recently built and launched a new vertical at Tapcheck that grew to represent 15% of company revenue in just three months.",
 
   works: [
     {
