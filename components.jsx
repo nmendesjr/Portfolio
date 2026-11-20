@@ -248,7 +248,7 @@ function AIProjects({ data }) {
     <section className="ai-projects" id="ai-projects">
       <header className="section-head">
         <span className="section-num">05</span>
-        <h2 className="section-title">AI Projects <span className="section-title-em">— built with Claude Code</span></h2>
+        <h2 className="section-title">AI Projects</h2>
         <span className="section-count">{data.aiProjects.length} project{data.aiProjects.length !== 1 ? "s" : ""}</span>
       </header>
 
