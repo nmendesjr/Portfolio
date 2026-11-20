@@ -93,6 +93,12 @@ function WorkRow({ work, index, open, onToggle }) {
           <span className="wr-company">{work.company}</span>
           <span className="wr-role">{work.role}</span>
         </span>
+        {(() => { const m = work.metrics?.find(x => !x.type); return m ? (
+          <span className="wr-key-metric">
+            <span className="wr-km-value">{m.value}</span>
+            <span className="wr-km-label">{m.label}</span>
+          </span>
+        ) : null; })()}
         <span className="wr-cat">{work.category}</span>
         <span className="wr-toggle" aria-hidden="true">
           <span className="wr-toggle-bar" />
