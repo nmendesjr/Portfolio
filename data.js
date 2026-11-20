@@ -92,8 +92,8 @@ window.PORTFOLIO_DATA = {
       category: "Geomarketing · YC W21",
       headline: "Y Combinator W21 — turned a consultancy into a Fortune‑500 SaaS platform.",
       metrics: [
-        { value: "YC W21", label: "Investment secured" },
         { value: "+25%", label: "MoM growth, sustained" },
+        { value: "YC W21", label: "Investment secured" },
         { value: "20", label: "Person team built & led" },
         {
           type: "clients",
