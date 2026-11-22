@@ -163,6 +163,7 @@
     for (const b of $("windowSeg").querySelectorAll("button")) b.setAttribute("aria-checked", String(b.dataset.window === state.window));
 
     renderTiles();
+    renderBubbles();
     renderStrip();
     renderSummaryTable();
     renderToneBars();
@@ -194,6 +195,122 @@
       tile("Warmest coverage", warm ? warm.name : "—", warm ? `net ${signed(warm.net)}` : "not enough stories"),
       tile("Harshest coverage", cool ? cool.name : "—", cool ? `net ${signed(cool.net)}` : "not enough stories"),
       tile("Busiest outlet", topOutlet.total ? topOutlet.outlet : "—", `${fmt(topOutlet.total)} stories`),
+    );
+  }
+
+  // ----- Bubble chart: x = net tone, area = number of stories -----
+  function lum(hex) {
+    const [r, g, b] = hexToRgb(hex).map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; });
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  }
+  function niceRound(v) {
+    const p = 10 ** Math.floor(Math.log10(Math.max(1, v)));
+    return Math.max(1, Math.round(v / p) * p);
+  }
+
+  function renderBubbles() {
+    const wrap = $("bubbles");
+    const W = Math.max(300, wrap.clientWidth);
+    const narrow = W < 600;
+    const H = narrow ? 380 : 460;
+    const m = { t: 30, r: 12, b: 40, l: 12 };
+    const pw = W - m.l - m.r, ph = H - m.t - m.b, cy0 = m.t + ph / 2;
+    const live = order.filter((c) => c.total > 0);
+    const xMax = Math.max(40, Math.ceil((Math.max(0, ...live.map((c) => Math.abs(c.net))) + 12) / 10) * 10);
+    const x = (v) => m.l + ((v + xMax) / (2 * xMax)) * pw;
+    const maxN = Math.max(1, ...live.map((c) => c.total));
+    const rMax = Math.min(ph * 0.17, pw * (narrow ? 0.12 : 0.07)), rMin = narrow ? 9 : 12;
+    const rad = (n) => rMin + (rMax - rMin) * Math.sqrt(n / maxN);
+    const mentions = V.companies.reduce((a, c) => a + c.total, 0);
+
+    const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, height: H, role: "img",
+      "aria-label": "Bubble chart: each company placed by net tone of coverage, sized by number of stories" });
+
+    // Axis: ticks every quarter of the range, neutral line emphasized.
+    for (const t of [-xMax, -xMax / 2, 0, xMax / 2, xMax]) {
+      svg.append(s("line", { class: t === 0 ? "axis-line" : "grid-line", x1: x(t), x2: x(t), y1: m.t - 8, y2: m.t + ph }));
+      svg.append(s("text", { class: "tick", x: x(t), y: H - 20, "text-anchor": t === -xMax ? "start" : t === xMax ? "end" : "middle" }, t === 0 ? "0" : signed(t)));
+    }
+    svg.append(
+      s("text", { class: "tick", x: m.l, y: 14, "text-anchor": "start" }, narrow ? "← More negative" : "← More negative coverage"),
+      s("text", { class: "tick", x: x(0), y: 14, "text-anchor": "middle" }, "Neutral"),
+      s("text", { class: "tick", x: W - m.r, y: 14, "text-anchor": "end" }, narrow ? "More positive →" : "More positive coverage →"),
+      s("text", { class: "axis-label", x: m.l + pw / 2, y: H - 2, "text-anchor": "middle" }, "Net tone (% positive − % negative)"),
+    );
+
+    // Place biggest first; each keeps its true x and moves vertically only to avoid overlap.
+    const nodes = live.map((c) => ({ c, x: x(c.net), r: rad(c.total) })).sort((a, b) => b.r - a.r);
+    const placed = [];
+    for (const n of nodes) {
+      const lo = m.t + n.r, hi = m.t + ph - n.r;
+      // Try spots outward from the middle; if none is free, take the one with the least overlap.
+      let best = null, bestOverlap = Infinity, bestY = cy0;
+      for (let k = 0; k < 600 && best == null; k++) {
+        const y = cy0 + (k % 2 ? 1 : -1) * Math.ceil(k / 2) * 2;
+        if (y < lo || y > hi) continue;
+        const overlap = placed.reduce((a, p) => a + Math.max(0, p.r + n.r + 3 - Math.hypot(p.x - n.x, p.y - y)), 0);
+        if (overlap === 0) best = y;
+        else if (overlap < bestOverlap) { bestOverlap = overlap; bestY = y; }
+      }
+      n.y = best ?? bestY;
+      placed.push(n);
+    }
+
+    const layer = s("g"), labels = s("g");
+    const boxes = [];
+    const hit = (b, self) => boxes.some((p) => !(b.x2 < p.x1 || b.x1 > p.x2 || b.y2 < p.y1 || b.y1 > p.y2)) ||
+      placed.some((p) => Math.hypot(Math.max(b.x1, Math.min(p.x, b.x2)) - p.x, Math.max(b.y1, Math.min(p.y, b.y2)) - p.y) < p.r + (p === self ? 0 : 10)) ||
+      b.x1 < 0 || b.x2 > W;
+    for (const n of placed) {
+      const { c } = n;
+      const fill = diverging(c.net, 40);
+      const g = s("g", {
+        class: `bubble${c.id === state.selected ? " selected" : ""}`, tabindex: 0, role: "button",
+        "aria-label": `${c.name}: ${c.total} stories, net tone ${signed(c.net)}`,
+        onclick: () => select(c.id), onkeydown: onActivate(() => select(c.id)),
+        onpointermove: (e) => tip(e, c), onpointerleave: hideTip, onfocus: (e) => tip(e, c), onblur: hideTip,
+      });
+      g.append(s("circle", { cx: n.x, cy: n.y, r: Math.max(n.r, 14) + 4, fill: "transparent" }));
+      g.append(s("circle", { class: "fill", cx: n.x, cy: n.y, r: n.r, fill }));
+      layer.append(g);
+
+      const name = narrow ? c.short || c.name : c.name;
+      const tw = name.length * 13 * 0.6;
+      if (n.r * 2 > tw + 14 && n.r > 22) {
+        const ink = lum(fill) > 0.3 ? "#0b0b0b" : "#ffffff";
+        labels.append(
+          s("text", { class: "bubble-name inside", x: n.x, y: n.y + 1, "text-anchor": "middle", style: `fill:${ink}` }, name),
+          s("text", { class: "bubble-count", x: n.x, y: n.y + 16, "text-anchor": "middle", style: `fill:${ink}` }, fmt(c.total)));
+      } else {
+        const opts = [
+          { x: n.x, y: n.y + n.r + 15, a: "middle" }, { x: n.x, y: n.y - n.r - 7, a: "middle" },
+          { x: n.x + n.r + 6, y: n.y + 4, a: "start" }, { x: n.x - n.r - 6, y: n.y + 4, a: "end" },
+        ];
+        const box = (o) => { const x1 = o.a === "middle" ? o.x - tw / 2 : o.a === "start" ? o.x : o.x - tw; return { x1, x2: x1 + tw, y1: o.y - 11, y2: o.y + 3 }; };
+        const pick = opts.find((o) => !hit(box(o), n)) || opts[0];
+        boxes.push(box(pick));
+        labels.append(s("text", { class: "bubble-name", x: pick.x, y: pick.y, "text-anchor": pick.a }, name));
+      }
+    }
+    svg.append(layer, labels);
+    wrap.replaceChildren(svg);
+
+    function tip(e, c) {
+      showTip(e, c.name, [
+        ["Stories", `${fmt(c.total)} · ${pct(c.total, mentions)}% of coverage`],
+        ["Positive", fmt(c.pos), cssVar("--pos")],
+        ["Neutral", fmt(c.neu), cssVar("--neu")],
+        ["Negative", fmt(c.neg), cssVar("--neg")],
+        ["Net tone", signed(c.net)],
+      ]);
+    }
+
+    const small = niceRound(maxN / 6), big = niceRound(maxN * 0.8);
+    const key = (n) => { const r = rad(n), d = r * 2 + 2; return s("svg", { width: d, height: d, viewBox: `0 0 ${d} ${d}`, "aria-hidden": "true" },
+      s("circle", { cx: d / 2, cy: d / 2, r, fill: "none", stroke: cssVar("--ink-3"), "stroke-width": 1 })); };
+    $("bubbleLegend").replaceChildren(
+      h("span", { class: "size-key" }, "Stories", key(small), fmt(small), key(big), fmt(big)),
+      h("span", null, "Tone", h("span", { class: "ramp", "aria-hidden": "true" }), "negative → positive"),
     );
   }
 
@@ -453,7 +570,7 @@
   });
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => state.raw && render());
   let rt;
-  addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => state.raw && renderStrip(), 120); });
+  addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { if (state.raw) { renderBubbles(); renderStrip(); } }, 120); });
 
   init();
 })();
