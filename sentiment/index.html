@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Sentiment</title>
-  <meta name="description" content="How the press and the public feel about the companies building AI — OpenAI, Anthropic, xAI, SpaceX, Google, Amazon, Microsoft and Perplexity." />
+  <meta name="description" content="How the news covers the companies building AI — OpenAI, Anthropic, xAI, SpaceX, Google, Amazon, Microsoft and Perplexity — read straight from publisher RSS feeds." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -22,71 +22,92 @@
           <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
         </button>
       </div>
-      <h1 class="headline">How the press and the public feel about the companies building <em>AI</em>.</h1>
-      <p class="dek">Every hour, Sentiment reads news coverage from thousands of outlets and public conversation on Reddit, Hacker News and Bluesky, then scores each headline and post as positive, neutral or negative.</p>
+      <h1 class="headline">How the news covers the companies building <em>AI</em>.</h1>
+      <p class="dek" id="dek">Sentiment reads the RSS feeds of a fixed list of news outlets, picks out every story about the companies below, and scores each one as positive, neutral or negative. No social media, no aggregators — every story links back to the outlet that published it.</p>
     </header>
 
     <div class="controls" role="toolbar" aria-label="Filters">
       <div class="seg" role="radiogroup" aria-label="Time window" id="windowSeg">
-        <button role="radio" data-window="1d">24 hours</button>
-        <button role="radio" data-window="7d" aria-checked="true">7 days</button>
-        <button role="radio" data-window="30d">30 days</button>
+        <button role="radio" data-window="1">24 hours</button>
+        <button role="radio" data-window="3">3 days</button>
+        <button role="radio" data-window="7" aria-checked="true">7 days</button>
+        <button role="radio" data-window="all">Everything in feeds</button>
       </div>
-      <div class="sources" id="sources" aria-label="Source status"></div>
+      <a class="feed-status" id="feedStatus" href="#sources"></a>
       <span class="updated" id="updated"></span>
     </div>
 
     <div class="banner" id="sampleBanner" hidden>
-      <strong>Sample data.</strong> The live feed isn't reachable from here, so this view shows illustrative numbers. Deployed on Vercel, <code>/api/sentiment</code> fills it with real coverage.
+      <strong>Sample data.</strong> The feeds can't be reached from this preview, so the numbers and headlines below are placeholders. The outlet list is real — deployed on Vercel, <code>/api/sentiment</code> reads those feeds live.
     </div>
 
     <main id="main" class="main">
       <section class="tiles" id="tiles" aria-label="Summary"></section>
 
-      <section class="card map-card">
+      <section class="card">
         <div class="card-head">
           <div>
-            <h2>The sentiment map</h2>
-            <p class="sub">Press tone across, public tone up. Bubble size is total mentions. Select a company to see what's driving it.</p>
+            <h2>Every headline, plotted</h2>
+            <p class="sub">Each dot is one story. Left is negative, right is positive; the more dots, the more coverage. Hover a dot to read the headline, click to open it.</p>
           </div>
-          <button class="link-btn" id="mapTableToggle" type="button" aria-expanded="false">View as table</button>
+          <button class="link-btn" id="tableToggle" type="button" aria-expanded="false">View as table</button>
         </div>
-        <div class="map-wrap" id="mapWrap"></div>
-        <div class="legend" id="mapLegend"></div>
-        <div class="table-wrap" id="mapTable" hidden></div>
+        <div class="strip-wrap" id="strip"></div>
+        <div class="legend" id="stripLegend"></div>
+        <div class="table-wrap" id="summaryTable" hidden></div>
       </section>
 
       <div class="duo">
         <section class="card">
           <div class="card-head">
             <div>
-              <h2>Press coverage</h2>
-              <p class="sub">News articles by tone. Negative extends left, positive right; bar length is volume.</p>
+              <h2>Coverage by tone</h2>
+              <p class="sub">Stories per company. Negative extends left, positive right; bar length is volume.</p>
             </div>
           </div>
-          <div id="pressBars" class="bars"></div>
+          <div id="toneBars" class="bars"></div>
         </section>
         <section class="card">
           <div class="card-head">
             <div>
-              <h2>Public reaction</h2>
-              <p class="sub">Reddit posts, Hacker News comments and Bluesky posts by tone.</p>
+              <h2>Who's writing</h2>
+              <p class="sub">Stories about these companies, by outlet.</p>
             </div>
           </div>
-          <div id="publicBars" class="bars"></div>
+          <div id="outletBars" class="bars"></div>
         </section>
       </div>
       <div class="legend legend-center" id="barLegend"></div>
 
+      <section class="card">
+        <div class="card-head">
+          <div>
+            <h2>Outlet × company</h2>
+            <p class="sub">How many stories each outlet ran about each company. Stronger shading means more.</p>
+          </div>
+        </div>
+        <div class="heat-wrap" id="heat"></div>
+      </section>
+
       <section class="card detail" id="detail" aria-live="polite"></section>
+
+      <section class="card" id="sources">
+        <div class="card-head">
+          <div>
+            <h2>Sources</h2>
+            <p class="sub">The complete list of feeds Sentiment reads. Nothing else is counted. Feeds only hold an outlet's most recent stories, so “goes back to” shows how far each one reaches.</p>
+          </div>
+        </div>
+        <div class="table-wrap" id="sourceTable"></div>
+      </section>
 
       <section class="method">
         <h2>How it works</h2>
         <div class="method-grid">
-          <div><h3>Press</h3><p>Google News search results for each company over the selected window — thousands of outlets, deduplicated by headline. Each headline is scored on its own.</p></div>
-          <div><h3>Public</h3><p>Reddit posts, Hacker News comments and Bluesky posts that mention the company by name. Off-topic hits (e.g. “perplexity” as a plain word) are filtered out.</p></div>
-          <div><h3>Scoring</h3><p>A lexicon tuned for tech news (lawsuit, outage, breakthrough, layoffs…) with negation and intensity handling. <em>Net sentiment</em> is the share of positive items minus the share of negative ones, from −100 to +100.</p></div>
-          <div><h3>Caveats</h3><p>Keyword scoring misses sarcasm and context, and the public sources skew toward tech-savvy, English-speaking audiences. Read it as a weather vane, not a poll.</p></div>
+          <div><h3>Collect</h3><p>Every hour, read each outlet's RSS feed listed under Sources. Stories are deduplicated by link and headline.</p></div>
+          <div><h3>Match</h3><p>A story counts toward a company when its headline or summary names it (OpenAI, ChatGPT, Claude, Grok, Gemini, Copilot…). Broad names like “Amazon” or “Google” only count alongside an AI term. One story can count for several companies.</p></div>
+          <div><h3>Score</h3><p>The headline and the outlet's own summary are scored with a word list tuned for tech news (lawsuit, outage, breakthrough, layoffs…) with negation handling. <em>Net tone</em> is the share of positive stories minus the share of negative ones, −100 to +100.</p></div>
+          <div><h3>Caveats</h3><p>Word-list scoring misses sarcasm and context, and the result reflects this outlet list, not all media. Read it as a weather vane, not a poll.</p></div>
         </div>
       </section>
     </main>
