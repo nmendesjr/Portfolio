@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sentiment</title>
+  <meta name="description" content="How the press and the public feel about the companies building AI — OpenAI, Anthropic, xAI, SpaceX, Google, Amazon, Microsoft and Perplexity." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/sentiment/sentiment.css" />
+  <script>
+    try { const t = localStorage.getItem("sentiment-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+</head>
+<body>
+  <div class="page">
+    <header class="masthead">
+      <div class="masthead-row">
+        <a class="wordmark" href="/sentiment/">Sentiment</a>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <h1 class="headline">How the press and the public feel about the companies building <em>AI</em>.</h1>
+      <p class="dek">Every hour, Sentiment reads news coverage from thousands of outlets and public conversation on Reddit, Hacker News and Bluesky, then scores each headline and post as positive, neutral or negative.</p>
+    </header>
+
+    <div class="controls" role="toolbar" aria-label="Filters">
+      <div class="seg" role="radiogroup" aria-label="Time window" id="windowSeg">
+        <button role="radio" data-window="1d">24 hours</button>
+        <button role="radio" data-window="7d" aria-checked="true">7 days</button>
+        <button role="radio" data-window="30d">30 days</button>
+      </div>
+      <div class="sources" id="sources" aria-label="Source status"></div>
+      <span class="updated" id="updated"></span>
+    </div>
+
+    <div class="banner" id="sampleBanner" hidden>
+      <strong>Sample data.</strong> The live feed isn't reachable from here, so this view shows illustrative numbers. Deployed on Vercel, <code>/api/sentiment</code> fills it with real coverage.
+    </div>
+
+    <main id="main" class="main">
+      <section class="tiles" id="tiles" aria-label="Summary"></section>
+
+      <section class="card map-card">
+        <div class="card-head">
+          <div>
+            <h2>The sentiment map</h2>
+            <p class="sub">Press tone across, public tone up. Bubble size is total mentions. Select a company to see what's driving it.</p>
+          </div>
+          <button class="link-btn" id="mapTableToggle" type="button" aria-expanded="false">View as table</button>
+        </div>
+        <div class="map-wrap" id="mapWrap"></div>
+        <div class="legend" id="mapLegend"></div>
+        <div class="table-wrap" id="mapTable" hidden></div>
+      </section>
+
+      <div class="duo">
+        <section class="card">
+          <div class="card-head">
+            <div>
+              <h2>Press coverage</h2>
+              <p class="sub">News articles by tone. Negative extends left, positive right; bar length is volume.</p>
+            </div>
+          </div>
+          <div id="pressBars" class="bars"></div>
+        </section>
+        <section class="card">
+          <div class="card-head">
+            <div>
+              <h2>Public reaction</h2>
+              <p class="sub">Reddit posts, Hacker News comments and Bluesky posts by tone.</p>
+            </div>
+          </div>
+          <div id="publicBars" class="bars"></div>
+        </section>
+      </div>
+      <div class="legend legend-center" id="barLegend"></div>
+
+      <section class="card detail" id="detail" aria-live="polite"></section>
+
+      <section class="method">
+        <h2>How it works</h2>
+        <div class="method-grid">
+          <div><h3>Press</h3><p>Google News search results for each company over the selected window — thousands of outlets, deduplicated by headline. Each headline is scored on its own.</p></div>
+          <div><h3>Public</h3><p>Reddit posts, Hacker News comments and Bluesky posts that mention the company by name. Off-topic hits (e.g. “perplexity” as a plain word) are filtered out.</p></div>
+          <div><h3>Scoring</h3><p>A lexicon tuned for tech news (lawsuit, outage, breakthrough, layoffs…) with negation and intensity handling. <em>Net sentiment</em> is the share of positive items minus the share of negative ones, from −100 to +100.</p></div>
+          <div><h3>Caveats</h3><p>Keyword scoring misses sarcasm and context, and the public sources skew toward tech-savvy, English-speaking audiences. Read it as a weather vane, not a poll.</p></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">Sentiment · a project by Naama Mendes Jr.</footer>
+  </div>
+  <div class="tooltip" id="tooltip" role="tooltip" hidden></div>
+  <script src="/sentiment/sentiment.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,1505 @@
+{
+ "generatedAt": "2026-11-22T21:34:26.517Z",
+ "window": "7d",
+ "sample": true,
+ "sources": {
+  "news": {
+   "label": "Google News",
+   "kind": "press",
+   "ok": 8,
+   "failed": 0,
+   "items": 0,
+   "error": null
+  },
+  "reddit": {
+   "label": "Reddit",
+   "kind": "public",
+   "ok": 8,
+   "failed": 0,
+   "items": 0,
+   "error": null
+  },
+  "hn": {
+   "label": "Hacker News",
+   "kind": "public",
+   "ok": 8,
+   "failed": 0,
+   "items": 0,
+   "error": null
+  },
+  "bluesky": {
+   "label": "Bluesky",
+   "kind": "public",
+   "ok": 8,
+   "failed": 0,
+   "items": 0,
+   "error": null
+  }
+ },
+ "companies": [
+  {
+   "id": "openai",
+   "name": "OpenAI",
+   "product": "ChatGPT",
+   "press": {
+    "total": 900,
+    "pos": 280,
+    "neu": 413,
+    "neg": 207,
+    "net": 8,
+    "avg": 0.049,
+    "items": [
+     {
+      "title": "Sample headline item 1",
+      "text": "Placeholder positive headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 213
+     },
+     {
+      "title": "Sample headline item 2",
+      "text": "Placeholder negative headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T14:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 132
+     },
+     {
+      "title": "Sample headline item 3",
+      "text": "Placeholder neutral headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T07:34:26.515Z",
+      "score": 0,
+      "label": "neutral",
+      "engagement": 301
+     },
+     {
+      "title": "Sample headline item 4",
+      "text": "Placeholder positive headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T00:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 302
+     },
+     {
+      "title": "Sample headline item 5",
+      "text": "Placeholder negative headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-21T17:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 217
+     },
+     {
+      "title": "Sample headline item 6",
+      "text": "Placeholder neutral headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-21T10:34:26.515Z",
+      "score": 0,
+      "label": "neutral",
+      "engagement": 274
+     }
+    ]
+   },
+   "public": {
+    "total": 2400,
+    "pos": 585,
+    "neu": 1037,
+    "neg": 778,
+    "net": -8,
+    "avg": -0.05,
+    "bySource": {
+     "reddit": {
+      "total": 1080,
+      "pos": 217,
+      "neu": 527,
+      "neg": 336,
+      "net": -11,
+      "avg": -0.066
+     },
+     "hn": {
+      "total": 480,
+      "pos": 117,
+      "neu": 189,
+      "neg": 174,
+      "net": -12,
+      "avg": -0.071
+     },
+     "bluesky": {
+      "total": 840,
+      "pos": 251,
+      "neu": 321,
+      "neg": 268,
+      "net": -2,
+      "avg": -0.012
+     }
+    },
+    "items": [
+     {
+      "title": "Sample post item 1",
+      "text": "Placeholder positive post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "r/sample",
+      "source": "reddit",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 254
+     },
+     {
+      "title": "Sample post item 2",
+      "text": "Placeholder negative post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "r/sample",
+      "source": "reddit",
+      "date": "2026-11-22T14:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 327
+     },
+     {
+      "title": "Sample post item 3",
+      "text": "Placeholder neutral post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "r/sample",
+      "source": "reddit",
+      "date": "2026-11-22T07:34:26.515Z",
+      "score": 0,
+      "label": "neutral",
+      "engagement": 97
+     },
+     {
+      "title": "Sample post item 1",
+      "text": "Placeholder positive post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Bluesky",
+      "source": "bluesky",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 150
+     },
+     {
+      "title": "Sample post item 2",
+      "text": "Placeholder negative post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Bluesky",
+      "source": "bluesky",
+      "date": "2026-11-22T14:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 283
+     },
+     {
+      "title": "Sample post item 1",
+      "text": "Placeholder positive post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Hacker News",
+      "source": "hn",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 279
+     }
+    ]
+   }
+  },
+  {
+   "id": "anthropic",
+   "name": "Anthropic",
+   "product": "Claude",
+   "press": {
+    "total": 520,
+    "pos": 195,
+    "neu": 245,
+    "neg": 80,
+    "net": 22,
+    "avg": 0.133,
+    "items": [
+     {
+      "title": "Sample headline item 1",
+      "text": "Placeholder positive headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 49
+     },
+     {
+      "title": "Sample headline item 2",
+      "text": "Placeholder negative headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T14:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 205
+     },
+     {
+      "title": "Sample headline item 3",
+      "text": "Placeholder neutral headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T07:34:26.515Z",
+      "score": 0,
+      "label": "neutral",
+      "engagement": 369
+     },
+     {
+      "title": "Sample headline item 4",
+      "text": "Placeholder positive headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T00:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 275
+     },
+     {
+      "title": "Sample headline item 5",
+      "text": "Placeholder negative headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-21T17:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 258
+     },
+     {
+      "title": "Sample headline item 6",
+      "text": "Placeholder neutral headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-21T10:34:26.515Z",
+      "score": 0,
+      "label": "neutral",
+      "engagement": 231
+     }
+    ]
+   },
+   "public": {
+    "total": 1300,
+    "pos": 432,
+    "neu": 596,
+    "neg": 272,
+    "net": 12,
+    "avg": 0.075,
+    "bySource": {
+     "reddit": {
+      "total": 585,
+      "pos": 189,
+      "neu": 265,
+      "neg": 131,
+      "net": 10,
+      "avg": 0.059
+     },
+     "hn": {
+      "total": 260,
+      "pos": 86,
+      "neu": 109,
+      "neg": 65,
+      "net": 8,
+      "avg": 0.048
+     },
+     "bluesky": {
+      "total": 455,
+      "pos": 157,
+      "neu": 222,
+      "neg": 76,
+      "net": 18,
+      "avg": 0.107
+     }
+    },
+    "items": [
+     {
+      "title": "Sample post item 1",
+      "text": "Placeholder positive post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "r/sample",
+      "source": "reddit",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 365
+     },
+     {
+      "title": "Sample post item 2",
+      "text": "Placeholder negative post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "r/sample",
+      "source": "reddit",
+      "date": "2026-11-22T14:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 363
+     },
+     {
+      "title": "Sample post item 3",
+      "text": "Placeholder neutral post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "r/sample",
+      "source": "reddit",
+      "date": "2026-11-22T07:34:26.515Z",
+      "score": 0,
+      "label": "neutral",
+      "engagement": 149
+     },
+     {
+      "title": "Sample post item 1",
+      "text": "Placeholder positive post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Bluesky",
+      "source": "bluesky",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 134
+     },
+     {
+      "title": "Sample post item 2",
+      "text": "Placeholder negative post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Bluesky",
+      "source": "bluesky",
+      "date": "2026-11-22T14:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 335
+     },
+     {
+      "title": "Sample post item 1",
+      "text": "Placeholder positive post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Hacker News",
+      "source": "hn",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 133
+     }
+    ]
+   }
+  },
+  {
+   "id": "xai",
+   "name": "xAI",
+   "product": "Grok",
+   "press": {
+    "total": 610,
+    "pos": 70,
+    "neu": 299,
+    "neg": 241,
+    "net": -28,
+    "avg": -0.168,
+    "items": [
+     {
+      "title": "Sample headline item 1",
+      "text": "Placeholder positive headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 223
+     },
+     {
+      "title": "Sample headline item 2",
+      "text": "Placeholder negative headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T14:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 292
+     },
+     {
+      "title": "Sample headline item 3",
+      "text": "Placeholder neutral headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T07:34:26.515Z",
+      "score": 0,
+      "label": "neutral",
+      "engagement": 351
+     },
+     {
+      "title": "Sample headline item 4",
+      "text": "Placeholder positive headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T00:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 23
+     },
+     {
+      "title": "Sample headline item 5",
+      "text": "Placeholder negative headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-21T17:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 109
+     },
+     {
+      "title": "Sample headline item 6",
+      "text": "Placeholder neutral headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-21T10:34:26.515Z",
+      "score": 0,
+      "label": "neutral",
+      "engagement": 224
+     }
+    ]
+   },
+   "public": {
+    "total": 1500,
+    "pos": 188,
+    "neu": 597,
+    "neg": 715,
+    "net": -35,
+    "avg": -0.219,
+    "bySource": {
+     "reddit": {
+      "total": 675,
+      "pos": 80,
+      "neu": 266,
+      "neg": 329,
+      "net": -37,
+      "avg": -0.221
+     },
+     "hn": {
+      "total": 300,
+      "pos": 28,
+      "neu": 124,
+      "neg": 148,
+      "net": -40,
+      "avg": -0.24
+     },
+     "bluesky": {
+      "total": 525,
+      "pos": 80,
+      "neu": 207,
+      "neg": 238,
+      "net": -30,
+      "avg": -0.181
+     }
+    },
+    "items": [
+     {
+      "title": "Sample post item 1",
+      "text": "Placeholder positive post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "r/sample",
+      "source": "reddit",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 204
+     },
+     {
+      "title": "Sample post item 2",
+      "text": "Placeholder negative post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "r/sample",
+      "source": "reddit",
+      "date": "2026-11-22T14:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 169
+     },
+     {
+      "title": "Sample post item 3",
+      "text": "Placeholder neutral post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "r/sample",
+      "source": "reddit",
+      "date": "2026-11-22T07:34:26.515Z",
+      "score": 0,
+      "label": "neutral",
+      "engagement": 77
+     },
+     {
+      "title": "Sample post item 1",
+      "text": "Placeholder positive post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Bluesky",
+      "source": "bluesky",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 364
+     },
+     {
+      "title": "Sample post item 2",
+      "text": "Placeholder negative post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Bluesky",
+      "source": "bluesky",
+      "date": "2026-11-22T14:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 22
+     },
+     {
+      "title": "Sample post item 1",
+      "text": "Placeholder positive post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Hacker News",
+      "source": "hn",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 146
+     }
+    ]
+   }
+  },
+  {
+   "id": "spacex",
+   "name": "SpaceX",
+   "product": "Starlink · Starship",
+   "press": {
+    "total": 700,
+    "pos": 261,
+    "neu": 262,
+    "neg": 177,
+    "net": 12,
+    "avg": 0.072,
+    "items": [
+     {
+      "title": "Sample headline item 1",
+      "text": "Placeholder positive headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 162
+     },
+     {
+      "title": "Sample headline item 2",
+      "text": "Placeholder negative headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T14:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 113
+     },
+     {
+      "title": "Sample headline item 3",
+      "text": "Placeholder neutral headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T07:34:26.515Z",
+      "score": 0,
+      "label": "neutral",
+      "engagement": 146
+     },
+     {
+      "title": "Sample headline item 4",
+      "text": "Placeholder positive headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T00:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 170
+     },
+     {
+      "title": "Sample headline item 5",
+      "text": "Placeholder negative headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-21T17:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 133
+     },
+     {
+      "title": "Sample headline item 6",
+      "text": "Placeholder neutral headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-21T10:34:26.515Z",
+      "score": 0,
+      "label": "neutral",
+      "engagement": 213
+     }
+    ]
+   },
+   "public": {
+    "total": 1700,
+    "pos": 496,
+    "neu": 764,
+    "neg": 440,
+    "net": 3,
+    "avg": 0.019,
+    "bySource": {
+     "reddit": {
+      "total": 765,
+      "pos": 218,
+      "neu": 344,
+      "neg": 203,
+      "net": 2,
+      "avg": 0.012
+     },
+     "hn": {
+      "total": 340,
+      "pos": 84,
+      "neu": 166,
+      "neg": 90,
+      "net": -2,
+      "avg": -0.011
+     },
+     "bluesky": {
+      "total": 595,
+      "pos": 194,
+      "neu": 254,
+      "neg": 147,
+      "net": 8,
+      "avg": 0.047
+     }
+    },
+    "items": [
+     {
+      "title": "Sample post item 1",
+      "text": "Placeholder positive post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "r/sample",
+      "source": "reddit",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 246
+     },
+     {
+      "title": "Sample post item 2",
+      "text": "Placeholder negative post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "r/sample",
+      "source": "reddit",
+      "date": "2026-11-22T14:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 93
+     },
+     {
+      "title": "Sample post item 3",
+      "text": "Placeholder neutral post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "r/sample",
+      "source": "reddit",
+      "date": "2026-11-22T07:34:26.515Z",
+      "score": 0,
+      "label": "neutral",
+      "engagement": 363
+     },
+     {
+      "title": "Sample post item 1",
+      "text": "Placeholder positive post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Bluesky",
+      "source": "bluesky",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 183
+     },
+     {
+      "title": "Sample post item 2",
+      "text": "Placeholder negative post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Bluesky",
+      "source": "bluesky",
+      "date": "2026-11-22T14:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 345
+     },
+     {
+      "title": "Sample post item 1",
+      "text": "Placeholder positive post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Hacker News",
+      "source": "hn",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 254
+     }
+    ]
+   }
+  },
+  {
+   "id": "google",
+   "name": "Google",
+   "product": "Gemini",
+   "press": {
+    "total": 640,
+    "pos": 221,
+    "neu": 314,
+    "neg": 105,
+    "net": 18,
+    "avg": 0.109,
+    "items": [
+     {
+      "title": "Sample headline item 1",
+      "text": "Placeholder positive headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 159
+     },
+     {
+      "title": "Sample headline item 2",
+      "text": "Placeholder negative headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T14:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 283
+     },
+     {
+      "title": "Sample headline item 3",
+      "text": "Placeholder neutral headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T07:34:26.515Z",
+      "score": 0,
+      "label": "neutral",
+      "engagement": 100
+     },
+     {
+      "title": "Sample headline item 4",
+      "text": "Placeholder positive headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T00:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 235
+     },
+     {
+      "title": "Sample headline item 5",
+      "text": "Placeholder negative headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-21T17:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 140
+     },
+     {
+      "title": "Sample headline item 6",
+      "text": "Placeholder neutral headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-21T10:34:26.515Z",
+      "score": 0,
+      "label": "neutral",
+      "engagement": 132
+     }
+    ]
+   },
+   "public": {
+    "total": 1350,
+    "pos": 426,
+    "neu": 589,
+    "neg": 335,
+    "net": 7,
+    "avg": 0.044,
+    "bySource": {
+     "reddit": {
+      "total": 608,
+      "pos": 195,
+      "neu": 260,
+      "neg": 153,
+      "net": 7,
+      "avg": 0.041
+     },
+     "hn": {
+      "total": 270,
+      "pos": 78,
+      "neu": 115,
+      "neg": 77,
+      "net": 0,
+      "avg": 0.002
+     },
+     "bluesky": {
+      "total": 472,
+      "pos": 153,
+      "neu": 214,
+      "neg": 105,
+      "net": 10,
+      "avg": 0.061
+     }
+    },
+    "items": [
+     {
+      "title": "Sample post item 1",
+      "text": "Placeholder positive post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "r/sample",
+      "source": "reddit",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 157
+     },
+     {
+      "title": "Sample post item 2",
+      "text": "Placeholder negative post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "r/sample",
+      "source": "reddit",
+      "date": "2026-11-22T14:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 318
+     },
+     {
+      "title": "Sample post item 3",
+      "text": "Placeholder neutral post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "r/sample",
+      "source": "reddit",
+      "date": "2026-11-22T07:34:26.515Z",
+      "score": 0,
+      "label": "neutral",
+      "engagement": 351
+     },
+     {
+      "title": "Sample post item 1",
+      "text": "Placeholder positive post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Bluesky",
+      "source": "bluesky",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 44
+     },
+     {
+      "title": "Sample post item 2",
+      "text": "Placeholder negative post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Bluesky",
+      "source": "bluesky",
+      "date": "2026-11-22T14:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 328
+     },
+     {
+      "title": "Sample post item 1",
+      "text": "Placeholder positive post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Hacker News",
+      "source": "hn",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 31
+     }
+    ]
+   }
+  },
+  {
+   "id": "amazon",
+   "name": "Amazon",
+   "product": "Alexa+ · Bedrock · Nova",
+   "press": {
+    "total": 340,
+    "pos": 115,
+    "neu": 130,
+    "neg": 95,
+    "net": 6,
+    "avg": 0.035,
+    "items": [
+     {
+      "title": "Sample headline item 1",
+      "text": "Placeholder positive headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 253
+     },
+     {
+      "title": "Sample headline item 2",
+      "text": "Placeholder negative headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T14:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 58
+     },
+     {
+      "title": "Sample headline item 3",
+      "text": "Placeholder neutral headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T07:34:26.515Z",
+      "score": 0,
+      "label": "neutral",
+      "engagement": 183
+     },
+     {
+      "title": "Sample headline item 4",
+      "text": "Placeholder positive headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T00:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 237
+     },
+     {
+      "title": "Sample headline item 5",
+      "text": "Placeholder negative headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-21T17:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 55
+     },
+     {
+      "title": "Sample headline item 6",
+      "text": "Placeholder neutral headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-21T10:34:26.515Z",
+      "score": 0,
+      "label": "neutral",
+      "engagement": 369
+     }
+    ]
+   },
+   "public": {
+    "total": 520,
+    "pos": 142,
+    "neu": 216,
+    "neg": 162,
+    "net": -4,
+    "avg": -0.025,
+    "bySource": {
+     "reddit": {
+      "total": 234,
+      "pos": 68,
+      "neu": 87,
+      "neg": 79,
+      "net": -5,
+      "avg": -0.028
+     },
+     "hn": {
+      "total": 104,
+      "pos": 28,
+      "neu": 38,
+      "neg": 38,
+      "net": -10,
+      "avg": -0.058
+     },
+     "bluesky": {
+      "total": 182,
+      "pos": 46,
+      "neu": 91,
+      "neg": 45,
+      "net": 1,
+      "avg": 0.003
+     }
+    },
+    "items": [
+     {
+      "title": "Sample post item 1",
+      "text": "Placeholder positive post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "r/sample",
+      "source": "reddit",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 354
+     },
+     {
+      "title": "Sample post item 2",
+      "text": "Placeholder negative post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "r/sample",
+      "source": "reddit",
+      "date": "2026-11-22T14:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 356
+     },
+     {
+      "title": "Sample post item 3",
+      "text": "Placeholder neutral post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "r/sample",
+      "source": "reddit",
+      "date": "2026-11-22T07:34:26.515Z",
+      "score": 0,
+      "label": "neutral",
+      "engagement": 354
+     },
+     {
+      "title": "Sample post item 1",
+      "text": "Placeholder positive post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Bluesky",
+      "source": "bluesky",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 363
+     },
+     {
+      "title": "Sample post item 2",
+      "text": "Placeholder negative post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Bluesky",
+      "source": "bluesky",
+      "date": "2026-11-22T14:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 304
+     },
+     {
+      "title": "Sample post item 1",
+      "text": "Placeholder positive post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Hacker News",
+      "source": "hn",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 110
+     }
+    ]
+   }
+  },
+  {
+   "id": "microsoft",
+   "name": "Microsoft",
+   "product": "Copilot",
+   "press": {
+    "total": 480,
+    "pos": 129,
+    "neu": 212,
+    "neg": 139,
+    "net": -2,
+    "avg": -0.012,
+    "items": [
+     {
+      "title": "Sample headline item 1",
+      "text": "Placeholder positive headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 93
+     },
+     {
+      "title": "Sample headline item 2",
+      "text": "Placeholder negative headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T14:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 296
+     },
+     {
+      "title": "Sample headline item 3",
+      "text": "Placeholder neutral headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T07:34:26.515Z",
+      "score": 0,
+      "label": "neutral",
+      "engagement": 196
+     },
+     {
+      "title": "Sample headline item 4",
+      "text": "Placeholder positive headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T00:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 275
+     },
+     {
+      "title": "Sample headline item 5",
+      "text": "Placeholder negative headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-21T17:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 95
+     },
+     {
+      "title": "Sample headline item 6",
+      "text": "Placeholder neutral headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-21T10:34:26.515Z",
+      "score": 0,
+      "label": "neutral",
+      "engagement": 353
+     }
+    ]
+   },
+   "public": {
+    "total": 1100,
+    "pos": 214,
+    "neu": 407,
+    "neg": 479,
+    "net": -24,
+    "avg": -0.15,
+    "bySource": {
+     "reddit": {
+      "total": 495,
+      "pos": 85,
+      "neu": 192,
+      "neg": 218,
+      "net": -27,
+      "avg": -0.161
+     },
+     "hn": {
+      "total": 220,
+      "pos": 39,
+      "neu": 80,
+      "neg": 101,
+      "net": -28,
+      "avg": -0.169
+     },
+     "bluesky": {
+      "total": 385,
+      "pos": 90,
+      "neu": 135,
+      "neg": 160,
+      "net": -18,
+      "avg": -0.109
+     }
+    },
+    "items": [
+     {
+      "title": "Sample post item 1",
+      "text": "Placeholder positive post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "r/sample",
+      "source": "reddit",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 94
+     },
+     {
+      "title": "Sample post item 2",
+      "text": "Placeholder negative post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "r/sample",
+      "source": "reddit",
+      "date": "2026-11-22T14:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 150
+     },
+     {
+      "title": "Sample post item 3",
+      "text": "Placeholder neutral post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "r/sample",
+      "source": "reddit",
+      "date": "2026-11-22T07:34:26.515Z",
+      "score": 0,
+      "label": "neutral",
+      "engagement": 358
+     },
+     {
+      "title": "Sample post item 1",
+      "text": "Placeholder positive post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Bluesky",
+      "source": "bluesky",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 47
+     },
+     {
+      "title": "Sample post item 2",
+      "text": "Placeholder negative post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Bluesky",
+      "source": "bluesky",
+      "date": "2026-11-22T14:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 196
+     },
+     {
+      "title": "Sample post item 1",
+      "text": "Placeholder positive post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Hacker News",
+      "source": "hn",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 1
+     }
+    ]
+   }
+  },
+  {
+   "id": "perplexity",
+   "name": "Perplexity",
+   "product": "Perplexity · Comet",
+   "press": {
+    "total": 260,
+    "pos": 57,
+    "neu": 126,
+    "neg": 77,
+    "net": -8,
+    "avg": -0.046,
+    "items": [
+     {
+      "title": "Sample headline item 1",
+      "text": "Placeholder positive headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 75
+     },
+     {
+      "title": "Sample headline item 2",
+      "text": "Placeholder negative headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T14:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 387
+     },
+     {
+      "title": "Sample headline item 3",
+      "text": "Placeholder neutral headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T07:34:26.515Z",
+      "score": 0,
+      "label": "neutral",
+      "engagement": 226
+     },
+     {
+      "title": "Sample headline item 4",
+      "text": "Placeholder positive headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-22T00:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 272
+     },
+     {
+      "title": "Sample headline item 5",
+      "text": "Placeholder negative headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-21T17:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 107
+     },
+     {
+      "title": "Sample headline item 6",
+      "text": "Placeholder neutral headline — real headlines appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Sample outlet",
+      "source": "news",
+      "date": "2026-11-21T10:34:26.515Z",
+      "score": 0,
+      "label": "neutral",
+      "engagement": 89
+     }
+    ]
+   },
+   "public": {
+    "total": 600,
+    "pos": 185,
+    "neu": 253,
+    "neg": 162,
+    "net": 4,
+    "avg": 0.025,
+    "bySource": {
+     "reddit": {
+      "total": 270,
+      "pos": 83,
+      "neu": 120,
+      "neg": 67,
+      "net": 6,
+      "avg": 0.036
+     },
+     "hn": {
+      "total": 120,
+      "pos": 28,
+      "neu": 59,
+      "neg": 33,
+      "net": -4,
+      "avg": -0.025
+     },
+     "bluesky": {
+      "total": 210,
+      "pos": 74,
+      "neu": 74,
+      "neg": 62,
+      "net": 6,
+      "avg": 0.034
+     }
+    },
+    "items": [
+     {
+      "title": "Sample post item 1",
+      "text": "Placeholder positive post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "r/sample",
+      "source": "reddit",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 84
+     },
+     {
+      "title": "Sample post item 2",
+      "text": "Placeholder negative post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "r/sample",
+      "source": "reddit",
+      "date": "2026-11-22T14:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 226
+     },
+     {
+      "title": "Sample post item 3",
+      "text": "Placeholder neutral post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "r/sample",
+      "source": "reddit",
+      "date": "2026-11-22T07:34:26.515Z",
+      "score": 0,
+      "label": "neutral",
+      "engagement": 21
+     },
+     {
+      "title": "Sample post item 1",
+      "text": "Placeholder positive post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Bluesky",
+      "source": "bluesky",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 308
+     },
+     {
+      "title": "Sample post item 2",
+      "text": "Placeholder negative post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Bluesky",
+      "source": "bluesky",
+      "date": "2026-11-22T14:34:26.515Z",
+      "score": -0.6,
+      "label": "negative",
+      "engagement": 280
+     },
+     {
+      "title": "Sample post item 1",
+      "text": "Placeholder positive post — real posts appear once the live feed is connected.",
+      "url": "#",
+      "outlet": "Hacker News",
+      "source": "hn",
+      "date": "2026-11-22T21:34:26.515Z",
+      "score": 0.6,
+      "label": "positive",
+      "engagement": 286
+     }
+    ]
+   }
+  }
+ ]
+}
