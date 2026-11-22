@@ -7,6 +7,11 @@ How the news covers the companies building AI.
 - **Sources:** publisher RSS/Atom feeds only, listed in `api/_lib/feeds.js`. Nothing else is fetched. No social media, no aggregators.
 - **Companies + matching rules:** `api/_lib/companies.js`
 - **Scoring:** dependency-free lexicon scorer in `api/_lib/score.js` (headline + the outlet's summary)
+- **Run locally with live feeds** (Node 18+, no install needed):
+  ```
+  node sentiment/dev.js            # then open http://localhost:3000/sentiment/
+  node sentiment/dev.js --check    # just test every feed and print a report
+  ```
 - **Fallback:** if the API is unreachable (e.g. opening the page locally), the page loads `sample.json` and shows a "Sample data" banner.
 
 Feeds only hold each outlet's most recent stories (often a few days' worth), so the
