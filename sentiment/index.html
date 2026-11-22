@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sentiment</title>
+  <meta name="description" content="How the news covers the companies building AI — OpenAI, Anthropic, SpaceX · xAI, Google Gemini, Amazon AI, Microsoft Copilot and Perplexity — read straight from publisher RSS feeds." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/sentiment/sentiment.css" />
+  <script>
+    try { const t = localStorage.getItem("sentiment-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+</head>
+<body>
+  <div class="page">
+    <header class="masthead">
+      <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div class="masthead-row">
+        <a class="wordmark" href="/sentiment/">Sentiment</a>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <h1 class="headline" aria-label="How the news covers the companies building AI."><span class="w" style="--i:0">How</span> <span class="w" style="--i:1">the</span> <span class="w" style="--i:2">news</span> <span class="w" style="--i:3">covers</span> <span class="w" style="--i:4">the</span> <span class="w" style="--i:5">companies</span> <span class="w" style="--i:6">building</span> <span class="w" style="--i:7"><em class="ai">AI</em>.</span></h1>
+      <p class="dek" id="dek">Sentiment reads the RSS feeds of a fixed list of news outlets, picks out every story about the companies below, and scores each one as positive, neutral or negative. No social media, no aggregators — every story links back to the outlet that published it.</p>
+    </header>
+
+    <div class="controls" role="toolbar" aria-label="Filters">
+      <div class="seg" role="radiogroup" aria-label="Time window" id="windowSeg">
+        <span class="seg-thumb" aria-hidden="true"></span>
+        <button role="radio" data-window="1">24 hours</button>
+        <button role="radio" data-window="3">3 days</button>
+        <button role="radio" data-window="7" aria-checked="true">7 days</button>
+        <button role="radio" data-window="all">Everything in feeds</button>
+      </div>
+      <a class="feed-status" id="feedStatus" href="#sources"></a>
+      <span class="updated" id="updated"></span>
+    </div>
+
+    <div class="banner" id="sampleBanner" hidden>
+      <strong>Sample data.</strong> The feeds can't be reached from this preview, so the numbers and headlines below are placeholders. The outlet list is real — deployed on Vercel, <code>/api/sentiment</code> reads those feeds live.
+    </div>
+
+    <main id="main" class="main">
+      <section class="tiles" id="tiles" aria-label="Summary"></section>
+
+      <section class="card">
+        <div class="card-head">
+          <div>
+            <h2>Tone and size of coverage</h2>
+            <p class="sub">Each bubble is a company. Its position is the net tone of its coverage; its size is how many stories ran about it.</p>
+          </div>
+        </div>
+        <div class="bubble-wrap" id="bubbles"></div>
+        <div class="legend" id="bubbleLegend"></div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <div>
+            <h2>Every headline, plotted</h2>
+            <p class="sub">Each dot is one story. Left is negative, right is positive; the more dots, the more coverage. Hover a dot to read the headline, click to open it.</p>
+          </div>
+          <button class="link-btn" id="tableToggle" type="button" aria-expanded="false">View as table</button>
+        </div>
+        <div class="strip-wrap" id="strip"></div>
+        <div class="legend" id="stripLegend"></div>
+        <div class="table-wrap" id="summaryTable" hidden></div>
+      </section>
+
+      <div class="duo">
+        <section class="card">
+          <div class="card-head">
+            <div>
+              <h2>Coverage by tone</h2>
+              <p class="sub">Stories per company. Negative extends left, positive right; bar length is volume.</p>
+            </div>
+          </div>
+          <div id="toneBars" class="bars"></div>
+        </section>
+        <section class="card">
+          <div class="card-head">
+            <div>
+              <h2>Who's writing</h2>
+              <p class="sub">Stories about these companies, by outlet.</p>
+            </div>
+          </div>
+          <div id="outletBars" class="bars"></div>
+        </section>
+      </div>
+      <div class="legend legend-center" id="barLegend"></div>
+
+      <section class="card">
+        <div class="card-head">
+          <div>
+            <h2>Outlet × company</h2>
+            <p class="sub">How many stories each outlet ran about each company. Stronger shading means more.</p>
+          </div>
+        </div>
+        <div class="heat-wrap" id="heat"></div>
+      </section>
+
+      <section class="card detail" id="detail" aria-live="polite"></section>
+
+      <section class="card" id="sources">
+        <div class="card-head">
+          <div>
+            <h2>Sources</h2>
+            <p class="sub">The complete list of feeds Sentiment reads. Nothing else is counted. Feeds only hold an outlet's most recent stories, so “goes back to” shows how far each one reaches.</p>
+          </div>
+        </div>
+        <div class="table-wrap" id="sourceTable"></div>
+      </section>
+
+      <section class="method">
+        <h2>How it works</h2>
+        <div class="method-grid">
+          <div><h3>Collect</h3><p>Every hour, read each outlet's RSS feed listed under Sources. Stories are deduplicated by link and headline.</p></div>
+          <div><h3>Match</h3><p>A story counts toward a company when its headline or summary names it or its products (ChatGPT, Claude, Grok, Starlink, Gemini, Alexa+, Copilot…). Only Google's Gemini work counts, and Amazon only counts for its AI products or when the headline is about Amazon and AI. SpaceX and xAI are tracked as one company. One story can count for several companies.</p></div>
+          <div><h3>Score</h3><p>The headline and the outlet's own summary are scored with a word list tuned for tech news (lawsuit, outage, breakthrough, layoffs…) with negation handling. <em>Net tone</em> is the share of positive stories minus the share of negative ones, −100 to +100.</p></div>
+          <div><h3>Caveats</h3><p>Word-list scoring misses sarcasm and context, and the result reflects this outlet list, not all media. Read it as a weather vane, not a poll.</p></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">Sentiment · a project by Naama Mendes Jr.</footer>
+  </div>
+  <div class="tooltip" id="tooltip" role="tooltip"></div>
+  <script src="/sentiment/sentiment.js" defer></script>
+</body>
+</html>

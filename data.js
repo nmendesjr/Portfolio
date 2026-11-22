@@ -171,6 +171,18 @@ window.PORTFOLIO_DATA = {
       href: "https://www.naamamendes.com/hereabouts",
       image: "uploads/hereabouts-demo.jpg",
     },
+    {
+      id: "sentiment",
+      name: "Sentiment",
+      status: "Live",
+      year: "2026",
+      tagline: "How the news covers the companies building AI, scored story by story.",
+      description: "Sentiment reads the RSS feeds of 14 news outlets every hour, from TechCrunch and The Verge to the BBC and The New York Times, picks out every story about OpenAI, Anthropic, SpaceX · xAI, Google Gemini, Amazon AI, Microsoft Copilot and Perplexity, and scores each one as positive, neutral or negative. Every story is a dot you can trace back to the outlet that published it, alongside a bubble map of tone against volume, a breakdown by outlet, and the headlines driving each company's number.",
+      insight: "Sentiment dashboards usually ask you to trust a black box. Showing every story, every source and how far back each feed reaches makes the number something you can check rather than take on faith.",
+      stack: ["Vanilla JS + SVG", "Vercel serverless", "RSS / Atom", "Lexicon sentiment scoring"],
+      href: "https://www.naamamendes.com/sentiment/",
+      image: "uploads/sentiment-demo.jpg",
+    },
   ],
 
   posts: [
