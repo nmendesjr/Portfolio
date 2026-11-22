@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Sentiment</title>
-  <meta name="description" content="How the news covers the companies building AI — OpenAI, Anthropic, xAI, SpaceX, Google, Amazon, Microsoft and Perplexity — read straight from publisher RSS feeds." />
+  <meta name="description" content="How the news covers the companies building AI — OpenAI, Anthropic, SpaceX · xAI, Google Gemini, Amazon AI, Microsoft Copilot and Perplexity — read straight from publisher RSS feeds." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -105,7 +105,7 @@
         <h2>How it works</h2>
         <div class="method-grid">
           <div><h3>Collect</h3><p>Every hour, read each outlet's RSS feed listed under Sources. Stories are deduplicated by link and headline.</p></div>
-          <div><h3>Match</h3><p>A story counts toward a company when its headline or summary names it (OpenAI, ChatGPT, Claude, Grok, Gemini, Copilot…). Broad names like “Amazon” or “Google” only count alongside an AI term. One story can count for several companies.</p></div>
+          <div><h3>Match</h3><p>A story counts toward a company when its headline or summary names it or its products (ChatGPT, Claude, Grok, Starlink, Gemini, Alexa+, Copilot…). Only Google's Gemini work counts, and Amazon only counts for its AI products or when the headline is about Amazon and AI. SpaceX and xAI are tracked as one company. One story can count for several companies.</p></div>
           <div><h3>Score</h3><p>The headline and the outlet's own summary are scored with a word list tuned for tech news (lawsuit, outage, breakthrough, layoffs…) with negation handling. <em>Net tone</em> is the share of positive stories minus the share of negative ones, −100 to +100.</p></div>
           <div><h3>Caveats</h3><p>Word-list scoring misses sarcasm and context, and the result reflects this outlet list, not all media. Read it as a weather vane, not a poll.</p></div>
         </div>

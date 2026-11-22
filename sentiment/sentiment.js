@@ -237,7 +237,7 @@
       });
       label.append(
         s("rect", { x: 0, y: cy - rowH / 2 + 2, width: labelW, height: rowH - 4, fill: "transparent" }),
-        s("text", { class: "row-name", x: 10, y: cy - 2 }, c.name),
+        s("text", { class: "row-name", x: 10, y: cy - 2 }, narrow ? c.short || c.name : c.name),
         s("text", { class: "row-count", x: 10, y: cy + 14 }, `${fmt(c.total)} ${c.total === 1 ? "story" : "stories"}`),
       );
       row.append(label, s("text", { class: "row-net", x: W - 6, y: cy + 4, "text-anchor": "end" }, c.total ? signed(c.net) : "—"));
@@ -343,7 +343,7 @@
     const ink = cssVar("--ink"), surface = cssVar("--surface");
     const lum = (hex) => { const [r, g, b] = hexToRgb(hex).map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
     $("heat").replaceChildren(h("table", { class: "heat" },
-      h("thead", null, h("tr", null, h("th", { scope: "col" }, "Outlet"), ...order.map((c) => h("th", { scope: "col" }, c.name)))),
+      h("thead", null, h("tr", null, h("th", { scope: "col" }, "Outlet"), ...order.map((c) => h("th", { scope: "col", title: c.name }, c.short || c.name)))),
       h("tbody", null, ...outlets.map((o) => h("tr", null,
         h("th", { scope: "row" }, o.outlet),
         ...order.map((c) => {

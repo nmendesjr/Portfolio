@@ -15,10 +15,12 @@ const matchers = COMPANIES.map((c) => ({
   withAI: c.withAI ? new RegExp(`\\b(${c.withAI.join("|")})\\b`, "i") : null,
 }));
 
-function companiesIn(text) {
-  const hasAI = AI_RE.test(text);
+// `any` patterns may match anywhere; `withAI` patterns need an AI term in the headline itself.
+function companiesIn(title, summary = "") {
+  const text = `${title}. ${summary}`;
+  const titleHasAI = AI_RE.test(title);
   return matchers
-    .filter((m) => (m.any && m.any.test(text)) || (m.withAI && hasAI && m.withAI.test(text)))
+    .filter((m) => (m.any && m.any.test(text)) || (m.withAI && titleHasAI && m.withAI.test(title)))
     .map((m) => m.id);
 }
 
@@ -37,7 +39,7 @@ async function aggregate() {
     for (const it of items) {
       if (it.date && (!oldest || it.date < oldest)) oldest = it.date;
       const text = `${it.title}. ${it.summary}`;
-      const ids = companiesIn(text);
+      const ids = companiesIn(it.title, it.summary);
       if (!ids.length) continue;
       const tkey = normTitle(it.title);
       if (seenUrl.has(it.url) || seenTitle.has(tkey)) continue;
@@ -61,7 +63,7 @@ async function aggregate() {
     generatedAt: new Date().toISOString(),
     sample: false,
     feeds,
-    companies: COMPANIES.map(({ id, name, product }) => ({ id, name, product })),
+    companies: COMPANIES.map(({ id, name, short, product }) => ({ id, name, short, product })),
     articles,
   };
 }
