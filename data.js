@@ -171,6 +171,17 @@ window.PORTFOLIO_DATA = {
       href: "https://www.naamamendes.com/hereabouts",
       image: "uploads/hereabouts-demo.jpg",
     },
+    {
+      id: "siteline",
+      name: "Siteline",
+      status: "Prototype",
+      year: "2026",
+      tagline: "A decision engine that scores how well a street address fits a business's ideal customer.",
+      description: "Enter an address, what you're opening, and who your ideal customer is: age, household income, education, household type, renting vs. owning, how they get around, plus free-form notes. Siteline geocodes the address to its census tract, pulls American Community Survey demographics for the tract and its county, and asks Jev to rate each fit dimension on calibrated, ordered scales. The scores are combined with explicit weights into a 0–100 storefront score, with the Census evidence behind every number.",
+      insight: "Site selection is a judgment call stacked on public data. Breaking it into atomic, calibrated decisions — and combining them in code — keeps the model's judgment auditable instead of hiding it inside a paragraph of prose.",
+      stack: ["Jev (TypeSafe System One)", "US Census Geocoder", "ACS 5-year API", "Vercel Functions", "Vanilla JS"],
+      href: "https://www.naamamendes.com/siteline",
+    },
   ],
 
   posts: [

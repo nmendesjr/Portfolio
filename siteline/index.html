@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Siteline</title>
+<meta name="description" content="Score how well a street address fits your business's ideal customer, using US Census data and the Jev decision model." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f4ede0; --bg-2: #ece2cc; --card: #fbf7ef;
+    --ink: #0e2a20; --ink-2: #2c4a3c; --ink-3: #6a8074;
+    --rule: rgba(14,42,32,.20); --rule-soft: rgba(14,42,32,.09);
+    --accent: #1f6b3a; --accent-2: #002677; --accent-3: #d6a516; --bad: #a33a2a;
+    --hilite: rgba(31,107,58,.14);
+    --serif: "Instrument Serif", "Times New Roman", serif;
+    --sans: "Inter Tight", "Helvetica Neue", Arial, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #07140f; --bg-2: #0e2018; --card: #0b1b14;
+      --ink: #f2e9d2; --ink-2: #d6cdb6; --ink-3: #8ea394;
+      --rule: rgba(242,233,210,.18); --rule-soft: rgba(242,233,210,.08);
+      --accent: #5fc88a; --accent-2: #5b8aff; --accent-3: #ffd840; --bad: #f08a76;
+      --hilite: rgba(95,200,138,.16); color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #07140f; --bg-2: #0e2018; --card: #0b1b14;
+    --ink: #f2e9d2; --ink-2: #d6cdb6; --ink-3: #8ea394;
+    --rule: rgba(242,233,210,.18); --rule-soft: rgba(242,233,210,.08);
+    --accent: #5fc88a; --accent-2: #5b8aff; --accent-3: #ffd840; --bad: #f08a76;
+    --hilite: rgba(95,200,138,.16); color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--bg); color: var(--ink); font: 16px/1.55 var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 28px clamp(16px, 4vw, 56px) 80px; }
+  header.top { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding-bottom: 18px; border-bottom: 1px solid var(--rule); }
+  .brand { font: 400 30px/1 var(--serif); letter-spacing: -.01em; }
+  .brand em { color: var(--accent); }
+  .back { font: 13px var(--mono); color: var(--ink-3); text-decoration: none; }
+  .back:hover { color: var(--ink); }
+  .intro { max-width: 640px; margin: 36px 0 32px; }
+  .intro h1 { font: 400 clamp(36px, 5vw, 56px)/1.02 var(--serif); margin: 0 0 14px; letter-spacing: -.015em; }
+  .intro p { color: var(--ink-2); margin: 0; }
+  .grid { display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: clamp(24px, 4vw, 56px); align-items: start; }
+  @media (max-width: 880px) { .grid { grid-template-columns: 1fr; } }
+
+  form { display: grid; gap: 18px; }
+  fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 14px; }
+  legend { font: 500 11px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); padding: 0 0 4px; }
+  label { display: grid; gap: 6px; font-size: 14px; font-weight: 500; color: var(--ink-2); }
+  input[type=text], select, textarea {
+    font: 15px var(--sans); color: var(--ink); background: var(--card);
+    border: 1px solid var(--rule); border-radius: 8px; padding: 10px 12px; width: 100%;
+  }
+  textarea { min-height: 92px; resize: vertical; }
+  input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .hint { font-weight: 400; font-size: 12.5px; color: var(--ink-3); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chips input { position: absolute; opacity: 0; pointer-events: none; }
+  .chips label { display: inline-block; font: 400 13px var(--sans); padding: 6px 11px; border: 1px solid var(--rule); border-radius: 999px; cursor: pointer; background: var(--card); color: var(--ink-2); }
+  .chips input:checked + label { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .chips input:focus-visible + label { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .chip-group { display: grid; gap: 6px; }
+  .chip-group > span { font-size: 14px; font-weight: 500; color: var(--ink-2); }
+  button.go {
+    font: 500 15px var(--sans); background: var(--accent); color: #fff; border: 0; border-radius: 8px;
+    padding: 13px 18px; cursor: pointer; display: inline-flex; justify-content: center; align-items: center; gap: 10px;
+  }
+  :root[data-theme="dark"] button.go { color: #07140f; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) button.go { color: #07140f; } }
+  button.go:disabled { opacity: .6; cursor: progress; }
+  .examples { font-size: 13px; color: var(--ink-3); }
+  .examples button { font: inherit; background: none; border: 0; padding: 0; color: var(--accent); text-decoration: underline; cursor: pointer; }
+
+  /* results */
+  .panel { background: var(--card); border: 1px solid var(--rule); border-radius: 14px; overflow: hidden; }
+  .empty { padding: 48px 32px; text-align: center; color: var(--ink-3); }
+  .empty svg { width: 120px; height: auto; margin-bottom: 14px; color: var(--ink-3); }
+  .awning { height: 34px; background: repeating-linear-gradient(90deg, var(--accent) 0 34px, var(--card) 34px 68px); border-bottom: 1px solid var(--rule); position: relative; }
+  .awning::after { content: ""; position: absolute; left: 0; right: 0; bottom: -9px; height: 9px;
+    background: radial-gradient(circle at 17px 0, var(--accent) 17px, transparent 17.5px) 0 0 / 68px 9px repeat-x; }
+  .sign { padding: 30px 28px 20px; display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: center; border-bottom: 1px solid var(--rule-soft); }
+  @media (max-width: 520px) { .sign { grid-template-columns: 1fr; } }
+  .dial { width: 132px; height: 132px; position: relative; }
+  .dial svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .dial .n { position: absolute; inset: 0; display: grid; place-items: center; font: 400 52px/1 var(--serif); }
+  .dial .n small { display: block; font: 11px var(--mono); color: var(--ink-3); text-align: center; letter-spacing: .1em; }
+  .biz { font: 500 11px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
+  .verdict { font: 400 34px/1.1 var(--serif); margin: 4px 0 6px; }
+  .where { font-size: 14px; color: var(--ink-2); }
+  .meta { font: 12px var(--mono); color: var(--ink-3); margin-top: 8px; }
+  .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+  .tag { font-size: 12.5px; padding: 3px 9px; border-radius: 999px; background: var(--hilite); color: var(--ink); }
+  .tag.risk { background: color-mix(in srgb, var(--bad) 16%, transparent); }
+  section.block { padding: 22px 28px; border-bottom: 1px solid var(--rule-soft); }
+  section.block:last-child { border-bottom: 0; }
+  h3 { font: 500 11px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 14px; }
+  .dim { display: grid; grid-template-columns: 150px 1fr 44px; gap: 6px 14px; align-items: center; padding: 10px 0; border-top: 1px solid var(--rule-soft); }
+  .dim:first-of-type { border-top: 0; }
+  .dim .name { font-weight: 500; font-size: 14.5px; }
+  .dim .name span { display: block; font: 11px var(--mono); color: var(--ink-3); font-weight: 400; }
+  .bar { height: 8px; background: var(--rule-soft); border-radius: 99px; overflow: hidden; }
+  .bar i { display: block; height: 100%; border-radius: 99px; background: var(--accent); transition: width .8s cubic-bezier(.2,.7,.2,1); }
+  .dim .val { font: 500 14px var(--mono); text-align: right; }
+  .dim .why { grid-column: 2 / 4; font-size: 13px; color: var(--ink-2); }
+  .dim .why ul { margin: 4px 0 0; padding-left: 16px; color: var(--ink-3); }
+  @media (max-width: 520px) { .dim { grid-template-columns: 1fr 44px; } .dim .bar { grid-column: 1 / 3; grid-row: 2; } .dim .why { grid-column: 1 / 3; } }
+  .caveat { font-size: 13.5px; padding: 10px 12px; border-left: 3px solid var(--accent-3); background: var(--bg-2); border-radius: 4px; margin-top: 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th, td { text-align: right; padding: 7px 0 7px 12px; border-top: 1px solid var(--rule-soft); font-variant-numeric: tabular-nums; }
+  th:first-child, td:first-child { text-align: left; padding-left: 0; color: var(--ink-2); }
+  thead th { font: 500 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); border-top: 0; }
+  td.up { color: var(--accent); }
+  .error { padding: 20px 24px; color: var(--bad); }
+  .spin { width: 16px; height: 16px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: spin .8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading { padding: 48px 28px; color: var(--ink-2); display: grid; gap: 10px; }
+  .loading p { margin: 0; display: flex; align-items: center; gap: 10px; }
+  .loading p.done { color: var(--ink-3); }
+  footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--rule); font-size: 12.5px; color: var(--ink-3); }
+  @media (prefers-reduced-motion: reduce) { .bar i { transition: none; } .spin { animation-duration: 2.4s; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">Site<em>line</em></div>
+    <a class="back" href="/">← Naama Mendes Jr.</a>
+  </header>
+
+  <div class="intro">
+    <h1>Is this the right corner for your business?</h1>
+    <p>Enter an address and describe your ideal customer. Siteline pulls the neighborhood's US Census profile and asks Jev, a decision model, to score how well the people who live there match the people you want to serve.</p>
+  </div>
+
+  <div class="grid">
+    <form id="f" novalidate>
+      <fieldset>
+        <legend>The place</legend>
+        <label>Street address
+          <input type="text" name="address" required autocomplete="street-address" placeholder="2000 E 6th St, Austin, TX 78702" />
+        </label>
+        <label>What are you opening?
+          <input type="text" name="business" required placeholder="Specialty coffee shop with pastries" />
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Your ideal customer</legend>
+        <div class="row">
+          <label>Age from <select name="ageMin"></select></label>
+          <label>to <select name="ageMax"></select></label>
+        </div>
+        <div class="row">
+          <label>Household income from <select name="incomeMin"></select></label>
+          <label>to <select name="incomeMax"></select></label>
+        </div>
+        <div class="chip-group"><span>Education</span>
+          <div class="chips" data-name="education" data-opts="any:Any|college:College-educated|graduate:Graduate degree"></div></div>
+        <div class="chip-group"><span>Household</span>
+          <div class="chips" data-name="household" data-opts="any:Any|families:Families with kids|no_kids:Singles &amp; couples"></div></div>
+        <div class="chip-group"><span>Housing</span>
+          <div class="chips" data-name="housing" data-opts="any:Any|renters:Renters|owners:Homeowners"></div></div>
+        <div class="chip-group"><span>How they get to you</span>
+          <div class="chips" data-name="mobility" data-opts="any:Any|walk_transit:Walk / transit|drive:Drive|remote:Work from home"></div></div>
+        <label>Anything else about your business or customers? <span class="hint">Optional. Price point, vibe, who you're for.</span>
+          <textarea name="notes" maxlength="1500" placeholder="Remote workers who want a laptop-friendly spot with great wifi. Lattes around $6."></textarea>
+        </label>
+      </fieldset>
+
+      <button class="go" type="submit" id="go">Score this location</button>
+      <div class="examples">Try an example: <button type="button" data-ex="0">coffee in East Austin</button> · <button type="button" data-ex="1">kids' gym in suburban Ohio</button></div>
+    </form>
+
+    <div class="panel" id="out" aria-live="polite">
+      <div class="empty">
+        <svg viewBox="0 0 120 90" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M10 30 L18 8 H102 L110 30" /><path d="M10 30 q8 10 16 0 q8 10 17 0 q8 10 17 0 q8 10 17 0 q8 10 17 0 q8 10 16 0" />
+          <rect x="18" y="38" width="84" height="48" /><rect x="28" y="50" width="30" height="36" /><rect x="66" y="50" width="26" height="20" />
+        </svg>
+        <div>Your storefront report will appear here.</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Demographics: US Census Bureau Geocoder and American Community Survey 5-year estimates (census tract compared with its county). Scoring: Jev by TypeSafe AI. This is a directional signal, not a substitute for foot-traffic counts, competitor mapping or a lease review. It does not use race or ethnicity.
+  </footer>
+</div>
+
+<script>
+(() => {
+  const $ = (s, el = document) => el.querySelector(s);
+  const f = $("#f"), out = $("#out"), go = $("#go");
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+  // Selects
+  const ages = [18, 21, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 85];
+  const incomes = [0, 25000, 35000, 50000, 75000, 100000, 125000, 150000, 200000, 400000];
+  const money = (n) => (n >= 400000 ? "$200k+ (no cap)" : n === 0 ? "$0" : `$${n / 1000}k`);
+  const fill = (sel, vals, fmt, def) => { sel.innerHTML = vals.map((v) => `<option value="${v}"${v === def ? " selected" : ""}>${fmt(v)}</option>`).join(""); };
+  fill(f.ageMin, ages.slice(0, -1), String, 25);
+  fill(f.ageMax, ages.slice(1).map((a) => (a === 85 ? 99 : a - 1)), (a) => (a === 99 ? "85+" : String(a)), 44);
+  fill(f.incomeMin, incomes.slice(0, -1), money, 50000);
+  fill(f.incomeMax, incomes.slice(1), money, 150000);
+
+  // Chips
+  document.querySelectorAll(".chips").forEach((box) => {
+    const name = box.dataset.name;
+    box.innerHTML = box.dataset.opts.split("|").map((pair, i) => {
+      const [v, l] = pair.split(":");
+      const id = `${name}-${v}`;
+      return `<input type="radio" name="${name}" id="${id}" value="${v}"${i === 0 ? " checked" : ""}><label for="${id}">${l}</label>`;
+    }).join("");
+  });
+
+  const EXAMPLES = [
+    { address: "2000 E 6th St, Austin, TX 78702", business: "Specialty coffee shop with pastries", ageMin: 25, ageMax: 39, incomeMin: 50000, incomeMax: 200000,
+      education: "college", household: "no_kids", housing: "renters", mobility: "remote",
+      notes: "Remote workers and young professionals who want a laptop-friendly spot with great wifi. Lattes around $6." },
+    { address: "6200 Frantz Rd, Dublin, OH 43017", business: "Kids' gymnastics and play gym", ageMin: 30, ageMax: 44, incomeMin: 75000, incomeMax: 400000,
+      education: "any", household: "families", housing: "owners", mobility: "drive",
+      notes: "Parents of kids aged 3-10. Classes are $120/month. Parking matters." },
+  ];
+  document.querySelectorAll("[data-ex]").forEach((b) => b.addEventListener("click", () => {
+    const ex = EXAMPLES[+b.dataset.ex];
+    for (const [k, v] of Object.entries(ex)) {
+      const el = f.elements[k];
+      if (el instanceof RadioNodeList) el.value = v; else if (el) el.value = v;
+    }
+    f.requestSubmit();
+  }));
+
+  const STEPS = ["Finding the address in Census records", "Pulling neighborhood demographics", "Asking Jev to score the fit"];
+  function showLoading() {
+    out.innerHTML = `<div class="loading">${STEPS.map((s, i) => `<p data-i="${i}">${i === 0 ? '<span class="spin"></span>' : '<span style="width:16px"></span>'}${s}</p>`).join("")}</div>`;
+    let i = 0;
+    return setInterval(() => {
+      if (i >= STEPS.length - 1) return;
+      const cur = out.querySelector(`[data-i="${i}"]`); if (!cur) return;
+      cur.classList.add("done"); cur.firstChild.outerHTML = '<span style="width:16px">✓</span>';
+      i++; const next = out.querySelector(`[data-i="${i}"]`); next.firstChild.outerHTML = '<span class="spin"></span>';
+    }, 1400);
+  }
+
+  f.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const d = Object.fromEntries(new FormData(f));
+    if (!d.address.trim() || !d.business.trim()) {
+      out.innerHTML = `<div class="error">Add an address and what you're opening.</div>`;
+      return;
+    }
+    const payload = {
+      address: d.address, business: d.business, notes: d.notes,
+      icp: { ageMin: +d.ageMin, ageMax: +d.ageMax, incomeMin: +d.incomeMin, incomeMax: +d.incomeMax,
+        education: d.education, household: d.household, housing: d.housing, mobility: d.mobility },
+    };
+    go.disabled = true; go.innerHTML = '<span class="spin"></span> Scoring…';
+    const timer = showLoading();
+    try {
+      const res = await fetch("/api/siteline", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+      const data = await res.json().catch(() => ({ error: "The server returned an unexpected response." }));
+      if (!res.ok) throw new Error(data.error || "Something went wrong.");
+      render(data, payload);
+      if (window.matchMedia("(max-width: 880px)").matches) out.scrollIntoView({ behavior: "smooth", block: "start" });
+    } catch (err) {
+      out.innerHTML = `<div class="error">${esc(err.message)}</div>`;
+    } finally {
+      clearInterval(timer);
+      go.disabled = false; go.textContent = "Score this location";
+    }
+  });
+
+  const pct = (x) => (x == null ? "—" : `${Math.round(x * 100)}%`);
+  const usd = (x) => (x == null ? "—" : `$${Math.round(x).toLocaleString()}`);
+  const num = (x) => (x == null ? "—" : Math.round(x).toLocaleString());
+
+  function render(r, p) {
+    const color = r.score >= 60 ? "var(--accent)" : r.score >= 45 ? "var(--accent-3)" : "var(--bad)";
+    const C = 2 * Math.PI * 56;
+    const rows = [
+      ["Residents", "population", num],
+      ["People per sq mi", "populationPerSqMi", num],
+      [`In your age range (${p.icp.ageMin}–${p.icp.ageMax >= 85 ? "85+" : p.icp.ageMax})`, "shareInTargetAge", pct, true],
+      ["In your income range", "shareInTargetIncome", pct, true],
+      ["Median age", "medianAge", (x) => (x == null ? "—" : x.toFixed(1))],
+      ["Median household income", "medianHouseholdIncome", usd],
+      ["Households earning $100k+", "shareHouseholdsOver100k", pct],
+      ["Bachelor's degree or higher", "shareBachelorsPlus", pct],
+      ["Households with kids", "shareHouseholdsWithKids", pct],
+      ["Renter households", "shareRenters", pct],
+      ["Work from home", "shareWorkFromHome", pct],
+      ["Walk or take transit to work", null, (t) => pct((t.shareCommuteWalk ?? 0) + (t.shareCommuteTransit ?? 0))],
+      ["Median rent", "medianGrossRent", usd],
+    ];
+    out.innerHTML = `
+      <div class="awning" aria-hidden="true"></div>
+      <div class="sign">
+        <div class="dial" role="img" aria-label="Fit score ${r.score} out of 100">
+          <svg viewBox="0 0 132 132"><circle cx="66" cy="66" r="56" fill="none" stroke="var(--rule-soft)" stroke-width="10"/>
+            <circle id="arc" cx="66" cy="66" r="56" fill="none" stroke="${color}" stroke-width="10" stroke-linecap="round"
+              stroke-dasharray="${C}" stroke-dashoffset="${C}" style="transition: stroke-dashoffset 1s cubic-bezier(.2,.7,.2,1)"/></svg>
+          <div class="n"><div>${r.score}<small>/ 100</small></div></div>
+        </div>
+        <div>
+          <div class="biz">${esc(p.business)}</div>
+          <div class="verdict" style="color:${color}">${esc(r.verdict.label)}</div>
+          <div class="where">${esc(r.location.address)}<br>${esc(r.location.tract)}, ${esc(r.location.county)}</div>
+          <div class="tags">
+            ${r.strengths.map((s) => `<span class="tag">↑ ${esc(s)}</span>`).join("")}
+            ${r.risks.map((s) => `<span class="tag risk">↓ ${esc(s)}</span>`).join("")}
+          </div>
+          <div class="meta">Jev confidence ${Math.round(r.confidence * 100)}% · ${esc(r.model)}</div>
+        </div>
+      </div>
+      ${r.caveats.length ? `<section class="block">${r.caveats.map((c) => `<div class="caveat">${esc(c)}</div>`).join("")}</section>` : ""}
+      <section class="block">
+        <h3>How the score breaks down</h3>
+        ${r.dimensions.map((d) => `
+          <div class="dim">
+            <div class="name">${esc(d.label)}<span>${d.weight}% weight</span></div>
+            <div class="bar"><i style="width:0" data-w="${d.score}"></i></div>
+            <div class="val">${d.score}</div>
+            <div class="why">${esc(d.reading)}.<ul>${d.evidence.map((e) => `<li>${esc(e)}</li>`).join("")}</ul></div>
+          </div>`).join("")}
+      </section>
+      <section class="block">
+        <h3>Neighborhood vs. county</h3>
+        <table>
+          <thead><tr><th>ACS ${esc(r.location.acsYear)} 5-year</th><th>This tract</th><th>County</th></tr></thead>
+          <tbody>${rows.map(([label, key, fmt, hl]) => {
+            const t = key ? r.tract[key] : r.tract, c = key ? r.county[key] : r.county;
+            const up = hl && key && t != null && c != null && t > c * 1.1;
+            return `<tr><td>${esc(label)}</td><td class="${up ? "up" : ""}">${fmt(t)}</td><td>${fmt(c)}</td></tr>`;
+          }).join("")}</tbody>
+        </table>
+      </section>`;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      $("#arc").style.strokeDashoffset = C * (1 - r.score / 100);
+      out.querySelectorAll(".bar i").forEach((i) => (i.style.width = i.dataset.w + "%"));
+    }));
+  }
+})();
+</script>
+</body>
+</html>
