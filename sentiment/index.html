@@ -16,18 +16,20 @@
 <body>
   <div class="page">
     <header class="masthead">
+      <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
       <div class="masthead-row">
         <a class="wordmark" href="/sentiment/">Sentiment</a>
         <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">
           <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
         </button>
       </div>
-      <h1 class="headline">How the news covers the companies building <em>AI</em>.</h1>
+      <h1 class="headline" aria-label="How the news covers the companies building AI."><span class="w" style="--i:0">How</span> <span class="w" style="--i:1">the</span> <span class="w" style="--i:2">news</span> <span class="w" style="--i:3">covers</span> <span class="w" style="--i:4">the</span> <span class="w" style="--i:5">companies</span> <span class="w" style="--i:6">building</span> <span class="w" style="--i:7"><em class="ai">AI</em>.</span></h1>
       <p class="dek" id="dek">Sentiment reads the RSS feeds of a fixed list of news outlets, picks out every story about the companies below, and scores each one as positive, neutral or negative. No social media, no aggregators — every story links back to the outlet that published it.</p>
     </header>
 
     <div class="controls" role="toolbar" aria-label="Filters">
       <div class="seg" role="radiogroup" aria-label="Time window" id="windowSeg">
+        <span class="seg-thumb" aria-hidden="true"></span>
         <button role="radio" data-window="1">24 hours</button>
         <button role="radio" data-window="3">3 days</button>
         <button role="radio" data-window="7" aria-checked="true">7 days</button>
@@ -125,7 +127,7 @@
 
     <footer class="foot">Sentiment · a project by Naama Mendes Jr.</footer>
   </div>
-  <div class="tooltip" id="tooltip" role="tooltip" hidden></div>
+  <div class="tooltip" id="tooltip" role="tooltip"></div>
   <script src="/sentiment/sentiment.js" defer></script>
 </body>
 </html>
