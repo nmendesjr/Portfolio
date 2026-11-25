@@ -142,7 +142,7 @@
 
   <div class="intro">
     <h1>Is this the right corner for your business?</h1>
-    <p>Enter an address and describe your ideal customer. Siteline pulls the neighborhood's US Census profile and asks Jev, a decision model, to score how well the people who live there match the people you want to serve.</p>
+    <p>Enter an address and describe your ideal customer. Siteline pulls the neighborhood's US Census profile, compares it with the rest of the county, and scores how well the people who live there match the people you want to serve.</p>
   </div>
 
   <div class="grid">
@@ -196,7 +196,7 @@
   </div>
 
   <footer>
-    Demographics: US Census Bureau Geocoder and American Community Survey 5-year estimates (census tract compared with its county). Scoring: Jev by TypeSafe AI. This is a directional signal, not a substitute for foot-traffic counts, competitor mapping or a lease review. It does not use race or ethnicity.
+    Demographics: US Census Bureau Geocoder and American Community Survey 5-year estimates (census tract compared with its county). Each factor compares the neighborhood with its county and the factors are combined with fixed weights. This is a directional signal, not a substitute for foot-traffic counts, competitor mapping or a lease review. It does not use race or ethnicity.
   </footer>
 </div>
 
@@ -243,7 +243,7 @@
     f.requestSubmit();
   }));
 
-  const STEPS = ["Finding the address in Census records", "Pulling neighborhood demographics", "Asking Jev to score the fit"];
+  const STEPS = ["Finding the address in Census records", "Pulling neighborhood demographics", "Scoring the fit"];
   function showLoading() {
     out.innerHTML = `<div class="loading">${STEPS.map((s, i) => `<p data-i="${i}">${i === 0 ? '<span class="spin"></span>' : '<span style="width:16px"></span>'}${s}</p>`).join("")}</div>`;
     let i = 0;
@@ -322,7 +322,7 @@
             ${r.strengths.map((s) => `<span class="tag">↑ ${esc(s)}</span>`).join("")}
             ${r.risks.map((s) => `<span class="tag risk">↓ ${esc(s)}</span>`).join("")}
           </div>
-          <div class="meta">Jev confidence ${Math.round(r.confidence * 100)}% · ${esc(r.model)}</div>
+          <div class="meta">${r.confidence != null ? `Jev confidence ${Math.round(r.confidence * 100)}% · ${esc(r.model)}` : "Scored against the county average"}${r.notesRead && r.notesRead.length ? ` · From your notes: ${esc(r.notesRead.join(", "))}` : ""}</div>
         </div>
       </div>
       ${r.caveats.length ? `<section class="block">${r.caveats.map((c) => `<div class="caveat">${esc(c)}</div>`).join("")}</section>` : ""}

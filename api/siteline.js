@@ -1,6 +1,7 @@
 // POST /api/siteline — score how well an address fits a business's ideal customer profile.
 const { locationProfile } = require("./_siteline/census");
 const { decide } = require("./_siteline/engine");
+const { decideByRules } = require("./_siteline/rules");
 
 const CHOICES = {
   education: ["any", "college", "graduate"],
@@ -49,7 +50,8 @@ module.exports = async function handler(req, res) {
 
   try {
     const loc = await locationProfile(input.address, input.icp);
-    const result = await decide(input, loc);
+    // Jev is optional: with no TYPESAFE_API_KEY, score with the free rule-based engine.
+    const result = process.env.TYPESAFE_API_KEY ? await decide(input, loc) : decideByRules(input, loc);
     res.setHeader("Cache-Control", "no-store");
     return res.status(200).json({
       location: {
